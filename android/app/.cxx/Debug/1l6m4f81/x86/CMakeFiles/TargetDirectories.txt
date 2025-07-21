@@ -1,0 +1,2 @@
+C:/FLUTTER PROJECT/FLUTTER COURSE/babyspark/android/app/.cxx/Debug/1l6m4f81/x86/CMakeFiles/edit_cache.dir
+C:/FLUTTER PROJECT/FLUTTER COURSE/babyspark/android/app/.cxx/Debug/1l6m4f81/x86/CMakeFiles/rebuild_cache.dir

@@ -25,6 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
         child: Column(
@@ -32,8 +33,8 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Lottie.asset("assets/lottie_animation_file/rabbit.json"),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: size.height * 0.01,
             ),
             Text(
               "Baby Spark",
@@ -42,14 +43,14 @@ class _SplashScreenState extends State<SplashScreen> {
                   fontFamily: "mainSecond",
                   fontColor: Colors.orange),
             ),
-            const SizedBox(
-              height: 10,
+             SizedBox(
+              height: size.height * 0.01,
             ),
 
             /// slogan
             Text(
-              "Capture the Magic of Growing Up.",
-              style: myTextStyle22(fontFamily: "cursive"),
+              "Mother's Lap, Teacher's Support!",
+              style: myTextStyle22(fontFamily: "primary"),
             )
           ],
         ),
@@ -58,4 +59,4 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-/// Splash screen complete
+

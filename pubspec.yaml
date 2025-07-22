@@ -38,6 +38,8 @@ dependencies:
 #  here we add dependency
   gif_view: ^0.4.4
   lottie: ^3.1.2
+  audioplayers: ^6.5.0
+  velocity_x: ^4.3.1
 
 dev_dependencies:
   flutter_test:

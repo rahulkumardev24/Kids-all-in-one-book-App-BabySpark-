@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
@@ -123,5 +124,17 @@ TextStyle myTextStyle40({
   );
 }
 
-/// DONE CUSTOM TEXT STYLE
-/// if we need change color , font weight , fontFamily then able to change
+TextStyle myTextStyleCus({
+  Color fontColor = Colors.black,
+  FontWeight fontWeight = FontWeight.normal,
+  String fontFamily = "main",
+  double fontSize = 18
+}) {
+  return TextStyle(
+    color: fontColor,
+    fontWeight: fontWeight,
+    fontFamily: fontFamily,
+    fontSize: fontSize,
+  );
+}
+

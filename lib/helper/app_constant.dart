@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class AppConstant {
  static final List<Map<String, dynamic>> categories = [
     {
@@ -24,13 +26,13 @@ class AppConstant {
     },
     {
       "title": "Vegetables",
-      "path": "assets/lottie_animation_file/vegatable.json",
+      "path": "assets/lottie_animation_file/tamato.json",
       "color": const Color(0xFFB5EAD7),
     },
     {
       "title": "Fruits",
       "path": "assets/lottie_animation_file/apple.json",
-      "color": const Color(0xFFC7CEEA),
+      "color": const Color(0xFFADBCF6),
     },
     {
       "title": "Flowers",
@@ -40,11 +42,11 @@ class AppConstant {
     {
       "title": "Shapes",
       "path": "assets/lottie_animation_file/shape.json",
-      "color": const Color(0xFFDCB6D5),
+      "color": const Color(0xFFFABFEF),
     },
     {
       "title": "Colors",
-      "path": "assets/lottie_animation_file/colors.json",
+      "path": "assets/lottie_animation_file/color.json",
       "color": const Color(0xFFA2D7D8),
     },
     {
@@ -54,7 +56,7 @@ class AppConstant {
     },
     {
       "title": "Music",
-      "path": "assets/lottie_animation_file/music instrument.json",
+      "path": "assets/lottie_animation_file/music instrument drum.json",
       "color": const Color(0xFFF67280),
     },
     {
@@ -63,5 +65,67 @@ class AppConstant {
       "color": const Color(0xFF6C5B7B),
     },
   ];
+
+
+ /// colors list
+ static  final List<Map<String, dynamic>> colorsList = [
+   {
+     "color": Colors.red,
+     "name": "Red",
+     "hindiName": "लाल",
+     "emoji": "🍎",
+     "sound": "red_sound.mp3"
+   },
+   {
+     "color": Colors.blue,
+     "name": "Blue",
+     "hindiName": "नीला",
+     "emoji": "🐳",
+     "sound": "blue_sound.mp3"
+   },
+   {
+     "color": Colors.green,
+     "name": "Green",
+     "hindiName": "हरा",
+     "emoji": "🐸",
+     "sound": "green_sound.mp3"
+   },
+   {
+     "color": Colors.yellow,
+     "name": "Yellow",
+     "hindiName": "पीला",
+     "emoji": "🍌",
+     "sound": "yellow_sound.mp3"
+   },
+   {
+     "color": Colors.orange,
+     "name": "Orange",
+     "hindiName": "नारंगी",
+     "emoji": "🍊",
+     "sound": "orange_sound.mp3"
+   },
+   {
+     "color": Colors.purple,
+     "name": "Purple",
+     "hindiName": "बैंगनी",
+     "emoji": "🍇",
+     "sound": "purple_sound.mp3"
+   },
+   {
+     "color": Colors.pink,
+     "name": "Pink",
+     "hindiName": "गुलाबी",
+     "emoji": "🌸",
+     "sound": "pink_sound.mp3"
+   },
+   {
+     "color": Colors.brown,
+     "name": "Brown",
+     "hindiName": "भूरा",
+     "emoji": "🐻",
+     "sound": "brown_sound.mp3"
+   },
+ ];
+
 
 }

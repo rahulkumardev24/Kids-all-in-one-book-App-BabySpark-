@@ -1,45 +1,70 @@
-import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import '../domain/custom_text_style.dart';
 
 class MyCategoriesCard extends StatelessWidget {
-  /// here we create constructor
-  String title;
-  String animationPath;
-  MyCategoriesCard(
-      {super.key, required this.animationPath, required this.title});
+  final String title;
+  final String animationPath;
+  final Color color;
+
+  const MyCategoriesCard({
+    super.key,
+    required this.color,
+    required this.title,
+    required this.animationPath,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: Container(
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              boxShadow: [BoxShadow(color: Colors.black, blurRadius: 3)],
-              borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30),
-                  bottomLeft: Radius.circular(30),
-                  topLeft: Radius.circular(5),
-                  bottomRight: Radius.circular(5))),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Lottie.asset(animationPath, height: 100 , fit: BoxFit.cover),
-              const SizedBox(
-                height: 8,
-              ),
-              Center(
-                child: Text(
-                  overflow: TextOverflow.ellipsis,
-                  title,
-                  style: myTextStyle28(fontFamily: "mainSecond"),
+    return InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: () {
+        Feedback.forTap(context);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Stack(
+          children: [
+            /// Animation with padding to ensure it fits
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Lottie.asset(
+                  animationPath,
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: double.infinity,
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+
+            /// Title
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.5),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: myTextStyle18(),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -20,16 +20,21 @@ class _ColorsScreenState extends State<ColorsScreen> {
   Timer? _autoPlayTimer;
   late PageController _pageController;
   late ScrollController _scrollController;
-
   final myColorList = AppConstant.colorsList;
+  late Size size;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: selectedIndex);
     _scrollController = ScrollController();
+  }
 
-    /// Center the initial selected item in the ListView
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    size = MediaQuery.of(context).size;
+    // Center the initial selected item after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToSelectedIndex();
     });
@@ -90,13 +95,22 @@ class _ColorsScreenState extends State<ColorsScreen> {
   }
 
   void _scrollToSelectedIndex() {
-    // Calculate the offset to center the selected item
     if (_scrollController.hasClients) {
-      const itemWidth = 50.0 + 16.0;
-      final offset = selectedIndex * itemWidth -
-          (MediaQuery.of(context).size.width - itemWidth) / 2;
+      const itemWidth = 100.0; // Fixed width for each color circle
+      const itemMargin = 8.0; // Margin between items
+      const totalItemWidth = itemWidth + itemMargin * 2;
+
+      // Calculate the position to center the selected item
+      final viewportWidth = _scrollController.position.viewportDimension;
+      final targetPosition =
+          selectedIndex * totalItemWidth - (viewportWidth / 2 - itemWidth / 2);
+
+      // Ensure we don't scroll beyond the list boundaries
+      final maxScrollExtent = _scrollController.position.maxScrollExtent;
+      final adjustedPosition = targetPosition.clamp(0.0, maxScrollExtent);
+
       _scrollController.animateTo(
-        offset,
+        adjustedPosition,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
       );
@@ -105,9 +119,9 @@ class _ColorsScreenState extends State<ColorsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    size = MediaQuery.of(context).size;
+
     return Scaffold(
-      /// --- app bar --- ///
       appBar: AppBar(
         centerTitle: true,
         toolbarHeight: size.height * 0.15,
@@ -120,7 +134,9 @@ class _ColorsScreenState extends State<ColorsScreen> {
         title: Text(
           "Let's Learn Colors!",
           style: myTextStyleCus(
-              fontFamily: "mainSecond", fontSize: size.width * 0.08),
+            fontFamily: "mainSecond",
+            fontSize: size.width * 0.08,
+          ),
         ),
       ),
       body: SafeArea(
@@ -134,7 +150,7 @@ class _ColorsScreenState extends State<ColorsScreen> {
           },
           child: Column(
             children: [
-              /// Main Color Display with PageView
+              /// Main Color Display
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
@@ -149,86 +165,118 @@ class _ColorsScreenState extends State<ColorsScreen> {
                   itemBuilder: (context, index) {
                     final colorData = myColorList[index];
                     return AnimatedBuilder(
-                        animation: _pageController,
-                        builder: (context, child) {
-                          double value = 1.0;
-                          if (_pageController.position.haveDimensions) {
-                            value = _pageController.page! - index;
-                            value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
-                          }
-                          return Transform.scale(
-                            scale: Curves.easeOut.transform(value),
-                            child: child,
-                          );
-                        },
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              /// Color Circle with Emoji
-                              GestureDetector(
-                                onTap: playColorSound,
-                                child: Container(
-                                  width: 250,
-                                  height: 250,
-                                  decoration: BoxDecoration(
-                                    color: colorData["color"],
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color:
-                                            colorData["color"].withOpacity(0.5),
-                                        blurRadius: 20,
-                                        spreadRadius: 5,
-                                      ),
-                                    ],
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      colorData["emoji"],
-                                      style: const TextStyle(fontSize: 100),
-                                    ),
+                      animation: _pageController,
+                      builder: (context, child) {
+                        double value = 1.0;
+                        if (_pageController.position.haveDimensions) {
+                          value = _pageController.page! - index;
+                          value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
+                        }
+                        return Transform.scale(
+                          scale: Curves.easeOut.transform(value),
+                          child: child,
+                        );
+                      },
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            /// Color Circle
+                            GestureDetector(
+                              onTap: playColorSound,
+                              child: Container(
+                                width: size.width * 0.6,
+                                height: size.width * 0.6,
+                                decoration: BoxDecoration(
+                                  color: colorData["color"],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    colorData["emoji"],
+                                    style: const TextStyle(fontSize: 100),
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 30),
-                              // Color Names with fade transition
-                              FadeTransition(
-                                opacity: AlwaysStoppedAnimation(_pageController
-                                        .position.haveDimensions
+                            ),
+                            const SizedBox(height: 30),
+                            // Color Names
+                            FadeTransition(
+                              opacity: AlwaysStoppedAnimation(
+                                _pageController.position.haveDimensions
                                     ? (1 -
                                         (_pageController.page! - index).abs())
-                                    : 1.0),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      colorData["name"],
-                                      style: TextStyle(
-                                        fontSize: 42,
-                                        fontWeight: FontWeight.bold,
-                                        color: colorData["color"],
-                                        fontFamily: 'Baloo2',
-                                      ),
-                                    ),
-                                    Text(
-                                      colorData["hindiName"],
-                                      style: TextStyle(
-                                        fontSize: 32,
-                                        color: colorData["color"],
-                                        fontFamily: 'BalooBhai2',
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                    : 1.0,
                               ),
-                            ],
-                          ),
-                        ));
+                              child: Column(
+                                children: [
+                                  Text(
+                                    colorData["name"],
+                                    style: TextStyle(
+                                      fontSize: 42,
+                                      fontWeight: FontWeight.bold,
+                                      color: colorData["color"],
+                                      fontFamily: 'secondary',
+                                    ),
+                                  ),
+                                  Text(
+                                    colorData["hindiName"],
+                                    style: TextStyle(
+                                      fontSize: 32,
+                                      color: colorData["color"],
+                                      fontFamily: 'secondary',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   },
                 ),
               ),
 
-              /// Bottom Color Palette with Curved ListView
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                      onPressed: () => previousColor(),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.0),
+                        child: Icon(Icons.arrow_back_ios_rounded),
+                      )),
+                  ElevatedButton(
+                      onPressed: () => toggleAutoPlay(),
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12))),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12.0),
+                        child: Icon(
+                            isAutoPlaying ? Icons.pause : Icons.play_arrow),
+                      )),
+                  ElevatedButton(
+                      onPressed: () => nextColor(),
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12))),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12.0),
+                        child: Icon(Icons.arrow_forward_ios_rounded),
+                      )),
+                ],
+              ),
+              SizedBox(
+                height: size.height * 0.05,
+              ),
+
+              /// Bottom Color Palette
               VxArc(
                 height: size.height * 0.04,
                 arcType: VxArcType.convex,
@@ -240,11 +288,14 @@ class _ColorsScreenState extends State<ColorsScreen> {
                   ),
                   child: Column(
                     children: [
-                      /// --- color list --- ///
                       Expanded(
                         child: ListView.builder(
                           controller: _scrollController,
                           scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: size.width * 0.1,
+                          ),
                           itemCount: myColorList.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
@@ -255,26 +306,35 @@ class _ColorsScreenState extends State<ColorsScreen> {
                                   curve: Curves.easeInOut,
                                 );
                               },
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
+                              child: Container(
                                 width: selectedIndex == index
                                     ? size.width * 0.25
-                                    : size.width * 0.15,
-                                margin: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: myColorList[index]["color"],
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: selectedIndex == index
-                                        ? Colors.black
-                                        : Colors.transparent,
-                                    width: 3,
+                                    : size.width * 0.2,
+                                height: selectedIndex == index
+                                    ? size.width * 0.25
+                                    : size.width * 0.2,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 300),
+                                  decoration: BoxDecoration(
+                                    color: myColorList[index]["color"],
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: selectedIndex == index
+                                          ? Colors.black
+                                          : Colors.transparent,
+                                      width: 3,
+                                    ),
                                   ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    myColorList[index]["emoji"],
-                                    style: const TextStyle(fontSize: 20),
+                                  child: Center(
+                                    child: Text(
+                                      myColorList[index]["emoji"],
+                                      style: TextStyle(
+                                        fontSize:
+                                            selectedIndex == index ? 30 : 24,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -282,31 +342,6 @@ class _ColorsScreenState extends State<ColorsScreen> {
                           },
                         ),
                       ),
-
-                      /*   /// Auto Play Button
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: ElevatedButton.icon(
-                          icon: Icon(
-                            isAutoPlaying ? Icons.pause : Icons.play_arrow,
-                            color: Colors.white,
-                          ),
-                          label: Text(
-                            isAutoPlaying ? "Stop" : "Auto Play",
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: myColorList[selectedIndex]
-                                ["color"],
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          onPressed: toggleAutoPlay,
-                        ),
-                      ),*/
                     ],
                   ),
                 ),

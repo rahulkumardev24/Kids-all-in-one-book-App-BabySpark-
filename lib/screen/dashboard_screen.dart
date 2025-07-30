@@ -4,6 +4,8 @@ import 'package:babyspark/widgets/my_categories_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import 'categories_screen/colors_screen.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
@@ -35,23 +37,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
               height: size.height * 0.25,
               child: Stack(
                 children: [
-                   Column(
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "Hello Little Explorer!",
                         style: myTextStyleCus(
-                          fontFamily: "secondary" ,
-                          fontSize: size.width * 0.1
-
-                        ),
+                            fontFamily: "secondary",
+                            fontSize: size.width * 0.1),
                       ),
-                     const  SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         "What shall we learn today?",
-                        style: myTextStyleCus(fontSize: size.width * 0.04 ,
-                        fontColor: Colors.white
-                        ),
+                        style: myTextStyleCus(
+                            fontSize: size.width * 0.04,
+                            fontColor: Colors.white),
                       ),
                     ],
                   ),
@@ -95,6 +95,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         color: categories["color"],
                         title: categories["title"],
                         animationPath: categories["path"],
+                        onTap: () {
+                          if(categories["title"] == "Colors"){
+                            Navigator.push(context, MaterialPageRoute(builder: (_)=> const ColorsScreen()));
+                          }
+
+                        },
                       );
                     },
                   ),

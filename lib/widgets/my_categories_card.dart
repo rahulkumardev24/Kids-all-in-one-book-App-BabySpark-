@@ -6,21 +6,21 @@ class MyCategoriesCard extends StatelessWidget {
   final String title;
   final String animationPath;
   final Color color;
+  final VoidCallback? onTap;
 
   const MyCategoriesCard({
     super.key,
     required this.color,
     required this.title,
     required this.animationPath,
+    required this.onTap
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: BorderRadius.circular(20),
-      onTap: () {
-        Feedback.forTap(context);
-      },
+      onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           color: color,

@@ -40,6 +40,7 @@ dependencies:
   lottie: ^3.1.2
   audioplayers: ^6.5.0
   velocity_x: ^4.3.1
+  confetti: ^0.8.0
 
 dev_dependencies:
   flutter_test:

@@ -8,16 +8,20 @@ class MyCategoriesCard extends StatelessWidget {
   final Color color;
   final VoidCallback? onTap;
 
-  const MyCategoriesCard({
-    super.key,
-    required this.color,
-    required this.title,
-    required this.animationPath,
-    required this.onTap
-  });
+  const MyCategoriesCard(
+      {super.key,
+      required this.color,
+      required this.title,
+      required this.animationPath,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    bool isTablet(BuildContext context) {
+      final shortestSide = MediaQuery.of(context).size.shortestSide;
+      return shortestSide >= 600;
+    }
+
     return InkWell(
       borderRadius: BorderRadius.circular(20),
       onTap: onTap,
@@ -59,7 +63,9 @@ class MyCategoriesCard extends StatelessWidget {
                   child: Text(
                     title,
                     textAlign: TextAlign.center,
-                    style: myTextStyle18(),
+                    style: isTablet(context)
+                        ? myTextStyle30(fontWeight: FontWeight.bold)
+                        : myTextStyle22(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),

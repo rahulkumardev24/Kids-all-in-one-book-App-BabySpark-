@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(milliseconds:3000), () {
+    Timer(const Duration(milliseconds: 3000), () {
       /// after splash screen user navigate to dashboard screen
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const DashboardScreen()));
@@ -43,14 +43,15 @@ class _SplashScreenState extends State<SplashScreen> {
                   fontFamily: "secondary",
                   fontColor: Colors.orange),
             ),
-             SizedBox(
+            SizedBox(
               height: size.height * 0.01,
             ),
 
             /// slogan
             Text(
               "Mother's Lap, Teacher's Support!",
-              style: myTextStyle22(fontFamily: "primary" , fontWeight: FontWeight.w500),
+              style: myTextStyle22(
+                  fontFamily: "primary", fontWeight: FontWeight.w500),
             )
           ],
         ),
@@ -58,5 +59,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
-

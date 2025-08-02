@@ -205,12 +205,11 @@ class _ShapesScreenState extends State<ShapesScreen>
                         ),
                         ControlIconButton(
                           color: _isAutoPlaying ? Colors.green : Colors.black,
-
                           icon: _isAutoPlaying
                               ? CupertinoIcons.pause_solid
                               : CupertinoIcons.play_arrow_solid,
                           iconSize: isTablet(context) ? 36 : 27,
-                          iconColor:Colors.white ,
+                          iconColor: Colors.white,
                           onPressed: _toggleAutoPlay,
                         ),
                         ControlIconButton(

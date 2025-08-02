@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(milliseconds:3000), () {
       /// after splash screen user navigate to dashboard screen
       Navigator.pushReplacement(context,
           MaterialPageRoute(builder: (context) => const DashboardScreen()));
@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Lottie.asset("assets/lottie_animation_file/rabbit.json"),
+            Lottie.asset("assets/lottie_animation_file/boll.json"),
             SizedBox(
               height: size.height * 0.01,
             ),
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
               "Baby Spark",
               style: myTextStyle30(
                   fontWeight: FontWeight.bold,
-                  fontFamily: "mainSecond",
+                  fontFamily: "secondary",
                   fontColor: Colors.orange),
             ),
              SizedBox(
@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
             /// slogan
             Text(
               "Mother's Lap, Teacher's Support!",
-              style: myTextStyle22(fontFamily: "primary"),
+              style: myTextStyle22(fontFamily: "primary" , fontWeight: FontWeight.w500),
             )
           ],
         ),

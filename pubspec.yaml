@@ -41,6 +41,7 @@ dependencies:
   audioplayers: ^6.5.0
   velocity_x: ^4.3.1
   confetti: ^0.8.0
+  font_awesome_flutter: ^10.8.0
 
 dev_dependencies:
   flutter_test:
@@ -87,29 +88,31 @@ flutter:
   # example:
   #  font family set
   fonts:
+    - family: main
+      fonts:
+        - asset: assets/fonts/Baloo2-Regular.ttf
+        - asset: assets/fonts/Baloo2-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Baloo2-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Baloo2-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Baloo2-ExtraBold.ttf
+          weight: 800
+
     - family: primary
       fonts:
-        - asset: assets/fonts/Handlee-Regular.ttf
+        - asset: assets/fonts/Fredoka-Regular.ttf
+        - asset: assets/fonts/Fredoka-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Fredoka-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Fredoka-Bold.ttf
+          weight: 700
 
     - family: secondary
       fonts:
-        - asset: assets/fonts/Itim-Regular.ttf
-
-    - family: third
-      fonts:
-        - asset: assets/fonts/Macondo-Regular.ttf
-
-    - family: cursive
-      fonts:
-        - asset: assets/fonts/Parisienne-Regular.ttf
-
-    - family: main
-      fonts:
-        - asset: assets/fonts/Sanchez-Regular.ttf
-
-    - family: mainSecond
-      fonts:
-        - asset: assets/fonts/SourGummy-Regular.ttf
+        - asset: assets/fonts/BubblegumSans-Regular.ttf
 
 
   #       - asset: fonts/TrajanPro_Bold.ttf

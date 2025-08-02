@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppConstant {
@@ -216,4 +215,90 @@ class AppConstant {
       "sound": "white_sound.mp3"
     },
   ];
+
+  ///
+  static final List<Map<String, dynamic>> shapes = [
+    {
+      'name': 'Circle',
+      'color': Colors.red,
+      'icon': Icons.circle_outlined,
+    },
+    {
+      'name': 'Square',
+      'color': Colors.blue,
+      'icon': Icons.crop_square_rounded,
+    },
+    {
+      'name': 'Rectangle',
+      'color': Colors.indigo,
+      'icon': Icons.rectangle_outlined,
+    },
+    {
+      'name': 'Triangle',
+      'color': Colors.green,
+      'icon': Icons.change_history,
+    },
+    {
+      'name': 'Diamond',
+      'color': Colors.cyan,
+      'icon': Icons.diamond,
+    },
+    {
+      'name': 'Star',
+      'color': Colors.amber,
+      'icon': Icons.star,
+    },
+    {
+      'name': 'Heart',
+      'color': Colors.pink,
+      'icon': Icons.favorite,
+    },
+    {
+      'name': 'Arrow',
+      'color': Colors.grey,
+      'icon': Icons.arrow_upward,
+    },
+    {
+      'name': 'Moon',
+      'color': Colors.blueGrey,
+      'icon': Icons.nightlight_round,
+    },
+    {
+      'name': 'Pentagon',
+      'color': Colors.deepOrange,
+      'icon': Icons.pentagon,
+    },
+    {
+      'name': 'Hexagon',
+      'color': Colors.teal,
+      'icon': Icons.hexagon,
+    },
+    {
+      'name': 'Sun',
+      'color': Colors.yellow.shade700,
+      'icon': Icons.wb_sunny,
+    },
+    {
+      'name': 'Cloud',
+      'color': Colors.lightBlue,
+      'icon': Icons.cloud,
+    },
+    {
+      'name': 'Flower',
+      'color': Colors.deepPurple,
+      'icon': Icons.local_florist,
+    },
+    {
+      'name': 'Drop',
+      'color': Colors.lightBlueAccent,
+      'icon': CupertinoIcons.drop_fill,
+    },
+    {
+      'name': 'Cube',
+      'color': Colors.pink,
+      'icon': CupertinoIcons.cube,
+    },
+  ];
+
+  ///
 }

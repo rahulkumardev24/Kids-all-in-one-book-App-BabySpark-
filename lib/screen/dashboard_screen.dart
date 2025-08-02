@@ -96,10 +96,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         title: categories["title"],
                         animationPath: categories["path"],
                         onTap: () {
-                          if(categories["title"] == "Colors"){
-                            Navigator.push(context, MaterialPageRoute(builder: (_)=> const ColorsScreen()));
+                          if (categories["title"] == "Colors") {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const ColorsScreen()));
                           }
-
                         },
                       );
                     },

@@ -1,5 +1,13 @@
+import 'dart:async';
+
+import 'package:babyspark/domain/custom_text_style.dart';
+import 'package:babyspark/helper/app_constant.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
+import 'package:lottie/lottie.dart';
+import '../../helper/app_color.dart';
+import '../../widgets/control_icon_button.dart';
 
 class ShapesScreen extends StatefulWidget {
   const ShapesScreen({super.key});
@@ -10,50 +18,20 @@ class ShapesScreen extends StatefulWidget {
 
 class _ShapesScreenState extends State<ShapesScreen>
     with TickerProviderStateMixin {
-  final List<Map<String, dynamic>> shapes = [
-    {
-      'name': 'Circle',
-      'color': Colors.red,
-      'icon': Icons.circle,
-      'animal': '🐘',
-      'bgColor': Colors.red[50],
-    },
-    {
-      'name': 'Square',
-      'color': Colors.blue,
-      'icon': Icons.square,
-      'animal': '🦁',
-      'bgColor': Colors.blue[50],
-    },
-    {
-      'name': 'Triangle',
-      'color': Colors.green,
-      'icon': Icons.change_history,
-      'animal': '🐵',
-      'bgColor': Colors.green[50],
-    },
-    {
-      'name': 'Star',
-      'color': Colors.amber,
-      'icon': Icons.star,
-      'animal': '🐶',
-      'bgColor': Colors.amber[50],
-    },
-    {
-      'name': 'Heart',
-      'color': Colors.pink,
-      'icon': Icons.favorite,
-      'animal': '🐰',
-      'bgColor': Colors.pink[50],
-    },
-  ];
-
   late AnimationController _bounceController;
   late Animation<double> _bounceAnimation;
   late ConfettiController _confettiController;
   int _currentIndex = 0;
   int _tapCount = 0;
   bool _isAutoPlaying = false;
+  Timer? _autoPlayTimer;
+
+  bool isTablet(BuildContext context) {
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    return shortestSide >= 600;
+  }
+
+  final shapes = AppConstant.shapes;
 
   @override
   void initState() {
@@ -64,32 +42,48 @@ class _ShapesScreenState extends State<ShapesScreen>
     _bounceController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
+      lowerBound: 0.0,
+      upperBound: 1.0,
     );
 
     _bounceAnimation = TweenSequence<double>(
       <TweenSequenceItem<double>>[
-        TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.2), weight: 50),
-        TweenSequenceItem(tween: Tween(begin: 1.2, end: 1.0), weight: 50),
+        TweenSequenceItem(tween: Tween(begin: 1.0, end: 1.1), weight: 10),
+        TweenSequenceItem(tween: Tween(begin: 1.1, end: 1.0), weight: 10),
       ],
-    ).animate(CurvedAnimation(
-      parent: _bounceController,
-      curve: Curves.elasticOut,
-    ));
+    ).animate(
+      CurvedAnimation(
+        parent: _bounceController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
   void dispose() {
+    _autoPlayTimer?.cancel();
     _bounceController.dispose();
     _confettiController.dispose();
     super.dispose();
   }
 
   void _nextShape() {
+    if (!mounted) return;
+
     setState(() {
-      _currentIndex = (_currentIndex + 1) % shapes.length;
+      if (_currentIndex + 1 >= shapes.length) {
+        _currentIndex = 0;
+        _isAutoPlaying = false;
+        _autoPlayTimer?.cancel();
+      } else {
+        _currentIndex++;
+      }
       _tapCount = 0;
     });
-    _bounceController.forward(from: 0.0);
+
+    _bounceController.stop();
+    _bounceController.reset();
+    _bounceController.forward();
   }
 
   void _previousShape() {
@@ -98,24 +92,33 @@ class _ShapesScreenState extends State<ShapesScreen>
       if (_currentIndex < 0) _currentIndex = shapes.length - 1;
       _tapCount = 0;
     });
-    _bounceController.forward(from: 0.0);
+
+    _bounceController.stop();
+    _bounceController.reset();
+    _bounceController.forward();
   }
 
   void _toggleAutoPlay() {
     setState(() {
       _isAutoPlaying = !_isAutoPlaying;
-      if (_isAutoPlaying) {
-        _startAutoPlay();
-      }
     });
+
+    if (_isAutoPlaying) {
+      _startAutoPlay();
+    } else {
+      _autoPlayTimer?.cancel();
+    }
   }
 
-  void _startAutoPlay() async {
-    while (_isAutoPlaying && mounted) {
-      await Future.delayed(const Duration(seconds: 2));
-      if (!_isAutoPlaying || !mounted) return;
+  void _startAutoPlay() {
+    _autoPlayTimer?.cancel();
+    _autoPlayTimer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (!_isAutoPlaying || !mounted) {
+        timer.cancel();
+        return;
+      }
       _nextShape();
-    }
+    });
   }
 
   void _handleShapeTap() {
@@ -126,210 +129,184 @@ class _ShapesScreenState extends State<ShapesScreen>
         _tapCount = 0;
       }
     });
-    _bounceController.forward(from: 0.0);
+
+    _bounceController.stop();
+    _bounceController.reset();
+    _bounceController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
     final currentShape = shapes[_currentIndex];
-    final screenSize = MediaQuery.of(context).size;
-    final shapeSize = screenSize.width * 0.7;
+    final size = MediaQuery.of(context).size;
+    final shapeSize = size.width * 0.7;
 
-    return Stack(
-      children: [
-        // Background with gradient
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                currentShape['bgColor'],
-                Colors.white,
-              ],
-            ),
-          ),
-        ),
-
-        Scaffold(
-          backgroundColor: Colors.transparent,
-          body: SafeArea(
-            child: Column(
-              children: [
-                // Animal character header
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text(
-                    currentShape['animal'],
-                    style: const TextStyle(fontSize: 80),
-                  ),
-                ),
-
-                // Shape display area
-                Expanded(
-                  child: GestureDetector(
-                    onTap: _handleShapeTap,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Bouncing shape with shadow
-                          ScaleTransition(
-                            scale: _bounceAnimation,
-                            child: Container(
-                              width: shapeSize,
-                              height: shapeSize,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: currentShape['name'] == 'Circle'
-                                    ? BoxShape.circle
-                                    : BoxShape.rectangle,
-                                borderRadius:
-                                    _getBorderRadius(currentShape['name']),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:
-                                        currentShape['color'].withOpacity(0.3),
-                                    blurRadius: 20,
-                                    spreadRadius: 5,
-                                    offset: const Offset(0, 10),
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            /// Main section
+            Container(
+              width: size.width,
+              height: size.height,
+              decoration:
+                  const BoxDecoration(gradient: AppColors.backgroundGradient),
+              child: Column(
+                children: [
+                  /// Shape display area
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: GestureDetector(
+                        onTap: _handleShapeTap,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(height: size.height * 0.2),
+                            ScaleTransition(
+                              scale: _bounceAnimation,
+                              child: SizedBox(
+                                width: shapeSize,
+                                height: shapeSize,
+                                child: Center(
+                                  child: Icon(
+                                    currentShape['icon'],
+                                    size: shapeSize * 0.8,
+                                    color: currentShape['color'],
                                   ),
-                                ],
-                                border: Border.all(
-                                  color: currentShape['color'],
-                                  width: 8,
-                                ),
-                              ),
-                              child: Center(
-                                child: Icon(
-                                  currentShape['icon'],
-                                  size: shapeSize * 0.7,
-                                  color: currentShape['color'],
                                 ),
                               ),
                             ),
-                          ),
-
-                          // Shape name with cute style
-                          Padding(
-                            padding: const EdgeInsets.only(top: 30),
-                            child: Text(
+                            Text(
                               currentShape['name'],
-                              style: TextStyle(
-                                fontSize: 50,
-                                fontWeight: FontWeight.bold,
-                                color: currentShape['color'],
-                                fontFamily: 'ComicNeue',
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    blurRadius: 10,
-                                    offset: const Offset(3, 3),
-                                  ),
-                                ],
+                              style: myTextStyleCus(
+                                fontSize: isTablet(context) ? 80 : 42,
+                                fontFamily: "primary",
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                // Navigation buttons
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  /// Navigation buttons
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ControlIconButton(
+                          icon: Icons.arrow_back_rounded,
+                          iconSize: isTablet(context) ? 32 : 21,
+                          color: AppColors.primaryDark,
+                          isRounded: false,
+                          onPressed: _previousShape,
+                        ),
+                        ControlIconButton(
+                          color: _isAutoPlaying ? Colors.green : Colors.black,
+
+                          icon: _isAutoPlaying
+                              ? CupertinoIcons.pause_solid
+                              : CupertinoIcons.play_arrow_solid,
+                          iconSize: isTablet(context) ? 36 : 27,
+                          iconColor:Colors.white ,
+                          onPressed: _toggleAutoPlay,
+                        ),
+                        ControlIconButton(
+                          icon: Icons.arrow_forward_rounded,
+                          iconSize: isTablet(context) ? 32 : 21,
+                          color: AppColors.primaryDark,
+                          isRounded: false,
+                          onPressed: _nextShape,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            /// Header
+            SizedBox(
+              height: size.height * 0.2,
+              width: size.width,
+              child: ClipPath(
+                clipper: _BabyWaveClipper(),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.primaryColor,
+                  ),
+                  child: Stack(
                     children: [
-                      // Previous button
-                      FloatingActionButton(
-                        backgroundColor: currentShape['color'],
-                        onPressed: _previousShape,
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                          size: 30,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0, vertical: 12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              onPressed: () => Navigator.pop(context),
+                              icon: Icon(
+                                Icons.backspace_rounded,
+                                color: AppColors.navigationColor,
+                                size: isTablet(context) ? 32 : 21,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "Let's Learn Shapes!",
+                              style: myTextStyleCus(
+                                fontSize: isTablet(context) ? 42 : 21,
+                                fontFamily: "secondary",
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-
-                      // Auto-play toggle button
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _isAutoPlaying
-                              ? Colors.green
-                              : currentShape['color'],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 15,
-                          ),
-                        ),
-                        onPressed: _toggleAutoPlay,
-                        child: Text(
-                          _isAutoPlaying ? 'AUTO ON' : 'AUTO OFF',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-
-                      // Next button
-                      FloatingActionButton(
-                        backgroundColor: currentShape['color'],
-                        onPressed: _nextShape,
-                        child: const Icon(
-                          Icons.arrow_forward,
-                          color: Colors.white,
-                          size: 30,
+                      Positioned(
+                        right: size.width * 0.09,
+                        bottom: size.height * 0.03,
+                        child: Lottie.asset(
+                          "assets/lottie_animation_file/rabbit.json",
+                          height: size.height * 0.18,
+                          width: size.height * 0.15,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
-
-        // Confetti celebration
-        Align(
-          alignment: Alignment.topCenter,
-          child: ConfettiWidget(
-            confettiController: _confettiController,
-            blastDirectionality: BlastDirectionality.explosive,
-            shouldLoop: false,
-            colors: const [
-              Colors.red,
-              Colors.blue,
-              Colors.green,
-              Colors.yellow,
-              Colors.pink,
-              Colors.purple
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
+}
 
-  BorderRadius? _getBorderRadius(String shapeName) {
-    switch (shapeName) {
-      case 'Circle':
-        return null;
-      case 'Triangle':
-        return BorderRadius.only(
-          topLeft: Radius.zero,
-          topRight: Radius.zero,
-          bottomLeft: const Radius.circular(30),
-          bottomRight: const Radius.circular(30),
-        );
-      default:
-        return BorderRadius.circular(30);
-    }
+class _BabyWaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.lineTo(0, size.height * 0.8);
+    path.quadraticBezierTo(
+      size.width * 0.25,
+      size.height,
+      size.width * 0.5,
+      size.height * 0.8,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.75,
+      size.height * 0.6,
+      size.width,
+      size.height * 0.8,
+    );
+    path.lineTo(size.width, 0);
+    return path;
   }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }

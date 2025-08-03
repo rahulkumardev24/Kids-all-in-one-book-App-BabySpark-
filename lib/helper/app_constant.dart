@@ -10,7 +10,7 @@ class AppConstant {
     },
     {
       "title": "Number",
-      "path": "assets/lottie_animation_file/abcd.json",
+      "path": "assets/images/one_two_three.png",
       "color": const Color(0xFFFF9AA2),
     },
     {

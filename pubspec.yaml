@@ -73,6 +73,7 @@ flutter:
      - assets/animals/
      - assets/body/
      - assets/fruits/
+     - assets/images/
      - assets/lottie_animation_file/
 
   #   - images/a_dot_ham.jpeg

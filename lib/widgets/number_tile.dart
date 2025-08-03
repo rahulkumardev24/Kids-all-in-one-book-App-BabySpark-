@@ -56,9 +56,12 @@ class NumberTile extends StatelessWidget {
                 style: isTablet
                     ? myTextStyle32(
                         fontWeight: FontWeight.bold,
+                  fontColor: Colors.white
+
                       )
                     : myTextStyle28(
                         fontWeight: FontWeight.w700,
+                  fontColor: Colors.white
                       ),
               ),
             ),

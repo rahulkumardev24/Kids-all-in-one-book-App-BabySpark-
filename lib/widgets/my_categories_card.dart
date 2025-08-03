@@ -8,12 +8,17 @@ class MyCategoriesCard extends StatelessWidget {
   final Color color;
   final VoidCallback? onTap;
 
-  const MyCategoriesCard(
-      {super.key,
-      required this.color,
-      required this.title,
-      required this.animationPath,
-      required this.onTap});
+  const MyCategoriesCard({
+    super.key,
+    required this.color,
+    required this.title,
+    required this.animationPath,
+    required this.onTap,
+  });
+
+  bool _isLottie(String path) {
+    return path.toLowerCase().endsWith('.json');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +37,18 @@ class MyCategoriesCard extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            /// Animation with padding to ensure it fits
+            /// Animation or Image
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
-                child: Lottie.asset(
+                child: _isLottie(animationPath)
+                    ? Lottie.asset(
+                  animationPath,
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: double.infinity,
+                )
+                    : Image.asset(
                   animationPath,
                   fit: BoxFit.contain,
                   width: double.infinity,
@@ -52,7 +64,7 @@ class MyCategoriesCard extends StatelessWidget {
               right: 0,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.5),
+                  color: Colors.white.withOpacity(0.5),
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),

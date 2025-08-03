@@ -5,7 +5,6 @@ import 'package:babyspark/screen/categories_screen/shapes_screen.dart';
 import 'package:babyspark/widgets/my_categories_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 import 'categories_screen/colors_screen.dart';
 
@@ -17,6 +16,10 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  bool isTablet(BuildContext context) {
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    return shortestSide >= 600;
+  }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -41,20 +44,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Stack(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "Hello Little Explorer!",
                             style: myTextStyleCus(
                                 fontFamily: "secondary",
-                                fontSize: size.width * 0.1),
+                                fontSize: isTablet(context) ? 30 : 21,),
                           ),
                           Text(
                             "What shall we learn today?",
                             style: myTextStyleCus(
-                                fontSize: size.width * 0.05,
+                                fontSize: isTablet(context) ? 27 : 18,
                                 fontFamily: "primary",
                                 fontWeight: FontWeight.w500),
                           ),
@@ -69,8 +73,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       bottom: -10,
                       child: Lottie.asset(
                         "assets/lottie_animation_file/bear_hi.json",
-                        height: size.height * 0.2,
-                        width: size.height * 0.2,
+                        height: size.height * 0.18,
+                        width: size.height * 0.18,
                         fit: BoxFit.contain,
                       ),
                     ),

@@ -1,6 +1,8 @@
+import 'package:babyspark/domain/custom_text_style.dart';
+import 'package:babyspark/widgets/navigation_button.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:babyspark/domain/custom_text_style.dart';
+import 'package:lottie/lottie.dart';
 import '../../widgets/number_tile.dart';
 import '../number/number_detail_screen.dart';
 
@@ -78,22 +80,46 @@ class _NumberScreenState extends State<NumberScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Numbers', style: myTextStyle22(fontFamily: "secondary")),
-        backgroundColor: Colors.lightBlue[100],
-        elevation: 0,
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.lightBlue[100]!, Colors.orange.shade100],
-          ),
-        ),
-        child: Column(
+    final size = MediaQuery.of(context).size;
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
           children: [
+            /// Header
+            SizedBox(
+              height: size.height * 0.2,
+              child: Stack(
+                children: [
+                  NavigationButton(onTap: () => Navigator.pop(context)),
+                  Positioned(
+                    top: 10,
+                    left: 0,
+                    right: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Number",
+                          style: myTextStyleCus(
+                            fontSize: isTablet(context) ? 32 : 24,
+                            fontFamily: "primary",
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Lottie.asset(
+                      "assets/lottie_animation_file/Birds_in_the_sky.json"),
+                  Positioned(
+                    bottom: 0,
+                    child: Lottie.asset(
+                        "assets/lottie_animation_file/Sunrise - Breathe in Breathe out.json",
+                        width: size.width),
+                  ),
+                ],
+              ),
+            ),
             Expanded(
               child: GridView.builder(
                 padding: const EdgeInsets.all(16),

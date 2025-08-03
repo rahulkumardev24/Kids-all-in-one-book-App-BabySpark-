@@ -1,5 +1,6 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
+import 'package:babyspark/screen/categories_screen/number_screen.dart';
 import 'package:babyspark/screen/categories_screen/shapes_screen.dart';
 import 'package:babyspark/widgets/my_categories_card.dart';
 import 'package:flutter/material.dart';
@@ -38,11 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               SizedBox(
                 width: size.width,
                 child: Stack(
-
                   children: [
-
-
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Column(
@@ -59,17 +56,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             style: myTextStyleCus(
                                 fontSize: size.width * 0.05,
                                 fontFamily: "primary",
-                                fontWeight: FontWeight.w500
-                               ),
+                                fontWeight: FontWeight.w500),
                           ),
-                          SizedBox(height: size.height * 0.03,),
-
+                          SizedBox(
+                            height: size.height * 0.03,
+                          ),
                         ],
                       ),
                     ),
                     Positioned(
                       right: 8,
-                      bottom:-10,
+                      bottom: -10,
                       child: Lottie.asset(
                         "assets/lottie_animation_file/bear_hi.json",
                         height: size.height * 0.2,
@@ -77,11 +74,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         fit: BoxFit.contain,
                       ),
                     ),
-
                   ],
                 ),
               ),
-
 
               /// Categories Grid
               Expanded(
@@ -94,7 +89,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0 , vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 12),
                     child: GridView.builder(
                       itemCount: AppConstant.categories.length,
                       gridDelegate:
@@ -116,11 +112,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const ColorsScreen()));
-                            }  else if (categories["title"] == "Shapes") {
+                            } else if (categories["title"] == "Shapes") {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const ShapesScreen()));
+                            } else if (categories["title"] == "Number") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const NumberScreen()));
                             }
                           },
                         );

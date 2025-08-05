@@ -135,26 +135,28 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                     icon: Icon(Icons.arrow_back_ios, size: 40),
                     onPressed: currentPage > 0
                         ? () {
-                      _pageController.previousPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    }
+                            _pageController.previousPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
                         : null,
                     color: currentPage > 0 ? Colors.blue : Colors.grey,
                   ),
-                const  SizedBox(width: 40),
+                  const SizedBox(width: 40),
                   IconButton(
                     icon: Icon(Icons.arrow_forward_ios, size: 40),
                     onPressed: currentPage < widget.maxNumber - 1
                         ? () {
-                      _pageController.nextPage(
-                        duration: Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    }
+                            _pageController.nextPage(
+                              duration: Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                          }
                         : null,
-                    color: currentPage < widget.maxNumber - 1 ? Colors.blue : Colors.grey,
+                    color: currentPage < widget.maxNumber - 1
+                        ? Colors.blue
+                        : Colors.grey,
                   ),
                 ],
               ),

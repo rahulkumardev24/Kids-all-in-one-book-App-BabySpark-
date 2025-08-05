@@ -3,6 +3,7 @@ import 'package:babyspark/widgets/navigation_button.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:lottie/lottie.dart';
+import '../../helper/app_color.dart';
 import '../../widgets/number_tile.dart';
 import '../number/number_detail_screen.dart';
 
@@ -87,11 +88,12 @@ class _NumberScreenState extends State<NumberScreen> {
         body: Column(
           children: [
             /// Header
-            SizedBox(
+            Container(
+              color: AppColors.babyBlue.withValues(alpha: 0.5),
               height: size.height * 0.2,
               child: Stack(
                 children: [
-                  NavigationButton(onTap: () => Navigator.pop(context)),
+                  /// navigation button -> back button
                   Positioned(
                     top: 10,
                     left: 0,
@@ -111,12 +113,18 @@ class _NumberScreenState extends State<NumberScreen> {
                   ),
                   Lottie.asset(
                       "assets/lottie_animation_file/Birds_in_the_sky.json"),
+
+                  /// rainbow
                   Positioned(
-                    bottom: 0,
+                    bottom: -10,
                     child: Lottie.asset(
-                        "assets/lottie_animation_file/Sunrise - Breathe in Breathe out.json",
-                        width: size.width),
+                      "assets/lottie_animation_file/Sunrise - Breathe in Breathe out.json",
+                      width: size.width,
+                      fit: BoxFit.cover,
+                    ),
                   ),
+
+                  NavigationButton(onTap: () => Navigator.pop(context)),
                 ],
               ),
             ),

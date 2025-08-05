@@ -43,6 +43,19 @@ TextStyle myTextStyle22(
 }
 
 /// font 25
+TextStyle myTextStyle21(
+    {Color fontColor = Colors.black,
+    FontWeight fontWeight = FontWeight.normal,
+    String fontFamily = "main"}) {
+  return TextStyle(
+    color: fontColor,
+    fontWeight: fontWeight,
+    fontFamily: fontFamily,
+    fontSize: 21,
+  );
+}
+
+/// font 25
 TextStyle myTextStyle25(
     {Color fontColor = Colors.black,
     FontWeight fontWeight = FontWeight.normal,
@@ -124,12 +137,11 @@ TextStyle myTextStyle40({
   );
 }
 
-TextStyle myTextStyleCus({
-  Color fontColor = Colors.black,
-  FontWeight fontWeight = FontWeight.normal,
-  String fontFamily = "main",
-  double fontSize = 18
-}) {
+TextStyle myTextStyleCus(
+    {Color fontColor = Colors.black,
+    FontWeight fontWeight = FontWeight.normal,
+    String fontFamily = "main",
+    double fontSize = 18}) {
   return TextStyle(
     color: fontColor,
     fontWeight: fontWeight,
@@ -137,4 +149,3 @@ TextStyle myTextStyleCus({
     fontSize: fontSize,
   );
 }
-

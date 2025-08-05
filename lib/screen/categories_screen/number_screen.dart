@@ -1,9 +1,7 @@
-import 'package:babyspark/domain/custom_text_style.dart';
-import 'package:babyspark/widgets/navigation_button.dart';
+import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:lottie/lottie.dart';
-import '../../helper/app_color.dart';
+import '../../widgets/my_text_button.dart';
 import '../../widgets/number_tile.dart';
 import '../number/number_detail_screen.dart';
 
@@ -84,81 +82,52 @@ class _NumberScreenState extends State<NumberScreen> {
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: size.height * 0.2,
+          flexibleSpace: const SecondaryAppBar(title: "Number"),
+        ),
         backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            /// Header
-            Container(
-              color: AppColors.babyBlue.withValues(alpha: 0.5),
-              height: size.height * 0.2,
-              child: Stack(
-                children: [
-                  /// navigation button -> back button
-                  Positioned(
-                    top: 10,
-                    left: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Number",
-                          style: myTextStyleCus(
-                            fontSize: isTablet(context) ? 32 : 24,
-                            fontFamily: "primary",
-                          ),
-                        ),
-                      ],
-                    ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              /// Grid item
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 2),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
                   ),
-                  Lottie.asset(
-                      "assets/lottie_animation_file/Birds_in_the_sky.json"),
-
-                  /// rainbow
-                  Positioned(
-                    bottom: -10,
-                    child: Lottie.asset(
-                      "assets/lottie_animation_file/Sunrise - Breathe in Breathe out.json",
-                      width: size.width,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-
-                  NavigationButton(onTap: () => Navigator.pop(context)),
-                ],
-              ),
-            ),
-            Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
+                  itemCount: _displayedNumbers.length,
+                  itemBuilder: (context, index) {
+                    return NumberTile(
+                      number: _displayedNumbers[index],
+                      color: _numberColors[index % _numberColors.length],
+                      isTablet: isTablet(context),
+                      onTap: () {
+                        _playNumberSound(_displayedNumbers[index]);
+                        _navigateToNumberDetail(
+                            context, _displayedNumbers[index]);
+                      },
+                    );
+                  },
                 ),
-                itemCount: _displayedNumbers.length,
-                itemBuilder: (context, index) {
-                  return NumberTile(
-                    number: _displayedNumbers[index],
-                    color: _numberColors[index % _numberColors.length],
-                    isTablet: isTablet(context),
-                    onTap: () {
-                      _playNumberSound(_displayedNumbers[index]);
-                      _navigateToNumberDetail(
-                          context, _displayedNumbers[index]);
-                    },
-                  );
-                },
               ),
-            ),
-            _isLoadingMore
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _loadMoreNumbers,
-                    child: const Text(
-                      'Learn More Numbers',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-          ],
+              _isLoadingMore
+                  ? const CircularProgressIndicator()
+                  : Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: MyTextButton(
+                            btnText: "Learn More Number",
+                            onPress: _loadMoreNumbers),
+                      )),
+            ],
+          ),
         ),
       ),
     );

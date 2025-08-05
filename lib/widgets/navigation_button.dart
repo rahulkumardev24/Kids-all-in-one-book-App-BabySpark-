@@ -23,15 +23,16 @@ class NavigationButton extends StatelessWidget {
                     blurRadius: 1,
                     offset: Offset(1.0, 1.5)),
                 BoxShadow(
-                    color: AppColors.textColor,
+                    color: AppColors.primaryDark,
                     spreadRadius: 1,
                     blurRadius: 1,
                     offset: Offset(-1.5, 2.0)),
               ]),
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
+          child:  Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Icon(
               Icons.arrow_back_ios_new_rounded,
+              color: Colors.grey.shade700,
               size: 28,
             ),
           ),

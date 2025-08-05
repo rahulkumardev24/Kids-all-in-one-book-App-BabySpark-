@@ -100,7 +100,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 1.0,
+                        childAspectRatio: 2/2.5,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
                       ),

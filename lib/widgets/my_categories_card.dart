@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import '../domain/custom_text_style.dart';
 
 class MyCategoriesCard extends StatelessWidget {
@@ -16,16 +15,14 @@ class MyCategoriesCard extends StatelessWidget {
     required this.onTap,
   });
 
-  bool _isLottie(String path) {
-    return path.toLowerCase().endsWith('.json');
-  }
-
   @override
   Widget build(BuildContext context) {
     bool isTablet(BuildContext context) {
       final shortestSide = MediaQuery.of(context).size.shortestSide;
       return shortestSide >= 600;
     }
+
+    final size = MediaQuery.of(context).size;
 
     return InkWell(
       borderRadius: BorderRadius.circular(20),
@@ -34,52 +31,44 @@ class MyCategoriesCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(20),
+          border: Border.all(width: 1.5 , color: Colors.grey.shade500)
         ),
         child: Stack(
           children: [
             /// Animation or Image
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: _isLottie(animationPath)
-                    ? Lottie.asset(
-                  animationPath,
-                  fit: BoxFit.contain,
-                  width: double.infinity,
-                  height: double.infinity,
-                )
-                    : Image.asset(
-                  animationPath,
-                  fit: BoxFit.contain,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
-              ),
-            ),
-
-            /// Title
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.5),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Image.asset(
+                      animationPath,
+                      fit: BoxFit.contain,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: isTablet(context)
-                        ? myTextStyle30(fontWeight: FontWeight.bold)
-                        : myTextStyle22(fontWeight: FontWeight.bold),
-                  ),
-                ),
+                  Container(
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.5),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        title,
+                        textAlign: TextAlign.center,
+                        style: isTablet(context)
+                            ? myTextStyle30(fontWeight: FontWeight.bold)
+                            : myTextStyle22(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  )
+                ],
               ),
             ),
           ],

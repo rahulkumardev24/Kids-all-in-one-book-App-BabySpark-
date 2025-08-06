@@ -1,6 +1,5 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:flutter/material.dart';
-
 import '../helper/app_color.dart';
 
 class MyTextButton extends StatelessWidget {

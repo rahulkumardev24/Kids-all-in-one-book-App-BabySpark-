@@ -1,4 +1,4 @@
-import 'package:babyspark/screen/categories_screen/number_screen.dart';
+import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/screen/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -1,6 +1,6 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
-import 'package:babyspark/screen/categories_screen/number_screen.dart';
+import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/screen/categories_screen/shapes_screen.dart';
 import 'package:babyspark/widgets/my_categories_card.dart';
 import 'package:flutter/material.dart';

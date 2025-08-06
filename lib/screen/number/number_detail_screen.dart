@@ -1,8 +1,11 @@
-import 'package:audioplayers/audioplayers.dart';
-import 'package:babyspark/helper/app_constant.dart';
-import 'package:flutter/material.dart';
+import 'dart:async';
 
+import 'package:babyspark/helper/app_constant.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import '../../domain/custom_text_style.dart';
+import '../../helper/app_color.dart';
+import '../../widgets/control_icon_button.dart';
 
 class NumberDetailScreen extends StatefulWidget {
   final int initialNumber;
@@ -21,8 +24,9 @@ class NumberDetailScreen extends StatefulWidget {
 class _NumberDetailScreenState extends State<NumberDetailScreen> {
   late PageController _pageController;
   late int currentPage;
-  final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isMuted = false;
+  Timer? _timer;
+  bool _isPlaying = false;
 
   @override
   void initState() {
@@ -31,29 +35,47 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
     _pageController = PageController(initialPage: widget.initialNumber);
   }
 
+  bool isTablet(BuildContext context) {
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    return shortestSide >= 600;
+  }
+
+  void _startAutoPlay() {
+    _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (currentPage < widget.maxNumber - 1) {
+        currentPage++;
+        _pageController.animateToPage(
+          currentPage,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        _stopAutoPlay();
+      }
+    });
+  }
+
+  void _stopAutoPlay() {
+    _timer?.cancel();
+    _timer = null;
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
-    _audioPlayer.dispose();
     super.dispose();
-  }
-
-  Future<void> playNumberSound(int number) async {
-    if (!_isMuted) {
-      await _audioPlayer.play(AssetSource('sounds/number_$number.mp3'));
-    }
   }
 
   Widget _buildNumberPage(int number) {
     String numberWord = _getNumberWord(number);
 
     return GestureDetector(
-      onTap: () => playNumberSound(number),
+      onTap: () {},
       child: Container(
         width: 200,
         height: 200,
         decoration: BoxDecoration(
-          color: Colors.blue.withValues(alpha:  0.3),
+          color: Colors.blue.withValues(alpha: 0.3),
           shape: BoxShape.circle,
         ),
         child: Center(
@@ -116,7 +138,6 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                   setState(() {
                     currentPage = page;
                   });
-                  playNumberSound(page + 1);
                 },
                 itemBuilder: (context, index) {
                   return Center(
@@ -126,13 +147,18 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                 itemCount: widget.maxNumber,
               ),
             ),
+
+            /// control button
             Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
+              padding: const EdgeInsets.all(20),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back_ios, size: 40),
+                  ControlIconButton(
+                    icon: Icons.arrow_back_rounded,
+                    iconSize: isTablet(context) ? 32 : 21,
+                    color: AppColors.primaryDark,
+                    isRounded: false,
                     onPressed: currentPage > 0
                         ? () {
                             _pageController.previousPage(
@@ -141,11 +167,30 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                             );
                           }
                         : null,
-                    color: currentPage > 0 ? Colors.blue : Colors.grey,
                   ),
-                  const SizedBox(width: 40),
-                  IconButton(
-                    icon: Icon(Icons.arrow_forward_ios, size: 40),
+                  ControlIconButton(
+                    color: _isPlaying ? Colors.green : Colors.black,
+                    icon: _isPlaying
+                        ? CupertinoIcons.pause_solid
+                        : CupertinoIcons.play_arrow_solid,
+                    iconSize: isTablet(context) ? 36 : 27,
+                    iconColor: Colors.white,
+                    onPressed: () {
+                      setState(() {
+                        _isPlaying = !_isPlaying;
+                        if (_isPlaying) {
+                          _startAutoPlay();
+                        } else {
+                          _stopAutoPlay();
+                        }
+                      });
+                    },
+                  ),
+                  ControlIconButton(
+                    icon: Icons.arrow_forward_rounded,
+                    iconSize: isTablet(context) ? 32 : 21,
+                    color: AppColors.primaryDark,
+                    isRounded: false,
                     onPressed: currentPage < widget.maxNumber - 1
                         ? () {
                             _pageController.nextPage(
@@ -154,13 +199,10 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                             );
                           }
                         : null,
-                    color: currentPage < widget.maxNumber - 1
-                        ? Colors.blue
-                        : Colors.grey,
                   ),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),

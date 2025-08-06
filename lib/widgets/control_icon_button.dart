@@ -4,7 +4,7 @@ class ControlIconButton extends StatefulWidget {
   final IconData? icon;
   final Color color;
   final Color? iconColor;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isRounded;
   final double iconSize;
 
@@ -51,8 +51,8 @@ class _BabyButtonState extends State<ControlIconButton>
       onTapDown: (_) => _controller.forward(),
       onTapUp: (_) {
         _controller.reverse();
-        widget.onPressed();
       },
+      onTap: widget.onPressed,
       onTapCancel: () => _controller.reverse(),
       child: ScaleTransition(
         scale: _scaleAnimation,

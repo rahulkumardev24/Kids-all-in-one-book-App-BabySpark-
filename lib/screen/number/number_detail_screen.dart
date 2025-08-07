@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import '../../domain/custom_text_style.dart';
 import '../../helper/app_color.dart';
 import '../../widgets/control_icon_button.dart';
@@ -68,6 +69,7 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
 
   Widget _buildNumberPage(int number) {
     String numberWord = _getNumberWord(number);
+    final size = MediaQuery.of(context).size;
 
     return GestureDetector(
       onTap: () {},
@@ -106,6 +108,7 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('Number ${currentPage + 1}',
@@ -148,60 +151,107 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
               ),
             ),
 
-            /// control button
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ControlIconButton(
-                    icon: Icons.arrow_back_rounded,
-                    iconSize: isTablet(context) ? 32 : 21,
-                    color: AppColors.primaryDark,
-                    isRounded: false,
-                    onPressed: currentPage > 0
-                        ? () {
-                            _pageController.previousPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        : null,
+            /// --- Footer part --- ///
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Lottie.asset(
+                  "assets/lottie_animation_file/water_wave.json",
+                  fit: BoxFit.cover,
+                  width: size.width,
+                ),
+                Positioned(
+                    left: 0,
+
+                    child: Lottie.asset("assets/lottie_animation_file/fishing_new.json" ,
+                        height: size.height * 0.3
+                    )),
+
+                Positioned(
+                  bottom: -20,
+                  child: Lottie.asset(
+                    "assets/lottie_animation_file/Fish Animation.json",
+                    fit: BoxFit.cover,
+                    width: size.width,
                   ),
-                  ControlIconButton(
-                    color: _isPlaying ? Colors.green : Colors.black,
-                    icon: _isPlaying
-                        ? CupertinoIcons.pause_solid
-                        : CupertinoIcons.play_arrow_solid,
-                    iconSize: isTablet(context) ? 36 : 27,
-                    iconColor: Colors.white,
-                    onPressed: () {
-                      setState(() {
-                        _isPlaying = !_isPlaying;
-                        if (_isPlaying) {
-                          _startAutoPlay();
-                        } else {
-                          _stopAutoPlay();
-                        }
-                      });
-                    },
+                ),
+
+
+
+                Positioned(
+                  right: -120,
+                  bottom: -50,
+                  child: Lottie.asset("assets/lottie_animation_file/Palm Tree Leaf Animation.json" ,
+                    height: size.height * 0.3
                   ),
-                  ControlIconButton(
-                    icon: Icons.arrow_forward_rounded,
-                    iconSize: isTablet(context) ? 32 : 21,
-                    color: AppColors.primaryDark,
-                    isRounded: false,
-                    onPressed: currentPage < widget.maxNumber - 1
-                        ? () {
-                            _pageController.nextPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          }
-                        : null,
+                ),
+
+
+                /// control button
+                Positioned(
+                  top: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: SizedBox(
+                      width: size.width,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ControlIconButton(
+                            icon: Icons.arrow_back_rounded,
+                            iconSize: isTablet(context) ? 32 : 21,
+                            color: AppColors.primaryDark,
+                            isRounded: false,
+                            onPressed: currentPage > 0
+                                ? () {
+                                    _pageController.previousPage(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  }
+                                : null,
+                          ),
+                          ControlIconButton(
+                            color: _isPlaying ? Colors.green : Colors.black,
+                            icon: _isPlaying
+                                ? CupertinoIcons.pause_solid
+                                : CupertinoIcons.play_arrow_solid,
+                            iconSize: isTablet(context) ? 36 : 27,
+                            iconColor: Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                _isPlaying = !_isPlaying;
+                                if (_isPlaying) {
+                                  _startAutoPlay();
+                                } else {
+                                  _stopAutoPlay();
+                                }
+                              });
+                            },
+                          ),
+                          ControlIconButton(
+                            icon: Icons.arrow_forward_rounded,
+                            iconSize: isTablet(context) ? 32 : 21,
+                            color: AppColors.primaryDark,
+                            isRounded: false,
+                            onPressed: currentPage < widget.maxNumber - 1
+                                ? () {
+                                    _pageController.nextPage(
+                                      duration:
+                                          const Duration(milliseconds: 300),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  }
+                                : null,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             )
           ],
         ),

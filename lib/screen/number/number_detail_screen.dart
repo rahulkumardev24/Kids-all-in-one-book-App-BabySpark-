@@ -160,12 +160,6 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                   fit: BoxFit.cover,
                   width: size.width,
                 ),
-                Positioned(
-                    left: 0,
-
-                    child: Lottie.asset("assets/lottie_animation_file/fishing_new.json" ,
-                        height: size.height * 0.3
-                    )),
 
                 Positioned(
                   bottom: -20,
@@ -176,16 +170,22 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                   ),
                 ),
 
-
-
                 Positioned(
-                  right: -120,
-                  bottom: -50,
-                  child: Lottie.asset("assets/lottie_animation_file/Palm Tree Leaf Animation.json" ,
-                    height: size.height * 0.3
-                  ),
-                ),
+                    left: 0,
+                    bottom: -size.height * 0.06,
+                    child: Lottie.asset(
+                        "assets/lottie_animation_file/fishing_new.json",
+                        height: size.height * 0.26,
+                        fit: BoxFit.cover)),
 
+                /// --- Tree --- ///
+                Positioned(
+                  right: -size.width * 0.25,
+                  bottom: -size.height * 0.06,
+                  child: Lottie.asset(
+                      "assets/lottie_animation_file/Palm Tree Leaf Animation.json",
+                      height: size.height * 0.3),
+                ),
 
                 /// control button
                 Positioned(

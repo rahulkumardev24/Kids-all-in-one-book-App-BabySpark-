@@ -1,13 +1,21 @@
 import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/screen/dashboard_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'firebase_options.dart';
 import 'helper/app_color.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  /// firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  /// screen Orientation -> Portrait
   await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 

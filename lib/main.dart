@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         statusBarBrightness: Brightness.dark,
       ),
       child: MaterialApp(
-        title: 'Fact fuel',
+        title: 'BabyBook - All in one',
         debugShowCheckedModeBanner: false,
         home: DashboardScreen(),
       ),

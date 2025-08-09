@@ -22,8 +22,9 @@ class _NumberScreenState extends State<NumberScreen> {
   final List<int> _displayedNumbers = List.generate(20, (index) => index + 1);
   bool _isLoadingMore = false;
 
+  /// number generate --> 100
   void _loadMoreNumbers() {
-    if (_isLoadingMore) return;
+    if (_isLoadingMore || _displayedNumbers.last >= 100) return;
 
     setState(() => _isLoadingMore = true);
 
@@ -31,8 +32,13 @@ class _NumberScreenState extends State<NumberScreen> {
       if (!mounted) return;
       setState(() {
         final lastNumber = _displayedNumbers.last;
-        _displayedNumbers
-            .addAll(List.generate(20, (index) => lastNumber + index + 1));
+        final remainingNumbers = 100 - lastNumber;
+        final numbersToAdd = remainingNumbers > 20 ? 20 : remainingNumbers;
+
+        if (numbersToAdd > 0) {
+          _displayedNumbers.addAll(
+              List.generate(numbersToAdd, (index) => lastNumber + index + 1));
+        }
         _isLoadingMore = false;
       });
     });
@@ -73,8 +79,7 @@ class _NumberScreenState extends State<NumberScreen> {
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
                 ),
                 itemCount: _displayedNumbers.length,
@@ -90,16 +95,20 @@ class _NumberScreenState extends State<NumberScreen> {
                   );
                 },
               ),
-              _isLoadingMore
-                  ? const CircularProgressIndicator()
-                  : Align(
+
+              /// --- Learn More Button ---
+              _displayedNumbers.last < 100
+                  ? Align(
                       alignment: Alignment.center,
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: MyTextButton(
-                            btnText: "Learn More Number",
-                            onPress: _loadMoreNumbers),
-                      )),
+                          btnText: "Learn More Number",
+                          onPress: _loadMoreNumbers,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
         ),

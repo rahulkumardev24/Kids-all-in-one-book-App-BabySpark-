@@ -1,5 +1,6 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
+import 'package:babyspark/screen/categories_screen/book_grid_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/screen/categories_screen/shapes_screen.dart';
 import 'package:babyspark/widgets/my_categories_card.dart';
@@ -126,6 +127,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const NumberScreen()));
+                            }else if (categories["title"] == "Alphabets") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen()));
                             }
                           },
                         );

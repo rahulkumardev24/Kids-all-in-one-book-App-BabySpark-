@@ -12,8 +12,8 @@ class NavigationButton extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          width: 50,
-          height: 50,
+          width: 40,
+          height: 40,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.white,

@@ -70,6 +70,7 @@ class _NumberScreenState extends State<NumberScreen> {
           automaticallyImplyLeading: false,
           toolbarHeight: size.height * 0.2,
           flexibleSpace: const SecondaryAppBar(title: "Number"),
+          backgroundColor: Colors.white,
         ),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(

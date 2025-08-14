@@ -6,7 +6,11 @@ class FirebaseBookService {
 
   /// Stream books for real-time updates
   Stream<List<BookModel>> getBookData(String collection) {
-    return _firestore.collection(collection).snapshots().map((snapshot) {
+    return _firestore
+        .collection(collection)
+        .orderBy('title', descending: false)
+        .snapshots()
+        .map((snapshot) {
       return snapshot.docs
           .map((doc) => BookModel.fromJson(doc.data()))
           .toList();

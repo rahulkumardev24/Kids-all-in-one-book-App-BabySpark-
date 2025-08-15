@@ -73,7 +73,6 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
     return SafeArea(
       child: Scaffold(
         /// --- Appbar --- ///
-        /// App Bar
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,

@@ -7,7 +7,8 @@ import '../../service/firebase_book_service.dart';
 import '../../widgets/items_card.dart';
 
 class BookGridScreen extends StatefulWidget {
-  const BookGridScreen({super.key});
+  final String collectionName;
+  const BookGridScreen({super.key, required this.collectionName});
 
   @override
   State<BookGridScreen> createState() => _BookGridScreenState();
@@ -34,7 +35,7 @@ class _BookGridScreenState extends State<BookGridScreen> {
 
         /// --- body --- ///
         body: StreamBuilder<List<BookModel>>(
-          stream: _firebaseService.getBookData("alphabets_data"),
+          stream: _firebaseService.getBookData(widget.collectionName),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -59,14 +60,24 @@ class _BookGridScreenState extends State<BookGridScreen> {
               itemCount: books.length,
               itemBuilder: (context, index) {
                 final book = books[index];
-                return ItemsCard(
-                  title: book.title,
-                  imagePath: book.image,
-                  isTablet: isTablet(context),
-                  onPress: () => Navigator.push(
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const DetailsScreen())),
+                        builder: (context) => DetailsScreen(
+                          currentIndex: index,
+                          collectionName: widget.collectionName,
+                          items: books,
+                        ),
+                      ),
+                    );
+                  },
+                  child: ItemsCard(
+                    title: book.title,
+                    imagePath: book.image,
+                    isTablet: isTablet(context),
+                  ),
                 );
               },
             );

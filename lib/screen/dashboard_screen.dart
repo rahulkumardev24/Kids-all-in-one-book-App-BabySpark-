@@ -2,7 +2,6 @@ import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/screen/categories_screen/book_grid_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
-import 'package:babyspark/screen/categories_screen/shapes_screen.dart';
 import 'package:babyspark/widgets/my_categories_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -21,6 +20,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final shortestSide = MediaQuery.of(context).size.shortestSide;
     return shortestSide >= 600;
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -45,7 +45,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Stack(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0, vertical: 8),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -53,8 +54,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Text(
                             "Hello Little Explorer!",
                             style: myTextStyleCus(
-                                fontFamily: "secondary",
-                                fontSize: isTablet(context) ? 30 : 21,),
+                              fontFamily: "secondary",
+                              fontSize: isTablet(context) ? 30 : 21,
+                            ),
                           ),
                           Text(
                             "What shall we learn today?",
@@ -101,7 +103,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 2/2.5,
+                        childAspectRatio: 2 / 2.5,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
                       ),
@@ -117,21 +119,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const ColorsScreen()));
-                            } else if (categories["title"] == "Shapes") {
+                            }
+
+                            /// --- Shapes --- ///
+                            else if (categories["title"] == "Shapes") {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => const ShapesScreen()));
+                                      builder: (_) => const BookGridScreen(
+                                            collectionName: "shape_data",
+                                          )));
                             } else if (categories["title"] == "Number") {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const NumberScreen()));
-                            }else if (categories["title"] == "Alphabets") {
+                            }
+
+                            /// --- Fruits --- ///
+                            else if (categories["title"] == "Fruits") {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => const BookGridScreen()));
+                                      builder: (_) => const BookGridScreen(
+                                            collectionName: 'fruits_data',
+                                          )));
+                            }
+
+                            /// --- Alphabets --- ///
+
+                            else if (categories["title"] == "Alphabets") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen(
+                                            collectionName: "alphabets_data",
+                                          )));
                             }
                           },
                         );

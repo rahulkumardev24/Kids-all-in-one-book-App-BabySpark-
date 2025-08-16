@@ -1,23 +1,21 @@
 import 'dart:async';
-
 import 'package:babyspark/model/book_model.dart';
 import 'package:babyspark/service/tts_service.dart';
 import 'package:babyspark/widgets/primary_app_bar.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import '../../../domain/custom_text_style.dart';
+import '../../../helper/app_color.dart';
+import '../../../widgets/control_icon_button.dart';
+import '../../../widgets/footer_animation.dart';
 
-import '../domain/custom_text_style.dart';
-import '../helper/app_color.dart';
-import '../widgets/control_icon_button.dart';
-import '../widgets/footer_animation.dart';
-
-class DetailsScreen extends StatefulWidget {
+class AlphabetsDetailsScreen extends StatefulWidget {
   final int currentIndex;
   final String collectionName;
   final List<BookModel> items;
 
-  const DetailsScreen({
+  const AlphabetsDetailsScreen({
     super.key,
     required this.currentIndex,
     required this.collectionName,
@@ -25,10 +23,10 @@ class DetailsScreen extends StatefulWidget {
   });
 
   @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
+  State<AlphabetsDetailsScreen> createState() => _DetailsScreenState();
 }
 
-class _DetailsScreenState extends State<DetailsScreen>
+class _DetailsScreenState extends State<AlphabetsDetailsScreen>
     with TickerProviderStateMixin {
   bool isTablet(BuildContext context) {
     final shortestSide = MediaQuery.of(context).size.shortestSide;
@@ -43,6 +41,7 @@ class _DetailsScreenState extends State<DetailsScreen>
 
   bool _isAutoPlaying = false;
   Timer? _autoPlayTimer;
+
 
   @override
   void initState() {
@@ -137,13 +136,16 @@ class _DetailsScreenState extends State<DetailsScreen>
   }
 
   void playSound(String title) {
-    TTSService.speak(title);
+    if (title.isNotEmpty) {
+      String firstLetter = title[0].toUpperCase();
+      TTSService.speak("$firstLetter for $title");
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final title = widget.collectionName.replaceAll('_data', '');
 
     return SafeArea(
       child: Scaffold(
@@ -151,7 +153,7 @@ class _DetailsScreenState extends State<DetailsScreen>
         appBar: AppBar(
           toolbarHeight: size.height * 0.2,
           automaticallyImplyLeading: false,
-          flexibleSpace: PrimaryAppBar(title: title),
+          flexibleSpace: const PrimaryAppBar(title: "New Alphabets"),
           backgroundColor: Colors.white,
         ),
         backgroundColor: Colors.white,

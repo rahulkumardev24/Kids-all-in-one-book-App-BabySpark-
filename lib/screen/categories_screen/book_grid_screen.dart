@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 
 import '../../service/firebase_book_service.dart';
 import '../../widgets/items_card.dart';
+import 'alphabets/alphabets_details_screen.dart';
 
 class BookGridScreen extends StatefulWidget {
   final String collectionName;
-  const BookGridScreen({super.key, required this.collectionName});
+  final String appBarTitle;
+  const BookGridScreen(
+      {super.key, required this.collectionName, required this.appBarTitle});
 
   @override
   State<BookGridScreen> createState() => _BookGridScreenState();
@@ -30,7 +33,7 @@ class _BookGridScreenState extends State<BookGridScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           toolbarHeight: size.height * 0.2,
-          flexibleSpace: const SecondaryAppBar(title: "Alphabets"),
+          flexibleSpace: SecondaryAppBar(title: widget.appBarTitle),
         ),
 
         /// --- body --- ///
@@ -61,17 +64,31 @@ class _BookGridScreenState extends State<BookGridScreen> {
                 return GestureDetector(
                   /// --- navigate to Details screen --- ///
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DetailsScreen(
-                          currentIndex: index,
-                          collectionName: widget.collectionName,
-                          items: books,
+                    if (widget.collectionName == "alphabets_data") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AlphabetsDetailsScreen(
+                            currentIndex: index,
+                            collectionName: widget.collectionName,
+                            items: books,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                            currentIndex: index,
+                            collectionName: widget.collectionName,
+                            items: books,
+                          ),
+                        ),
+                      );
+                    }
                   },
+
                   child: ItemsCard(
                     title: book.title,
                     imagePath: book.image,

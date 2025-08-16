@@ -128,6 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
                                             collectionName: "shape_data",
+                                        appBarTitle: "Shapes",
                                           )));
                             } else if (categories["title"] == "Number") {
                               Navigator.push(
@@ -143,7 +144,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
                                             collectionName: 'fruits_data',
+                                        appBarTitle: "Fruits",
                                           )));
+                            }
+
+                            /// --- Vegetables --- ///
+                            else if (categories["title"] == "Vegetables") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen(
+                                        collectionName: 'vegetables_data',
+                                        appBarTitle: "Fruits",
+                                      )));
                             }
 
                             /// --- Alphabets --- ///
@@ -154,6 +167,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
                                             collectionName: "alphabets_data",
+                                        appBarTitle: "Alphabets",
                                           )));
                             }
                           },

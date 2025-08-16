@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../domain/custom_text_style.dart';
 import '../../helper/app_color.dart';
+import '../../service/tts_service.dart';
 import '../../widgets/control_icon_button.dart';
 import '../../widgets/footer_animation.dart';
 import '../../widgets/primary_app_bar.dart';
@@ -25,7 +26,6 @@ class NumberDetailScreen extends StatefulWidget {
 class _NumberDetailScreenState extends State<NumberDetailScreen> {
   late PageController _pageController;
   late int currentPage;
-  bool _isMuted = false;
   Timer? _timer;
   bool _isPlaying = false;
 
@@ -34,6 +34,10 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
     super.initState();
     currentPage = widget.initialNumber;
     _pageController = PageController(initialPage: widget.initialNumber);
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      playSound(currentPage + 1);
+    });
   }
 
   bool isTablet(BuildContext context) {
@@ -61,6 +65,10 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
     _timer = null;
   }
 
+  void playSound(int number) {
+    TTSService.speak("$number");
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -72,16 +80,13 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        /// --- Appbar --- ///
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           toolbarHeight: size.height * 0.2,
           flexibleSpace: const PrimaryAppBar(title: "Number"),
         ),
-      
         backgroundColor: Colors.white,
-        /// --- Body --- ///
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -92,6 +97,7 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                   setState(() {
                     currentPage = page;
                   });
+                  playSound(page + 1);
                 },
                 itemBuilder: (context, index) {
                   return Center(
@@ -101,9 +107,6 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                 itemCount: widget.maxNumber,
               ),
             ),
-      
-            /// --- Footer part --- ///
-            /// --- Footer with controls --- ///
             SizedBox(
               height: size.height * 0.25,
               child: Stack(
@@ -117,6 +120,7 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          /// Previous Button
                           ControlIconButton(
                             icon: Icons.arrow_back_rounded,
                             iconSize: isTablet(context) ? 32 : 21,
@@ -125,15 +129,16 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                             onPressed: currentPage > 0
                                 ? () {
                                     _pageController.previousPage(
-                                      duration: const Duration(milliseconds: 300),
+                                      duration:
+                                          const Duration(milliseconds: 300),
                                       curve: Curves.easeInOut,
                                     );
                                   }
                                 : null,
                           ),
-                          SizedBox(
-                            width: size.width * 0.05,
-                          ),
+                          SizedBox(width: size.width * 0.05),
+
+                          /// Play / Pause AutoPlay
                           ControlIconButton(
                             color: _isPlaying ? Colors.green : Colors.black,
                             icon: _isPlaying
@@ -152,9 +157,9 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                               });
                             },
                           ),
-                          SizedBox(
-                            width: size.width * 0.05,
-                          ),
+                          SizedBox(width: size.width * 0.05),
+
+                          /// Next Button
                           ControlIconButton(
                             icon: Icons.arrow_forward_rounded,
                             iconSize: isTablet(context) ? 32 : 21,
@@ -163,7 +168,8 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                             onPressed: currentPage < widget.maxNumber - 1
                                 ? () {
                                     _pageController.nextPage(
-                                      duration: const Duration(milliseconds: 300),
+                                      duration:
+                                          const Duration(milliseconds: 300),
                                       curve: Curves.easeInOut,
                                     );
                                   }
@@ -182,33 +188,25 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
     );
   }
 
-  String _getNumberWord(int number) {
-    return AppConstant.numberWords[number];
-  }
-
-  /// ---
   Widget _numberPage(int number) {
-    String numberWord = _getNumberWord(number);
-    return GestureDetector(
-      onTap: () {},
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            /// --- number --- ///
-            Text('$number',
-                style: myTextStyleCus(
-                    fontSize: 200,
-                    fontFamily: "primary",
-                    fontWeight: FontWeight.w500)),
-
-            /// --- number word --- ///
-            Text(
-              numberWord,
-              style: myTextStyle40(fontWeight: FontWeight.bold),
+    String numberWord = AppConstant.numberWords[number];
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '$number',
+            style: myTextStyleCus(
+              fontSize: 200,
+              fontFamily: "primary",
+              fontWeight: FontWeight.w500,
             ),
-          ],
-        ),
+          ),
+          Text(
+            numberWord,
+            style: myTextStyle40(fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }

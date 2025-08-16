@@ -46,21 +46,20 @@ class _BookGridScreenState extends State<BookGridScreen> {
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(child: Text("No alphabets found"));
             }
-
             final books = snapshot.data!;
-
             return GridView.builder(
               padding: const EdgeInsets.all(12),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: size.width > 600 ? 4 : 2,
-                mainAxisSpacing: 6,
-                crossAxisSpacing: 6,
-                childAspectRatio: 0.8,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                childAspectRatio: 0.9,
               ),
               itemCount: books.length,
               itemBuilder: (context, index) {
                 final book = books[index];
                 return GestureDetector(
+                  /// --- navigate to Details screen --- ///
                   onTap: () {
                     Navigator.push(
                       context,

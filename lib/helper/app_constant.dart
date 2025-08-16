@@ -75,149 +75,82 @@ class AppConstant {
     {
       "color": Colors.red,
       "name": "Red",
-      "hindiName": "लाल",
-      "emoji": "🍎",
-      "sound": "red_sound.mp3"
     },
     {
       "color": Colors.blue,
       "name": "Blue",
-      "hindiName": "नीला",
-      "emoji": "🐳",
-      "sound": "blue_sound.mp3"
     },
     {
       "color": Colors.green,
       "name": "Green",
-      "hindiName": "हरा",
-      "emoji": "🐸",
-      "sound": "green_sound.mp3"
     },
     {
       "color": Colors.yellow,
       "name": "Yellow",
-      "hindiName": "पीला",
-      "emoji": "🍌",
-      "sound": "yellow_sound.mp3"
     },
     {
       "color": Colors.orange,
       "name": "Orange",
-      "hindiName": "नारंगी",
-      "emoji": "🍊",
-      "sound": "orange_sound.mp3"
     },
     {
       "color": Colors.purple,
       "name": "Purple",
-      "hindiName": "बैंगनी",
-      "emoji": "🍇",
-      "sound": "purple_sound.mp3"
     },
     {
       "color": Colors.pink,
       "name": "Pink",
-      "hindiName": "गुलाबी",
-      "emoji": "🌸",
-      "sound": "pink_sound.mp3"
     },
     {
       "color": Colors.brown,
       "name": "Brown",
-      "hindiName": "भूरा",
-      "emoji": "🐻",
-      "sound": "brown_sound.mp3"
     },
     {
       "color": Colors.indigo,
       "name": "Indigo",
-      "hindiName": "नील",
-      "emoji": "👖",
-      "sound": "indigo_sound.mp3"
     },
     {
       "color": Colors.teal,
       "name": "Teal",
-      "hindiName": "टील",
-      "emoji": "🦚",
-      "sound": "teal_sound.mp3"
     },
     {
       "color": Colors.cyan,
       "name": "Cyan",
-      "hindiName": "सियान",
-      "emoji": "💧",
-      "sound": "cyan_sound.mp3"
     },
     {
       "color": Colors.lime,
       "name": "Lime",
-      "hindiName": "लाइम",
-      "emoji": "🍈",
-      "sound": "lime_sound.mp3"
     },
     {
       "color": Colors.amber,
       "name": "Amber",
-      "hindiName": "अंबर",
-      "emoji": "🍯",
-      "sound": "amber_sound.mp3"
     },
     {
       "color": Colors.deepPurple,
       "name": "Deep Purple",
-      "hindiName": "गहरा बैंगनी",
-      "emoji": "🍆",
-      "sound": "deep_purple_sound.mp3"
     },
     {
       "color": Colors.lightBlue,
       "name": "Light Blue",
-      "hindiName": "हल्का नीला",
-      "emoji": "🦋",
-      "sound": "light_blue_sound.mp3"
     },
     {
       "color": Colors.deepOrange,
       "name": "Deep Orange",
-      "hindiName": "गहरा नारंगी",
-      "emoji": "🌅",
-      "sound": "deep_orange_sound.mp3"
     },
     {
       "color": Colors.lightGreen,
       "name": "Light Green",
-      "hindiName": "हल्का हरा",
-      "emoji": "🍀",
-      "sound": "light_green_sound.mp3"
     },
     {
       "color": Colors.grey,
       "name": "Gray",
-      "hindiName": "स्लेटी",
-      "emoji": "🐘",
-      "sound": "gray_sound.mp3"
     },
     {
       "color": Colors.blueGrey,
       "name": "Blue Gray",
-      "hindiName": "नीला स्लेटी",
-      "emoji": "🌫️",
-      "sound": "blue_gray_sound.mp3"
     },
     {
       "color": Colors.black,
       "name": "Black",
-      "hindiName": "काला",
-      "emoji": "⚫",
-      "sound": "black_sound.mp3"
-    },
-    {
-      "color": Colors.white,
-      "name": "White",
-      "hindiName": "सफेद",
-      "emoji": "☁️",
-      "sound": "white_sound.mp3"
     },
   ];
 

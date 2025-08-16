@@ -9,40 +9,57 @@ class ItemsCard extends StatelessWidget {
   final String imagePath;
   final bool isTablet;
 
-
-  const ItemsCard(
-      {super.key,
-      required this.title,
-      required this.imagePath,
-      required this.isTablet,
-   });
+  const ItemsCard({
+    super.key,
+    required this.title,
+    required this.imagePath,
+    required this.isTablet,
+  });
 
   @override
   Widget build(BuildContext context) {
     String firstLetter = title.isNotEmpty ? title[0].toUpperCase() : "?";
     final size = MediaQuery.of(context).size;
 
+    /// --- Card --- ///
     return VxArc(
       height: 20,
-      edge: VxEdge.top,
-      child: Container(
-        decoration: const BoxDecoration(
-            color: AppColors.primaryDark,
-            borderRadius: BorderRadiusGeometry.only(
-                topRight: Radius.circular(200),
-                bottomRight: Radius.circular(200),
-                topLeft: Radius.circular(200))),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CachedNetworkImage(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: size.height,
+              width: size.height,
+              decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withValues(alpha: 0.8),
+                  borderRadius: const BorderRadiusGeometry.only(
+                      topRight: Radius.circular(400),
+                      bottomRight: Radius.circular(50),
+                      topLeft: Radius.circular(100),
+                      bottomLeft: Radius.circular(200))),
+            ),
+          ),
+
+          /// --- Title --- ///
+          Positioned(
+            bottom: 20,
+            child: Text(
+              title,
+              style: myTextStyleCus(
+                  fontSize: isTablet ? 60 : 22, fontWeight: FontWeight.normal),
+            ),
+          ),
+          Positioned(
+            top: - size.width * 0.00,
+            right: 0,
+            child: CachedNetworkImage(
               imageUrl: imagePath,
               height: size.width * 0.4,
               width: size.width * 0.4,
               fit: BoxFit.contain,
               placeholder: (context, url) => Container(
-                color: Colors.grey.shade300,
                 alignment: Alignment.center,
                 child: Text(
                   firstLetter,
@@ -53,7 +70,6 @@ class ItemsCard extends StatelessWidget {
                 ),
               ),
               errorWidget: (context, url, error) => Container(
-                color: Colors.grey.shade300,
                 alignment: Alignment.center,
                 child: Text(
                   firstLetter,
@@ -64,17 +80,8 @@ class ItemsCard extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 8),
-
-            /// --- Title --- ///
-            Text(
-              title,
-              style: myTextStyleCus(
-                  fontSize: isTablet ? 60 : 22,
-                  fontWeight: FontWeight.normal),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

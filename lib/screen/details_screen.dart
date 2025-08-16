@@ -138,6 +138,7 @@ class _DetailsScreenState extends State<DetailsScreen>
 
     return SafeArea(
       child: Scaffold(
+        /// --- App bar --- ///
         appBar: AppBar(
           toolbarHeight: size.height * 0.2,
           automaticallyImplyLeading: false,

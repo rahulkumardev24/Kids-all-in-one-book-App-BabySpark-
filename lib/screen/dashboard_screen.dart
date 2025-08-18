@@ -128,7 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
                                             collectionName: "shape_data",
-                                        appBarTitle: "Shapes",
+                                            appBarTitle: "Shapes",
                                           )));
                             } else if (categories["title"] == "Number") {
                               Navigator.push(
@@ -144,7 +144,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
                                             collectionName: 'fruits_data',
-                                        appBarTitle: "Fruits",
+                                            appBarTitle: "Fruits",
                                           )));
                             }
 
@@ -154,11 +154,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
-                                        collectionName: 'vegetables_data',
-                                        appBarTitle: "Fruits",
-                                      )));
+                                            collectionName: 'vegetables_data',
+                                            appBarTitle: "Fruits",
+                                          )));
                             }
 
+                            /// --- animal --- ///
+                            else if (categories["title"] == "Animals") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen(
+                                        collectionName: 'animal_data',
+                                        appBarTitle: "Animals",
+                                      )));
+                            }
                             /// --- Alphabets --- ///
 
                             else if (categories["title"] == "Alphabets") {
@@ -167,7 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
                                             collectionName: "alphabets_data",
-                                        appBarTitle: "Alphabets",
+                                            appBarTitle: "Alphabets",
                                           )));
                             }
                           },

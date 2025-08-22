@@ -33,6 +33,7 @@ class _BookGridScreenState extends State<BookGridScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           toolbarHeight: size.height * 0.2,
+          backgroundColor: Colors.transparent,
           flexibleSpace: SecondaryAppBar(title: widget.appBarTitle),
         ),
 
@@ -52,11 +53,12 @@ class _BookGridScreenState extends State<BookGridScreen> {
             final books = snapshot.data!;
             return GridView.builder(
               padding: const EdgeInsets.all(12),
+              physics: const ClampingScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: size.width > 600 ? 4 : 2,
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
-                childAspectRatio: 0.9,
+                childAspectRatio: 0.85,
               ),
               itemCount: books.length,
               itemBuilder: (context, index) {

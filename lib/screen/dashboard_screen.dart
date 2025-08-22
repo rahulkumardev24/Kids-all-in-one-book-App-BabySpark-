@@ -159,16 +159,73 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           )));
                             }
 
+                            /// --- Body Parts --- ///
+                            else if (categories["title"] == "Body Parts") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen(
+                                        collectionName: 'body_parts_data',
+                                        appBarTitle: "Body Parts",
+                                      )));
+                            }
+
+                            /// --- Flowers --- ///
+                            else if (categories["title"] == "Flowers") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen(
+                                        collectionName: 'flowers_data',
+                                        appBarTitle: "Flowers",
+                                      )));
+                            }
+
+
+                            /// --- Vehicles --- ///
+                            else if (categories["title"] == "Vehicles") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen(
+                                        collectionName: 'vehicles_data',
+                                        appBarTitle: "Vehicles",
+                                      )));
+                            }
+
+                            /// --- Music --- ///
+                            else if (categories["title"] == "Music") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen(
+                                        collectionName: 'music_instrument_data',
+                                        appBarTitle: "Music",
+                                      )));
+                            }
+
+                            /// --- Birds --- ///
+                            else if (categories["title"] == "Birds") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen(
+                                        collectionName: 'birds_data',
+                                        appBarTitle: "Birds",
+                                      )));
+                            }
+
                             /// --- animal --- ///
                             else if (categories["title"] == "Animals") {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
-                                        collectionName: 'animal_data',
-                                        appBarTitle: "Animals",
-                                      )));
+                                            collectionName: 'animal_data',
+                                            appBarTitle: "Animals",
+                                          )));
                             }
+
                             /// --- Alphabets --- ///
 
                             else if (categories["title"] == "Alphabets") {

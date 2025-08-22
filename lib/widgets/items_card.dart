@@ -23,7 +23,7 @@ class ItemsCard extends StatelessWidget {
 
     /// --- Card --- ///
     return VxArc(
-      height: 20,
+      height: size.height * 0.02,
       child: Stack(
         alignment: Alignment.center,
         children: [
@@ -36,7 +36,7 @@ class ItemsCard extends StatelessWidget {
                   color: AppColors.primaryColor.withValues(alpha: 0.8),
                   borderRadius: const BorderRadiusGeometry.only(
                       topRight: Radius.circular(400),
-                      bottomRight: Radius.circular(50),
+                      bottomRight: Radius.circular(100),
                       topLeft: Radius.circular(100),
                       bottomLeft: Radius.circular(200))),
             ),
@@ -44,11 +44,11 @@ class ItemsCard extends StatelessWidget {
 
           /// --- Title --- ///
           Positioned(
-            bottom: 20,
+            bottom: size.height* 0.03,
             child: Text(
               title,
               style: myTextStyleCus(
-                  fontSize: isTablet ? 60 : 22, fontWeight: FontWeight.normal),
+                  fontSize: isTablet ? 60 : 18, fontWeight: FontWeight.normal),
             ),
           ),
           Positioned(

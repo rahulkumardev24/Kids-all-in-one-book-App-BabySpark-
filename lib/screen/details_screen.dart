@@ -155,6 +155,8 @@ class _DetailsScreenState extends State<DetailsScreen>
           backgroundColor: Colors.white,
         ),
         backgroundColor: Colors.white,
+
+        /// ------ Body ------- ///
         body: Column(
           children: [
             Expanded(

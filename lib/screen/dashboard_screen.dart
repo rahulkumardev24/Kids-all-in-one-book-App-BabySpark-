@@ -1,12 +1,16 @@
 import 'package:babyspark/domain/custom_text_style.dart';
+import 'package:babyspark/helper/app_color.dart';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/screen/categories_screen/book_grid_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/widgets/my_categories_card.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../widgets/home_carousel_slider.dart';
 import 'categories_screen/colors_screen.dart';
+import 'math/math_dashboard_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -26,84 +30,85 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFFFCE4EC),
-                Color(0xFFF8BBD0),
-                Color(0xFFF48FB1),
+        /// ---- App bar ---- ///
+        appBar: AppBar(
+          toolbarHeight: size.height * 0.12,
+          backgroundColor: AppColors.primaryColor,
+          flexibleSpace: SizedBox(
+            width: size.width,
+            child: Stack(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Hello Little Explorer!",
+                        style: myTextStyleCus(
+                          fontFamily: "secondary",
+                          fontSize: isTablet(context) ? 30 : 21,
+                        ),
+                      ),
+                      Text(
+                        "What shall we learn today?",
+                        style: myTextStyleCus(
+                            fontSize: isTablet(context) ? 27 : 18,
+                            fontFamily: "primary",
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  bottom: -1.5.h,
+                  child: Lottie.asset(
+                    "assets/lottie_animation_file/animal animation.json",
+                    height: size.height * 0.18,
+                    width: size.height * 0.18,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ],
             ),
           ),
-          child: Column(
-            children: [
-              SizedBox(
-                width: size.width,
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0, vertical: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Hello Little Explorer!",
-                            style: myTextStyleCus(
-                              fontFamily: "secondary",
-                              fontSize: isTablet(context) ? 30 : 21,
-                            ),
-                          ),
-                          Text(
-                            "What shall we learn today?",
-                            style: myTextStyleCus(
-                                fontSize: isTablet(context) ? 27 : 18,
-                                fontFamily: "primary",
-                                fontWeight: FontWeight.w500),
-                          ),
-                          SizedBox(
-                            height: size.height * 0.03,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      right: 8,
-                      bottom: -10,
-                      child: Lottie.asset(
-                        "assets/lottie_animation_file/bear_hi.json",
-                        height: size.height * 0.18,
-                        width: size.height * 0.18,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+        ),
 
-              /// Categories Grid
-              Expanded(
-                child: Container(
+        /// ---- Body ------ ///
+        body: Container(
+          decoration: const BoxDecoration(color: AppColors.primaryColor),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                /// ------ Carousel Slider ------- ///
+                const HomeCarouselSlider(),
+
+                SizedBox(
+                  height: 1.h,
+                ),
+
+                /// Categories Grid - Removed Expanded and added Container with fixed height
+                Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(40),
-                      topRight: Radius.circular(40),
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 12),
+                        horizontal: 8.0, vertical: 12),
                     child: GridView.builder(
                       itemCount: AppConstant.categories.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true, // Important for scrollable content
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 2 / 2.5,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
                       ),
@@ -165,9 +170,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
-                                        collectionName: 'body_parts_data',
-                                        appBarTitle: "Body Parts",
-                                      )));
+                                            collectionName: 'body_parts_data',
+                                            appBarTitle: "Body Parts",
+                                          )));
                             }
 
                             /// --- Flowers --- ///
@@ -176,11 +181,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
-                                        collectionName: 'flowers_data',
-                                        appBarTitle: "Flowers",
-                                      )));
+                                            collectionName: 'flowers_data',
+                                            appBarTitle: "Flowers",
+                                          )));
                             }
 
+                            /// ----- Math ------- ///
+                            else if (categories["title"] == "Maths") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          const MathDashboardScreen()));
+                            }
 
                             /// --- Vehicles --- ///
                             else if (categories["title"] == "Vehicles") {
@@ -188,9 +201,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
-                                        collectionName: 'vehicles_data',
-                                        appBarTitle: "Vehicles",
-                                      )));
+                                            collectionName: 'vehicles_data',
+                                            appBarTitle: "Vehicles",
+                                          )));
                             }
 
                             /// --- Music --- ///
@@ -199,9 +212,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
-                                        collectionName: 'music_instrument_data',
-                                        appBarTitle: "Music",
-                                      )));
+                                            collectionName:
+                                                'music_instrument_data',
+                                            appBarTitle: "Music",
+                                          )));
                             }
 
                             /// --- Birds --- ///
@@ -210,9 +224,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => const BookGridScreen(
-                                        collectionName: 'birds_data',
-                                        appBarTitle: "Birds",
-                                      )));
+                                            collectionName: 'birds_data',
+                                            appBarTitle: "Birds",
+                                          )));
                             }
 
                             /// --- animal --- ///
@@ -227,7 +241,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             }
 
                             /// --- Alphabets --- ///
-
                             else if (categories["title"] == "Alphabets") {
                               Navigator.push(
                                   context,
@@ -243,8 +256,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

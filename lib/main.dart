@@ -3,9 +3,11 @@ import 'package:babyspark/screen/math/math_dashboard_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/screen/dashboard_screen.dart';
 import 'package:babyspark/service/tts_service.dart';
+import 'package:babyspark/widgets/home_carousel_slider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'firebase_options.dart';
 import 'helper/app_color.dart';
@@ -32,17 +34,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: AppColors.primaryDark,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-      ),
-      child: MaterialApp(
-        title: 'BabyBook - All in one',
-        debugShowCheckedModeBanner: false,
-        home: BoxCountScreen(),
-      ),
-    );
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: AppColors.primaryDark,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+        ),
+        child: ResponsiveSizer(
+          builder: (context, orientation, screenType) {
+            return const MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: DashboardScreen(),
+            );
+          },
+        ));
   }
 }

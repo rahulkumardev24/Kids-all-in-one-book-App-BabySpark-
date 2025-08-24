@@ -4,6 +4,7 @@ class AppColors {
   /// Core Theme Colors
   static const Color primaryColor = Color(0xFFFFD6E8);
   static const Color primaryDark = Color(0xFFFB76B0);
+  static const Color primaryLight = Color(0xFFFD90C0);
   static const Color secondaryColor = Color(0xFFA7E9AF);
   static const Color accentColor = Color(0xFFFFF5BA);
   static const Color backgroundColor = Color(0xFFFDFDFD);

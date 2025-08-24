@@ -10,6 +10,8 @@ class MathDashboardScreen extends StatefulWidget {
 class _MathDashboardScreenState extends State<MathDashboardScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold() ;
+    return Scaffold(
+      appBar: AppBar(title: Text("Learn Math"),),
+    );
   }
 }

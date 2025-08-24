@@ -2,6 +2,30 @@ import 'dart:ffi';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+
+TextStyle myTextStyle14(
+    {Color fontColor = Colors.black,
+      FontWeight fontWeight = FontWeight.normal,
+      String fontFamily = "main"}) {
+  return TextStyle(
+    color: fontColor,
+    fontWeight: fontWeight,
+    fontFamily: fontFamily,
+    fontSize: 14,
+  );
+}
+TextStyle myTextStyle12(
+    {Color fontColor = Colors.black,
+      FontWeight fontWeight = FontWeight.normal,
+      String fontFamily = "main"}) {
+  return TextStyle(
+    color: fontColor,
+    fontWeight: fontWeight,
+    fontFamily: fontFamily,
+    fontSize: 12,
+  );
+}
+
 /// font 18
 TextStyle myTextStyle18(
     {Color fontColor = Colors.black,

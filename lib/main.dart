@@ -1,5 +1,6 @@
 import 'package:babyspark/screen/math/box_count_screen.dart';
 import 'package:babyspark/screen/math/math_dashboard_screen.dart';
+import 'package:babyspark/screen/multiplication_table_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/screen/dashboard_screen.dart';
 import 'package:babyspark/service/tts_service.dart';
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
           builder: (context, orientation, screenType) {
             return const MaterialApp(
               debugShowCheckedModeBanner: false,
-              home: DashboardScreen(),
+              home: MultiplicationTableScreen(),
             );
           },
         ));

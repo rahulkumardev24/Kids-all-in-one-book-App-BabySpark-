@@ -7,16 +7,17 @@ class ControlIconButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final bool isRounded;
   final double iconSize;
+  final Color borderColor;
 
-  const ControlIconButton({
-    super.key,
-    this.icon,
-    required this.color,
-    required this.onPressed,
-    this.isRounded = true,
-    this.iconSize = 20,
-    this.iconColor = Colors.white,
-  });
+  const ControlIconButton(
+      {super.key,
+      this.icon,
+      required this.color,
+      required this.onPressed,
+      this.isRounded = true,
+      this.iconSize = 20,
+      this.iconColor = Colors.white,
+      this.borderColor = Colors.white});
 
   @override
   State<ControlIconButton> createState() => _BabyButtonState();
@@ -70,7 +71,7 @@ class _BabyButtonState extends State<ControlIconButton>
               ],
             ),
             border: Border.all(
-              color: widget.iconColor!,
+              color: widget.borderColor,
               width: 2,
             ),
           ),

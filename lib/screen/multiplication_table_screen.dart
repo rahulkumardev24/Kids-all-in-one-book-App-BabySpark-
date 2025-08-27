@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:velocity_x/velocity_x.dart';
 import '../helper/app_color.dart';
 import '../service/tts_service.dart';
 import '../widgets/control_icon_button.dart';
@@ -261,27 +262,47 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
       child: Scaffold(
         /// --- App bar ---- ///
         appBar: AppBar(
-          toolbarHeight: size.height * 0.12,
+          toolbarHeight: size.height * 0.13,
           backgroundColor: Colors.white,
-          flexibleSpace: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          flexibleSpace: VxArc(
+            height: 2.h,
+            arcType: VxArcType.convey,
+            child: Stack(
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    NavigationButton(
-                      onTap: () {},
+                Container(
+                  color: AppColors.primaryDark,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            NavigationButton(
+                              onTap: () {},
+                            ),
+                            Text(
+                              "Multiplication Table",
+                              style: myTextStyle21(fontFamily: "primary"),
+                            )
+                          ],
+                        ),
+                      ],
                     ),
-                    Text(
-                      "Multiplication Table",
-                      style: myTextStyle21(),
-                    )
-                  ],
+                  ),
                 ),
-                Lottie.asset("assets/lottie_animation_file/cat.json")
+                Positioned(
+                  right: 2.h,
+                  bottom: 0,
+                  child: Lottie.asset(
+                    "assets/lottie_animation_file/bear_hi.json",
+                    fit: BoxFit.cover,
+                    height: size.width * 0.35,
+                    width: size.width * 0.35,
+                  ),
+                )
               ],
             ),
           ),
@@ -291,7 +312,11 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
         /// --- Body ------ ///
         body: Column(
           children: [
+            SizedBox(
+              height: 1.h,
+            ),
 
+            ///  Grid of numbers
             GridView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               physics: const NeverScrollableScrollPhysics(),
@@ -376,83 +401,98 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
             ),
 
             /// --- Multiplication Table --- ///
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 2.h),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  final multiplier = index + 1;
-                  final result = _selectedNumber * multiplier;
-                  final itemColor = currentColor;
-                  final isCurrentlySpeaking = _currentSpeakingIndex == index;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: EdgeInsets.symmetric(vertical: 0.1.h),
-                    padding: const EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: isCurrentlySpeaking
-                          ? Colors.amber
-                          : itemColor.withValues(alpha: 0.9),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text('$_selectedNumber',
-                            style: myTextStyle21(
-                                fontWeight: FontWeight.bold,
-                                fontColor: isCurrentlySpeaking
-                                    ? Colors.black
-                                    : Colors.white,
-                                fontFamily: "primary")),
-                        Text(' × ',
-                            style: myTextStyle21(
-                                fontWeight: FontWeight.bold,
-                                fontColor: isCurrentlySpeaking
-                                    ? Colors.black
-                                    : Colors.white,
-                                fontFamily: "primary")),
-                        Text('$multiplier',
-                            style: myTextStyle21(
-                                fontWeight: FontWeight.bold,
-                                fontColor: isCurrentlySpeaking
-                                    ? Colors.black
-                                    : Colors.white,
-                                fontFamily: "primary")),
-                        Text(' = ',
-                            style: myTextStyle21(
-                                fontWeight: FontWeight.bold,
-                                fontColor: isCurrentlySpeaking
-                                    ? Colors.black
-                                    : Colors.white,
-                                fontFamily: "primary")),
-                        Text('$result',
-                            style: myTextStyle25(
-                                fontWeight: FontWeight.bold,
-                                fontColor: isCurrentlySpeaking
-                                    ? Colors.black
-                                    : Colors.white,
-                                fontFamily: "primary")),
-                      ],
-                    ),
-                  );
-                },
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 2.h),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    final multiplier = index + 1;
+                    final result = _selectedNumber * multiplier;
+                    final itemColor = currentColor;
+                    final isCurrentlySpeaking = _currentSpeakingIndex == index;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: EdgeInsets.symmetric(vertical: 0.1.h),
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: isCurrentlySpeaking
+                            ? Colors.amber
+                            : itemColor.withValues(alpha: 0.9),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('$_selectedNumber',
+                              style: myTextStyle21(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: isCurrentlySpeaking
+                                      ? Colors.black
+                                      : Colors.white,
+                                  fontFamily: "primary")),
+                          Text(' × ',
+                              style: myTextStyle21(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: isCurrentlySpeaking
+                                      ? Colors.black
+                                      : Colors.white,
+                                  fontFamily: "primary")),
+                          Text('$multiplier',
+                              style: myTextStyle21(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: isCurrentlySpeaking
+                                      ? Colors.black
+                                      : Colors.white,
+                                  fontFamily: "primary")),
+                          Text(' = ',
+                              style: myTextStyle21(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: isCurrentlySpeaking
+                                      ? Colors.black
+                                      : Colors.white,
+                                  fontFamily: "primary")),
+                          Text('$result',
+                              style: myTextStyle25(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: isCurrentlySpeaking
+                                      ? Colors.black
+                                      : Colors.white,
+                                  fontFamily: "primary")),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
 
-            /// -------- Bottom Navigation and animations --------- ///
-            Align(
-              alignment: Alignment.bottomCenter,
+            SizedBox(
+              height: size.height * 0.15,
               child: Stack(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 2.h, vertical: 2.h),
+                  /// Car animation at the bottom
+                  Positioned(
+                    top: -1.1.h,
+                    child: SizedBox(
+                      child: Lottie.asset(
+                        "assets/lottie_animation_file/Car insurance offers loading page.json",
+                        width: size.width,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+
+                  ///  --- Control buttons at the bottom --- ///
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 2.h, vertical: 2.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -465,8 +505,9 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
                           borderColor: Colors.grey.shade700,
                         ),
                         AvatarGlow(
-                          glowColor:
-                              _isSpeaking ? Colors.amber : AppColors.primaryDark,
+                          glowColor: _isSpeaking
+                              ? Colors.amber
+                              : AppColors.primaryDark,
                           glowRadiusFactor: 0.4,
                           animate: _isSpeaking,
                           child: ControlIconButton(
@@ -487,14 +528,6 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
                         ),
                       ],
                     ),
-                  ),
-                  Positioned(
-                    top: 0,
-                    child: Lottie.asset(
-                        "assets/lottie_animation_file/Car insurance offers loading page.json",
-                        height: 0.1.h,
-                        width: size.width,
-                        fit: BoxFit.cover),
                   ),
                 ],
               ),

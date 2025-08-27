@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
           builder: (context, orientation, screenType) {
             return const MaterialApp(
               debugShowCheckedModeBanner: false,
-              home: MultiplicationTableScreen(),
+              home: DashboardScreen(),
             );
           },
         ));

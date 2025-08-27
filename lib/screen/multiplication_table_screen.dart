@@ -263,6 +263,7 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
         /// --- App bar ---- ///
         appBar: AppBar(
           toolbarHeight: size.height * 0.13,
+          automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
           flexibleSpace: VxArc(
             height: 2.h,
@@ -281,7 +282,7 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             NavigationButton(
-                              onTap: () {},
+                              onTap: () => Navigator.pop(context),
                             ),
                             Text(
                               "Multiplication Table",

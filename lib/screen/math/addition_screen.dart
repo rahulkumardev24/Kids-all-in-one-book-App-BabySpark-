@@ -7,6 +7,7 @@ import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/service/tts_service.dart';
 import 'package:babyspark/widgets/control_icon_button.dart';
 import 'package:babyspark/widgets/navigation_button.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'dart:math';
 
@@ -47,7 +48,6 @@ class _AdditionScreenState extends State<AdditionScreen> {
 
   // Variables for drag and drop
   bool _isCorrect = false;
-  bool _showCelebration = false;
   Timer? _hintTimer;
   bool _showHint = false;
   bool _vibrateAnswerBox = false;
@@ -59,7 +59,7 @@ class _AdditionScreenState extends State<AdditionScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Generate options for the first problem
+      /// ------ Generate options for the first problem -------- ///
       final correctAnswer =
           _additionProblems[_currentProblemIndex]['result'].toString();
       _currentOptions = _generateOptions(correctAnswer);
@@ -68,6 +68,7 @@ class _AdditionScreenState extends State<AdditionScreen> {
     });
   }
 
+  /// ---- Start Hint Timer ---- ///
   void _startHintTimer() {
     _hintTimer?.cancel();
     _hintTimer = Timer(const Duration(seconds: 5), () {
@@ -85,6 +86,7 @@ class _AdditionScreenState extends State<AdditionScreen> {
     });
   }
 
+  /// --- Vibration Animation ---- ///
   void _startVibrationAnimation() {
     _vibrationTimer?.cancel();
     const vibrationDuration = Duration(seconds: 3); // Vibrate for 3 seconds
@@ -110,12 +112,12 @@ class _AdditionScreenState extends State<AdditionScreen> {
     });
   }
 
+  /// ----- Go to next problem ---- ///
   void _goToNextProblem() {
     if (_currentProblemIndex < _additionProblems.length - 1) {
       setState(() {
         _currentProblemIndex++;
         _isCorrect = false;
-        _showCelebration = false;
         _showHint = false;
         _vibrateAnswerBox = false;
         _vibrateCorrectOption = false;
@@ -133,18 +135,18 @@ class _AdditionScreenState extends State<AdditionScreen> {
     }
   }
 
+  /// -------- Go to previous problem -------- ///
   void _goToPreviousProblem() {
     if (_currentProblemIndex > 0) {
       setState(() {
         _currentProblemIndex--;
         _isCorrect = false;
-        _showCelebration = false;
         _showHint = false;
         _vibrateAnswerBox = false;
         _vibrateCorrectOption = false;
       });
 
-      // Generate options for the previous problem
+      /// ---- Generate options for the previous problem ------- ///
       final correctAnswer =
           _additionProblems[_currentProblemIndex]['result'].toString();
       _currentOptions = _generateOptions(correctAnswer);
@@ -156,6 +158,7 @@ class _AdditionScreenState extends State<AdditionScreen> {
     }
   }
 
+  /// ---------- Toggle Auto Play ----------- ///
   void _toggleAutoPlay() {
     if (_isAutoPlaying) {
       _stopAutoPlay();
@@ -186,6 +189,7 @@ class _AdditionScreenState extends State<AdditionScreen> {
     _speakCurrentProblem(session);
   }
 
+  /// ------ Stop Auto Play ------- ///
   void _stopAutoPlay() {
     _invalidateSpeechSession();
 
@@ -243,6 +247,7 @@ class _AdditionScreenState extends State<AdditionScreen> {
     }
   }
 
+  /// ----- Check Answer ------- ///
   void _checkAnswer(String draggedNumber) {
     final problem = _additionProblems[_currentProblemIndex];
     final correctAnswer = problem['result'].toString();
@@ -251,7 +256,6 @@ class _AdditionScreenState extends State<AdditionScreen> {
       // Correct answer
       setState(() {
         _isCorrect = true;
-        _showCelebration = true;
         _showHint = false;
         _vibrateAnswerBox = false;
         _vibrateCorrectOption = false;
@@ -363,26 +367,26 @@ class _AdditionScreenState extends State<AdditionScreen> {
             ),
           ),
         ),
+
         backgroundColor: const Color(0xFFE1F5FE),
+
+        /// ----------------- Body -------------------- ///
         body: Stack(
           children: [
-            Column(
-              children: [
-                // Progress indicator
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: LinearProgressIndicator(
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Column(
+                children: [
+                  // Progress indicator
+                  LinearProgressIndicator(
                     value:
                         (_currentProblemIndex + 1) / _additionProblems.length,
                     backgroundColor: Colors.grey.shade200,
                     valueColor: AlwaysStoppedAnimation<Color>(currentColor),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
+
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
@@ -400,327 +404,380 @@ class _AdditionScreenState extends State<AdditionScreen> {
                       ),
                     ],
                   ),
-                ),
 
-                const SizedBox(height: 20),
 
-                // Addition problem display
-                Expanded(
-                  child: Center(
+
+                  /// ------- Addition Section (Bear) ---- ////
+                  Expanded(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // Visual representation with objects
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            for (int i = 0; i < currentProblem['num1']; i++)
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Image.asset(
-                                  "assets/images/apple.png",
-                                  width: 50,
-                                  height: 50,
+                            /// ------------ First Bear ------------ ///
+                            Expanded(
+                              flex: 2,
+                              child: GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                  ),
+                                  itemCount: currentProblem['num1'],
+                                  itemBuilder: (context, index) {
+                                    return Image.asset(
+                                      "assets/images/trady_bear.png",
+                                      width: 6.h,
+                                      height: 6.h,
+                                      fit: BoxFit.cover,
+                                    );
+                                  }),
+                            ),
+
+                            Expanded(
+                              child: Text(
+                                "+",
+                                style: myTextStyle40(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: currentColor,
                                 ),
                               ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 10),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "+",
-                              style: myTextStyle40(
-                                fontWeight: FontWeight.bold,
-                                fontColor: currentColor,
-                              ),
                             ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 10),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            for (int i = 0; i < currentProblem['num2']; i++)
-                              Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Image.asset(
-                                  "assets/images/apple.png",
-                                  width: 50,
-                                  height: 50,
+                            Expanded(
+                              flex: 2,
+                              child: GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                  ),
+                                  itemCount: currentProblem['num2'],
+                                  itemBuilder: (context, index) {
+                                    return Image.asset(
+                                      "assets/images/trady_bear.png",
+                                      width: 6.h,
+                                      height: 6.h,
+                                      fit: BoxFit.cover,
+                                    );
+                                  }),
+                            ),
+                            Expanded(
+                              child: Text(
+                                "=",
+                                style: myTextStyle40(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: currentColor,
                                 ),
                               ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 8,
+                                  crossAxisSpacing: 8,
+                                ),
+                                itemCount: currentProblem['result'],
+                                itemBuilder: (context, index) {
+                                  return Image.asset(
+                                    "assets/images/trady_bear.png",
+                                    width: 6.h,
+                                    height: 6.h,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                              ),
+                            ),
                           ],
                         ),
 
-                        const SizedBox(height: 20),
-
-                        // Hint message
-                        if (_showHint && !_isCorrect)
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.amber.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: Colors.amber),
-                            ),
-                            child: Text(
-                              "Drag ${correctAnswer} here!",
-                              style: myTextStyle18(
-                                fontWeight: FontWeight.bold,
-                                fontColor: Colors.amber.shade800,
-                              ),
-                            ),
-                          ),
-
-                        const SizedBox(height: 20),
-
-                        // Equation with drag target
+                        ///--- Equation with drag target --- ///
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 24, vertical: 16),
+                          width: size.width,
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: currentColor, width: 3),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: currentColor, width: 1),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                "${currentProblem['num1']}",
-                                style: myTextStyle30(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: currentColor,
+                              /// ----- First Number ---- ///
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 8.h,
+                                  width: 8.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryDark ,
+                                    borderRadius: BorderRadius.circular(5),
+
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "${currentProblem['num1']}",
+                                      style: myTextStyle30(
+                                        fontWeight: FontWeight.bold,
+                                        fontColor:  Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              Text(
-                                "+",
-                                style: myTextStyle30(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: currentColor,
+
+
+                              /// --- Add icon --- ///
+                              Expanded(
+                                flex: 1,
+                                child: Center(
+                                  child: Text(
+                                    "+",
+                                    style: myTextStyle30(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              Text(
-                                "${currentProblem['num2']}",
-                                style: myTextStyle30(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: currentColor,
+
+                              /// --- Second Number --- ///
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 8.h,
+                                  width: 8.h,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryDark ,
+                                    borderRadius: BorderRadius.circular(5),
+
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        "${currentProblem['num2']}",
+                                        style: myTextStyle30(
+                                          fontWeight: FontWeight.bold,
+                                          fontColor:  Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              Text(
-                                "=",
-                                style: myTextStyle30(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: currentColor,
+
+                              Expanded(
+                                flex: 1,
+                                child: Center(
+                                  child: Text(
+                                    "=",
+                                    style: myTextStyle30(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              // Apply the same animation to the correct answer box
-                              AnimatedContainer(
+                              Expanded(
+                                flex: 2,
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 100),
+                                  transform: _vibrateAnswerBox
+                                      ? Matrix4.translationValues(
+                                    Random().nextInt(6) - 3,
+                                    Random().nextInt(6) - 3,
+                                    0,
+                                  )
+                                      : Matrix4.identity(),
+                                  child: DragTarget<String>(
+                                    builder: (
+                                        BuildContext context,
+                                        List<dynamic> accepted,
+                                        List<dynamic> rejected,
+                                        ) {
+                                      return Container(
+                                        height: 8.h,
+                                        width: 8.h,
+
+                                        decoration: BoxDecoration(
+                                          color: _isCorrect ? Colors.green : Colors.white,
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(
+                                            color:
+                                            _isCorrect ? Colors.green : currentColor,
+                                            width: 3,
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: _isCorrect
+                                              ? Text(
+                                            correctAnswer,
+                                            style: myTextStyle30(
+                                              fontWeight: FontWeight.bold,
+                                              fontColor: Colors.white,
+                                            ),
+                                          )
+                                              : Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.arrow_circle_up,
+                                                color: currentColor,
+                                                size: 25,
+                                              ),
+                                              if (_currentProblemIndex == 0 &&
+                                                  !_isCorrect)
+                                                Text(
+                                                  "Drag here",
+                                                  style: myTextStyle12(
+                                                    fontColor: currentColor,
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    onAccept: (data) {
+                                      _checkAnswer(data);
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 1.h),
+
+
+
+                   SizedBox(height: 3.h),
+
+                  /// --------- Answer options ---------- ///
+                  Wrap(
+                    spacing: 2.h,
+                    children: _currentOptions.map((number) {
+                      final isCorrectOption = number == correctAnswer;
+                      return Draggable<String>(
+                        data: number,
+                        feedback: Material(
+                          child: Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              color: _showHint && isCorrectOption
+                                  ? Colors.amber.shade100
+                                  : currentColor,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                number,
+                                style: myTextStyle30(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        /// --- When dragging --- ///
+                        childWhenDragging: Container(
+                          width: 70,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              number,
+                              style: myTextStyle30(
+                                fontWeight: FontWeight.bold,
+                                fontColor: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        child: _showHint && isCorrectOption
+                            ? AnimatedContainer(
                                 duration: const Duration(milliseconds: 100),
-                                transform: _vibrateAnswerBox
+                                transform: _vibrateCorrectOption
                                     ? Matrix4.translationValues(
                                         Random().nextInt(6) - 3,
                                         Random().nextInt(6) - 3,
                                         0,
                                       )
                                     : Matrix4.identity(),
-                                child: DragTarget<String>(
-                                  builder: (
-                                    BuildContext context,
-                                    List<dynamic> accepted,
-                                    List<dynamic> rejected,
-                                  ) {
-                                    return Container(
-                                      width: 70,
-                                      height: 70,
-                                      decoration: BoxDecoration(
-                                        color: _isCorrect
-                                            ? Colors.green
-                                            : Colors.white,
-                                        borderRadius: BorderRadius.circular(15),
-                                        border: Border.all(
-                                          color: _isCorrect
-                                              ? Colors.green
-                                              : currentColor,
-                                          width: 3,
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: _isCorrect
-                                            ? Text(
-                                                correctAnswer,
-                                                style: myTextStyle30(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontColor: Colors.white,
-                                                ),
-                                              )
-                                            : Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.arrow_circle_up,
-                                                    color: currentColor,
-                                                    size: 25,
-                                                  ),
-                                                  if (_currentProblemIndex ==
-                                                          0 &&
-                                                      !_isCorrect)
-                                                    Text(
-                                                      "Drag here",
-                                                      style: myTextStyle12(
-                                                        fontColor: currentColor,
-                                                      ),
-                                                    ),
-                                                ],
-                                              ),
-                                      ),
-                                    );
-                                  },
-                                  onAccept: (data) {
-                                    _checkAnswer(data);
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 30),
-
-                        // Answer options (draggable numbers)
-                        Wrap(
-                          spacing: 20,
-                          runSpacing: 20,
-                          children: _currentOptions.map((number) {
-                            final isCorrectOption = number == correctAnswer;
-                            return Draggable<String>(
-                              data: number,
-                              feedback: Material(
                                 child: Container(
                                   width: 70,
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: _showHint && isCorrectOption
-                                        ? Colors.amber.shade100
-                                        : currentColor,
+                                    color: Colors.amber.shade100,
                                     borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                      color: Colors.amber,
+                                      width: 3,
+                                    ),
                                   ),
                                   child: Center(
                                     child: Text(
                                       number,
                                       style: myTextStyle30(
                                         fontWeight: FontWeight.bold,
-                                        fontColor: Colors.white,
+                                        fontColor: currentColor,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-
-                              /// --- When dragging --- ///
-                              childWhenDragging: Container(
+                              )
+                            : Container(
                                 width: 70,
                                 height: 70,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey.shade300,
+                                  color: _showHint && isCorrectOption
+                                      ? Colors.amber.shade100
+                                      : Colors.white,
                                   borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: _showHint && isCorrectOption
+                                        ? Colors.amber
+                                        : currentColor,
+                                    width: 3,
+                                  ),
                                 ),
                                 child: Center(
                                   child: Text(
                                     number,
                                     style: myTextStyle30(
                                       fontWeight: FontWeight.bold,
-                                      fontColor: Colors.grey,
+                                      fontColor: currentColor,
                                     ),
                                   ),
                                 ),
                               ),
-
-                              child: _showHint && isCorrectOption
-                                  ? AnimatedContainer(
-                                      duration:
-                                          const Duration(milliseconds: 100),
-                                      transform: _vibrateCorrectOption
-                                          ? Matrix4.translationValues(
-                                              Random().nextInt(6) - 3,
-                                              Random().nextInt(6) - 3,
-                                              0,
-                                            )
-                                          : Matrix4.identity(),
-                                      child: Container(
-                                        width: 70,
-                                        height: 70,
-                                        decoration: BoxDecoration(
-                                          color: Colors.amber.shade100,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          border: Border.all(
-                                            color: Colors.amber,
-                                            width: 3,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            number,
-                                            style: myTextStyle30(
-                                              fontWeight: FontWeight.bold,
-                                              fontColor: currentColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Container(
-                                      width: 70,
-                                      height: 70,
-                                      decoration: BoxDecoration(
-                                        color: _showHint && isCorrectOption
-                                            ? Colors.amber.shade100
-                                            : Colors.white,
-                                        borderRadius: BorderRadius.circular(15),
-                                        border: Border.all(
-                                          color: _showHint && isCorrectOption
-                                              ? Colors.amber
-                                              : currentColor,
-                                          width: 3,
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          number,
-                                          style: myTextStyle30(
-                                            fontWeight: FontWeight.bold,
-                                            fontColor: currentColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
+                      );
+                    }).toList(),
                   ),
-                ),
+                  SizedBox(height: 2.h,),
 
-                /// --- Navigation controls Button --- ///
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 16.0),
-                  child: Row(
+                  /// --- Navigation controls Button --- ///
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ControlIconButton(
@@ -755,36 +812,11 @@ class _AdditionScreenState extends State<AdditionScreen> {
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
 
-            // Celebration animation
-            if (_showCelebration)
-              IgnorePointer(
-                child: Container(
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/images/celebration.gif",
-                          width: 200,
-                          height: 200,
-                        ),
-                        Text(
-                          "Great Job!",
-                          style: myTextStyle30(
-                            fontWeight: FontWeight.bold,
-                            fontColor: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                  SizedBox(height: 2.h,)
+                ],
               ),
+            ),
           ],
         ),
       ),

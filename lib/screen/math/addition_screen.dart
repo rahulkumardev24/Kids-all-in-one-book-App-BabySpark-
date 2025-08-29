@@ -21,24 +21,7 @@ class AdditionScreen extends StatefulWidget {
 }
 
 class _AdditionScreenState extends State<AdditionScreen> {
-  final List<Map<String, dynamic>> _additionProblems = [
-    {'num1': 1, 'num2': 1, 'result': 2},
-    {'num1': 1, 'num2': 2, 'result': 3},
-    {'num1': 1, 'num2': 3, 'result': 4},
-    {'num1': 1, 'num2': 4, 'result': 5},
-    {'num1': 1, 'num2': 5, 'result': 6},
-    {'num1': 2, 'num2': 2, 'result': 4},
-    {'num1': 2, 'num2': 3, 'result': 5},
-    {'num1': 2, 'num2': 4, 'result': 6},
-    {'num1': 2, 'num2': 5, 'result': 7},
-    {'num1': 3, 'num2': 3, 'result': 6},
-    {'num1': 3, 'num2': 4, 'result': 7},
-    {'num1': 3, 'num2': 5, 'result': 8},
-    {'num1': 4, 'num2': 4, 'result': 8},
-    {'num1': 4, 'num2': 5, 'result': 9},
-    {'num1': 5, 'num2': 5, 'result': 10},
-  ];
-
+  final List<Map<String, dynamic>> _additionProblems = [];
   int _currentProblemIndex = 0;
   bool _isAutoPlaying = false;
   bool _isSpeaking = false;
@@ -59,6 +42,9 @@ class _AdditionScreenState extends State<AdditionScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Generate random addition problems
+      _generateRandomProblems();
+
       /// ------ Generate options for the first problem -------- ///
       final correctAnswer =
           _additionProblems[_currentProblemIndex]['result'].toString();
@@ -66,6 +52,29 @@ class _AdditionScreenState extends State<AdditionScreen> {
       _startAutoPlayWithSpeech();
       _startHintTimer();
     });
+  }
+
+  /// ---- Generate random addition problems ---- ///
+  void _generateRandomProblems() {
+    final random = Random();
+    _additionProblems.clear();
+
+    // Generate 15 random problems
+    for (int i = 0; i < 15; i++) {
+      int maxRange;
+
+      // For first 5 problems, use numbers 1-4
+      if (i < 5) {
+        maxRange = 4;
+      } else {
+        maxRange = 7;
+      }
+
+      int num1 = 1 + random.nextInt(maxRange);
+      int num2 = 1 + random.nextInt(maxRange);
+      _additionProblems
+          .add({'num1': num1, 'num2': num2, 'result': num1 + num2});
+    }
   }
 
   /// ---- Start Hint Timer ---- ///
@@ -124,6 +133,26 @@ class _AdditionScreenState extends State<AdditionScreen> {
       });
 
       // Generate new options for the next problem
+      final correctAnswer =
+          _additionProblems[_currentProblemIndex]['result'].toString();
+      _currentOptions = _generateOptions(correctAnswer);
+
+      _hintTimer?.cancel();
+      _vibrationTimer?.cancel();
+      _startHintTimer();
+      _startAutoPlayWithSpeech();
+    } else {
+      // If we're at the last problem, generate new random problems
+      _generateRandomProblems();
+      setState(() {
+        _currentProblemIndex = 0;
+        _isCorrect = false;
+        _showHint = false;
+        _vibrateAnswerBox = false;
+        _vibrateCorrectOption = false;
+      });
+
+      // Generate new options for the first problem
       final correctAnswer =
           _additionProblems[_currentProblemIndex]['result'].toString();
       _currentOptions = _generateOptions(correctAnswer);
@@ -268,6 +297,26 @@ class _AdditionScreenState extends State<AdditionScreen> {
       Future.delayed(const Duration(seconds: 2), () {
         if (_currentProblemIndex < _additionProblems.length - 1) {
           _goToNextProblem();
+        } else {
+          // If it's the last problem, generate new problems and reset
+          _generateRandomProblems();
+          setState(() {
+            _currentProblemIndex = 0;
+            _isCorrect = false;
+            _showHint = false;
+            _vibrateAnswerBox = false;
+            _vibrateCorrectOption = false;
+          });
+
+          // Generate options for the first problem
+          final correctAnswer =
+              _additionProblems[_currentProblemIndex]['result'].toString();
+          _currentOptions = _generateOptions(correctAnswer);
+
+          _hintTimer?.cancel();
+          _vibrationTimer?.cancel();
+          _startHintTimer();
+          _startAutoPlayWithSpeech();
         }
       });
     } else {
@@ -312,17 +361,6 @@ class _AdditionScreenState extends State<AdditionScreen> {
     final size = MediaQuery.of(context).size;
 
     final correctAnswer = currentProblem['result'].toString();
-
-    IconData getIcon() {
-      if (_isAutoPlaying) return Icons.pause_rounded;
-      if (_isSpeaking) return Icons.volume_up_rounded;
-      return Icons.volume_up_rounded;
-    }
-
-    Color getIconColor() {
-      if (_isSpeaking) return Colors.amber;
-      return const Color(0xFF01579B);
-    }
 
     return SafeArea(
       child: Scaffold(
@@ -405,8 +443,6 @@ class _AdditionScreenState extends State<AdditionScreen> {
                     ],
                   ),
 
-
-
                   /// ------- Addition Section (Bear) ---- ////
                   Expanded(
                     child: Column(
@@ -419,24 +455,51 @@ class _AdditionScreenState extends State<AdditionScreen> {
                             /// ------------ First Bear ------------ ///
                             Expanded(
                               flex: 2,
-                              child: GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                  ),
-                                  itemCount: currentProblem['num1'],
-                                  itemBuilder: (context, index) {
-                                    return Image.asset(
-                                      "assets/images/trady_bear.png",
-                                      width: 6.h,
-                                      height: 6.h,
-                                      fit: BoxFit.cover,
-                                    );
-                                  }),
-                            ),
+                              child: Column(
+                                children: [
+                                  GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                      ),
+                                      itemCount: currentProblem['num1'],
+                                      itemBuilder: (context, index) {
+                                        return Image.asset(
+                                          "assets/images/trady_bear.png",
+                                          width: 6.h,
+                                          height: 6.h,
+                                          fit: BoxFit.cover,
+                                        );
+                                      }),
 
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+
+                                  /// ----- First Number ---- ///
+                                  Container(
+                                    height: 8.h,
+                                    width: 8.h,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryDark,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "${currentProblem['num1']}",
+                                        style: myTextStyle30(
+                                          fontWeight: FontWeight.bold,
+                                          fontColor: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                             Expanded(
                               child: Text(
                                 "+",
@@ -448,22 +511,50 @@ class _AdditionScreenState extends State<AdditionScreen> {
                             ),
                             Expanded(
                               flex: 2,
-                              child: GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
+                              child: Column(
+                                children: [
+                                  GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                      ),
+                                      itemCount: currentProblem['num2'],
+                                      itemBuilder: (context, index) {
+                                        return Image.asset(
+                                          "assets/images/trady_bear.png",
+                                          width: 6.h,
+                                          height: 6.h,
+                                          fit: BoxFit.cover,
+                                        );
+                                      }),
+                                  SizedBox(
+                                    height: 1.h,
                                   ),
-                                  itemCount: currentProblem['num2'],
-                                  itemBuilder: (context, index) {
-                                    return Image.asset(
-                                      "assets/images/trady_bear.png",
-                                      width: 6.h,
-                                      height: 6.h,
-                                      fit: BoxFit.cover,
-                                    );
-                                  }),
+                                  Container(
+                                    height: 8.h,
+                                    width: 8.h,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primaryDark,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          "${currentProblem['num2']}",
+                                          style: myTextStyle30(
+                                            fontWeight: FontWeight.bold,
+                                            fontColor: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Expanded(
                               child: Text(
@@ -476,195 +567,115 @@ class _AdditionScreenState extends State<AdditionScreen> {
                             ),
                             Expanded(
                               flex: 2,
-                              child: GridView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 8,
-                                  crossAxisSpacing: 8,
-                                ),
-                                itemCount: currentProblem['result'],
-                                itemBuilder: (context, index) {
-                                  return Image.asset(
-                                    "assets/images/trady_bear.png",
-                                    width: 6.h,
-                                    height: 6.h,
-                                    fit: BoxFit.cover,
-                                  );
-                                },
+                              child: Column(
+                                children: [
+                                  GridView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 8,
+                                      crossAxisSpacing: 8,
+                                    ),
+                                    itemCount: currentProblem['result'],
+                                    itemBuilder: (context, index) {
+                                      return Image.asset(
+                                        "assets/images/trady_bear.png",
+                                        width: 6.h,
+                                        height: 6.h,
+                                        fit: BoxFit.cover,
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: 1.h,
+                                  ),
+                                  AnimatedContainer(
+                                    duration: const Duration(milliseconds: 100),
+                                    transform: _vibrateAnswerBox
+                                        ? Matrix4.translationValues(
+                                            Random().nextInt(6) - 3,
+                                            Random().nextInt(6) - 3,
+                                            0,
+                                          )
+                                        : Matrix4.identity(),
+                                    child: DragTarget<String>(
+                                      builder: (
+                                        BuildContext context,
+                                        List<dynamic> accepted,
+                                        List<dynamic> rejected,
+                                      ) {
+                                        return Container(
+                                          height: 8.h,
+                                          width: 8.h,
+                                          decoration: BoxDecoration(
+                                            color: _isCorrect
+                                                ? Colors.green
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              color: _isCorrect
+                                                  ? Colors.green
+                                                  : currentColor,
+                                              width: 3,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: _isCorrect
+                                                ? Text(
+                                                    correctAnswer,
+                                                    style: myTextStyle30(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontColor: Colors.white,
+                                                    ),
+                                                  )
+                                                : Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.arrow_circle_up,
+                                                        color: currentColor,
+                                                        size: 25,
+                                                      ),
+                                                      if (_currentProblemIndex ==
+                                                              0 &&
+                                                          !_isCorrect)
+                                                        Text(
+                                                          "Drag here",
+                                                          style: myTextStyle12(
+                                                            fontColor:
+                                                                currentColor,
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                          ),
+                                        );
+                                      },
+                                      onAccept: (data) {
+                                        _checkAnswer(data);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-
-                        ///--- Equation with drag target --- ///
-                        Container(
-                          width: size.width,
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: currentColor, width: 1),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              /// ----- First Number ---- ///
-                              Expanded(
-                                flex: 2,
-                                child: Container(
-                                  height: 8.h,
-                                  width: 8.h,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryDark ,
-                                    borderRadius: BorderRadius.circular(5),
-
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "${currentProblem['num1']}",
-                                      style: myTextStyle30(
-                                        fontWeight: FontWeight.bold,
-                                        fontColor:  Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-
-                              /// --- Add icon --- ///
-                              Expanded(
-                                flex: 1,
-                                child: Center(
-                                  child: Text(
-                                    "+",
-                                    style: myTextStyle30(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              /// --- Second Number --- ///
-                              Expanded(
-                                flex: 2,
-                                child: Container(
-                                  height: 8.h,
-                                  width: 8.h,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryDark ,
-                                    borderRadius: BorderRadius.circular(5),
-
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "${currentProblem['num2']}",
-                                        style: myTextStyle30(
-                                          fontWeight: FontWeight.bold,
-                                          fontColor:  Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              Expanded(
-                                flex: 1,
-                                child: Center(
-                                  child: Text(
-                                    "=",
-                                    style: myTextStyle30(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 100),
-                                  transform: _vibrateAnswerBox
-                                      ? Matrix4.translationValues(
-                                    Random().nextInt(6) - 3,
-                                    Random().nextInt(6) - 3,
-                                    0,
-                                  )
-                                      : Matrix4.identity(),
-                                  child: DragTarget<String>(
-                                    builder: (
-                                        BuildContext context,
-                                        List<dynamic> accepted,
-                                        List<dynamic> rejected,
-                                        ) {
-                                      return Container(
-                                        height: 8.h,
-                                        width: 8.h,
-
-                                        decoration: BoxDecoration(
-                                          color: _isCorrect ? Colors.green : Colors.white,
-                                          borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(
-                                            color:
-                                            _isCorrect ? Colors.green : currentColor,
-                                            width: 3,
-                                          ),
-                                        ),
-                                        child: Center(
-                                          child: _isCorrect
-                                              ? Text(
-                                            correctAnswer,
-                                            style: myTextStyle30(
-                                              fontWeight: FontWeight.bold,
-                                              fontColor: Colors.white,
-                                            ),
-                                          )
-                                              : Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Icon(
-                                                Icons.arrow_circle_up,
-                                                color: currentColor,
-                                                size: 25,
-                                              ),
-                                              if (_currentProblemIndex == 0 &&
-                                                  !_isCorrect)
-                                                Text(
-                                                  "Drag here",
-                                                  style: myTextStyle12(
-                                                    fontColor: currentColor,
-                                                  ),
-                                                ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    onAccept: (data) {
-                                      _checkAnswer(data);
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        const SizedBox(
+                          height: 20,
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(height: 1.h),
 
-
-
-                   SizedBox(height: 3.h),
+                  SizedBox(height: 5.h),
 
                   /// --------- Answer options ---------- ///
                   Wrap(
@@ -774,7 +785,9 @@ class _AdditionScreenState extends State<AdditionScreen> {
                       );
                     }).toList(),
                   ),
-                  SizedBox(height: 2.h,),
+                  SizedBox(
+                    height: 5.h,
+                  ),
 
                   /// --- Navigation controls Button --- ///
                   Row(
@@ -783,21 +796,24 @@ class _AdditionScreenState extends State<AdditionScreen> {
                       ControlIconButton(
                         icon: Icons.arrow_back_rounded,
                         iconSize: 24,
-                        color: const Color(0xFF01579B),
+                        color: AppColors.primaryDark,
                         onPressed: _goToPreviousProblem,
-                        isRounded: true,
                         borderColor: Colors.grey.shade700,
+                        isRounded: false,
                       ),
                       AvatarGlow(
-                        glowColor: _isSpeaking
-                            ? Colors.amber
-                            : const Color(0xFF01579B),
+                        glowColor:
+                            _isSpeaking ? Colors.amber : AppColors.primaryColor,
                         glowRadiusFactor: 0.4,
                         animate: _isSpeaking,
                         child: ControlIconButton(
-                          icon: getIcon(),
+                          icon: _isSpeaking
+                              ? Icons.pause_rounded
+                              : Icons.volume_up_rounded,
                           iconSize: 24,
-                          color: getIconColor(),
+                          color: _isSpeaking
+                              ? Colors.amber
+                              : AppColors.primaryDark,
                           onPressed: _toggleAutoPlay,
                           borderColor: Colors.grey.shade700,
                         ),
@@ -805,15 +821,17 @@ class _AdditionScreenState extends State<AdditionScreen> {
                       ControlIconButton(
                         icon: Icons.arrow_forward_rounded,
                         iconSize: 24,
-                        color: const Color(0xFF01579B),
+                        color: AppColors.primaryDark,
                         onPressed: _goToNextProblem,
+                        isRounded: false,
                         borderColor: Colors.grey.shade700,
-                        isRounded: true,
                       ),
                     ],
                   ),
 
-                  SizedBox(height: 2.h,)
+                  SizedBox(
+                    height: 2.h,
+                  )
                 ],
               ),
             ),

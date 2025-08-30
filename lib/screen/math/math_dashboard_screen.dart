@@ -152,9 +152,9 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
 
             GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (_)=>const AdditionScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (_) => AdditionScreen()));
               },
-                child: Text("Addition") )
+                child: const Text("Addition") )
 
 
           ],

@@ -1,6 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../screen/math/addition_screen.dart';
+import '../screen/math/division_screen.dart';
+import '../screen/math/multiplication_screen.dart';
+import '../screen/math/subtraction_screen.dart';
+
 class AppConstant {
   static final List<Map<String, dynamic>> categories = [
     {
@@ -257,5 +262,36 @@ class AppConstant {
     'Ninety-Eight',
     'Ninety-Nine',
     'One Hundred',
+  ];
+
+
+
+  /// List of math categories with icons and colors
+ static final List<Map<String, dynamic>> mathCategories = [
+
+    {
+      'title': 'Addition',
+      'color': const Color(0xFF80DEEA),
+      'screen': const AdditionScreen(),
+      'image': 'assets/images/add_icon.png',
+    },
+    {
+      'title': 'Subtraction',
+      'color': const Color(0xFFCE93D8),
+      'screen': const SubtractionScreen(),
+      'image': 'assets/images/subtraction_icon.png',
+    },
+    {
+      'title': 'Multiplication',
+      'color': const Color(0xFFFFF59D),
+      'screen': const MultiplicationScreen(),
+      'image': 'assets/images/multiplication_icon.png',
+    },
+    {
+      'title': 'Division',
+      'color': const Color(0xFFA5D6A7),
+      'screen': const DivisionScreen(),
+      'image': 'assets/images/division_icon.png',
+    },
   ];
 }

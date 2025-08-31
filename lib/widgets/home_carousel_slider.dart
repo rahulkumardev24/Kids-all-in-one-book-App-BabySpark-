@@ -5,7 +5,8 @@ import '../helper/app_color.dart';
 import '../screen/math/box_count_screen.dart';
 
 class HomeCarouselSlider extends StatefulWidget {
-  const HomeCarouselSlider({super.key});
+  final double viewportFraction ;
+  const HomeCarouselSlider({super.key , this.viewportFraction = 0.75});
 
   @override
   State<HomeCarouselSlider> createState() => _HomeCarouselSliderState();
@@ -32,7 +33,7 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
             image: const DecorationImage(
-              image: AssetImage("assets/poster/poster_ball.png"),
+              image: AssetImage("assets/poster/ball_count.png"),
               fit: BoxFit.cover,
             ),
           ),
@@ -46,7 +47,7 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
           items: items,
           options: CarouselOptions(
             height: size.height * 0.15,
-            viewportFraction: 0.75 ,
+            viewportFraction: widget.viewportFraction ,
             initialPage: 0,
             enableInfiniteScroll: true,
             autoPlay: true,

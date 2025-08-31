@@ -145,6 +145,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  clay_containers:
+    dependency: "direct main"
+    description:
+      name: clay_containers
+      sha256: "84039b8afd1ab168caaefee862611810add7e77a6c6d03d02788a56bd60e76c1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.4"
   clock:
     dependency: transitive
     description:

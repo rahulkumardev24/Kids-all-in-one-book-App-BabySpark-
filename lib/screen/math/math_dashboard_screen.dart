@@ -1,12 +1,17 @@
 import 'package:babyspark/domain/custom_text_style.dart';
+import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/screen/math/addition_screen.dart';
-import 'package:babyspark/screen/math/subtraction_screen.dart';
 import 'package:babyspark/screen/multiplication_table_screen.dart';
+import 'package:babyspark/widgets/navigation_button.dart';
+import 'package:clay_containers/constants.dart';
+import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:velocity_x/velocity_x.dart';
 
-import 'division_screen.dart';
-import 'multiplication_screen.dart';
+import '../../helper/app_color.dart';
+import '../../widgets/home_carousel_slider.dart';
 
 class MathDashboardScreen extends StatefulWidget {
   const MathDashboardScreen({super.key});
@@ -16,176 +21,295 @@ class MathDashboardScreen extends StatefulWidget {
 }
 
 class _MathDashboardScreenState extends State<MathDashboardScreen> {
-  // List of math categories with icons and colors
-  final List<Map<String, dynamic>> _mathCategories = [
-    {
-      'title': 'Multiplication\nTable',
-      'icon': Iconsax.calculator,
-      'color': const Color(0xFFE91E63),
-      'screen': const MultiplicationTableScreen(),
-      'image': 'assets/images/multiplication.png',
-    },
-    {
-      'title': 'Counting\nNumbers',
-      'icon': Iconsax.hashtag,
-      'color': const Color(0xFF9C27B0),
-      'screen': null, // You can create a CountingNumbersScreen
-      'image': 'assets/images/counting.png',
-    },
-    {
-      'title': 'Shapes &\nPatterns',
-      'icon': Iconsax.shapes,
-      'color': const Color(0xFF673AB7),
-      'screen': null, // You can create a ShapesScreen
-      'image': 'assets/images/shapes.png',
-    },
-    {
-      'title': 'Simple\nAddition',
-      'icon': Iconsax.add,
-      'color': const Color(0xFF3F51B5),
-      'screen': null, // You can create a AdditionScreen
-      'image': 'assets/images/addition.png',
-    },
-    {
-      'title': 'Simple\nSubtraction',
-      'icon': Iconsax.minus,
-      'color': const Color(0xFF2196F3),
-      'screen': null, // You can create a SubtractionScreen
-      'image': 'assets/images/subtraction.png',
-    },
-    {
-      'title': 'Number\nRecognition',
-      'icon': Iconsax.note_1,
-      'color': const Color(0xFF009688),
-      'screen': null, // You can create a NumberRecognitionScreen
-      'image': 'assets/images/numbers.png',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: const Color(0xFFE1F5FE),
-      /// ---- Appbar ------ ///
-      appBar: AppBar(
-        title: Text(
-          "Learn Math",
-          style: myTextStyle25(
-            fontWeight: FontWeight.bold,
-            fontColor: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFF0288D1),
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Welcome header
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.blue.shade100,
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    "Math Adventure",
-                    style: myTextStyle22(
-                      fontWeight: FontWeight.bold,
-                      fontColor: const Color(0xFF01579B),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Explore fun math activities!",
-                    style: myTextStyle18(
-                      fontColor: const Color(0xFF0277BD),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.primaryLight,
 
-            const SizedBox(height: 20),
-
-            /// ---- Multiplication Table ----- ///
-            GestureDetector(
-              onTap: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const MultiplicationTableScreen())),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
+        /// -------- App bar -------- ///
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: size.height * 0.15,
+          shape: const RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadiusGeometry.only(bottomRight: Radius.circular(100))),
+          flexibleSpace: Container(
+            decoration: const BoxDecoration(
+                borderRadius:
+                    BorderRadius.only(bottomRight: Radius.circular(32))),
+            child: Stack(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                          child: Text(
-                            "Multiplication\nTable",
-                            textAlign: TextAlign.center,
-                            style: myTextStyle30(
-                              fontFamily: "secondary",
-                            ),
-                          )),
-                      Image.asset(
-                        "assets/images/multiplication.png",
-                        height: size.width * 0.3,
-                        width: size.width * 0.3,
-                        fit: BoxFit.cover,
+                      /// ---- Back Button ------ ///
+                      NavigationButton(onTap: () {
+                        Navigator.pop(context);
+                      }),
+                      Text(
+                        "Mathematics",
+                        style: myTextStyle21(fontFamily: "primary"),
                       )
                     ],
                   ),
                 ),
+                Positioned(
+                  right: size.width * 0.3,
+                  child: LottieBuilder.asset(
+                    "assets/lottie_animation_file/Winged Teacher.json",
+                    fit: BoxFit.cover,
+                    height: size.height * 0.15,
+                    width: size.height * 0.15,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+
+        /// ------- Body -------- ///
+        body: Stack(
+          children: [
+            /// --------- Floating shapes in background ----------- ///
+            Positioned(
+              top: size.height * 0.1,
+              right: 20,
+              child: Icon(Icons.circle,
+                  size: size.width * 0.3,
+                  color: Colors.white.withValues(alpha: 0.3)),
+            ),
+            Positioned(
+              top: size.height * 0.3,
+              left: 10,
+              child: Icon(Icons.circle,
+                  size: size.width * 0.3,
+                  color: Colors.white.withValues(alpha: 0.5)),
+            ),
+            Positioned(
+              bottom: 20,
+              right: 40,
+              child: Icon(Icons.circle,
+                  size: size.width * 0.3,
+                  color: Colors.white.withValues(alpha: 0.3)),
+            ),
+
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 2.h,
+                        ),
+
+                        /// ---- Multiplication Table ----- ///
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) =>
+                                      const MultiplicationTableScreen())),
+                          child: Card(
+                            color: Colors.white,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: Text(
+                                    "Multiplication\nTable",
+                                    textAlign: TextAlign.center,
+                                    style: myTextStyle30(
+                                      fontFamily: "secondary",
+                                    ),
+                                  )),
+                                  Image.asset(
+                                    "assets/images/multiplication.png",
+                                    height: size.width * 0.3,
+                                    width: size.width * 0.3,
+                                    fit: BoxFit.cover,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(
+                          height: 2.h,
+                        ),
+
+                        ///--------- Grid of math activities ----------- ///
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 18,
+                            mainAxisSpacing: 18,
+                          ),
+                          itemCount: AppConstant.mathCategories.length,
+                          itemBuilder: (context, index) {
+                            final category = AppConstant.mathCategories[index];
+                            return _buildMathCategoryCard(category, context);
+                          },
+                        ),
+
+                        SizedBox(height: 3.h),
+                        const HomeCarouselSlider(
+                          viewportFraction: 1,
+                        ),
+                        SizedBox(height: 3.h),
+                      ],
+                    ),
+                  ),
+
+                  /// ----- Daily challenge section ------ ///
+                  VxArc(
+                    height: 3.h,
+                    arcType: VxArcType.convex,
+                    edge: VxEdge.top,
+                    child: Container(
+                      width: double.infinity,
+                      height: size.height * 0.3,
+                      padding: const EdgeInsets.all(16),
+                      decoration:  BoxDecoration(
+                        color: AppColors.babyOrange,
+
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.emoji_events_rounded,
+                                  color: Colors.amber[700]),
+                              const SizedBox(width: 8),
+                              Text(
+                                "Daily Challenge",
+                                style: myTextStyle20(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: const Color(0xFF01579B),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "Solve 5 addition problems to earn a star!",
+                            style: myTextStyle18(
+                              fontColor: Colors.grey[700]!,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          LinearProgressIndicator(
+                            value: 0.4,
+                            backgroundColor: Colors.grey[200],
+                            valueColor: const AlwaysStoppedAnimation<Color>(
+                                Color(0xFFFFA726)),
+                            borderRadius: BorderRadius.circular(10),
+                            minHeight: 12,
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                "2/5 completed",
+                                style: myTextStyle14(
+                                  fontColor: Colors.grey[600]!,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 2.h),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const AdditionScreen()));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFFFA726),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              child: Text(
+                                "Start Challenge",
+                                style: myTextStyle18(
+                                  fontWeight: FontWeight.bold,
+                                  fontColor: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ) ,
-            const SizedBox(height: 20),
-
-            GestureDetector(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (_) => AdditionScreen()));
-              },
-                child: const Text("Addition") ) ,
-            const SizedBox(height: 100,),
-
-            GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => SubtractionScreen()));
-                },
-                child: const Text("Subtraction") ) ,
-
-            const SizedBox(height: 100,),
-
-            GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_) =>const MultiplicationScreen()));
-                },
-                child: const Text("Multiplication") ) ,
-
-            const SizedBox(height: 100,),
-            GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_) =>const DivisionScreen()));
-                },
-                child: const Text("Multiplication") ) ,
-
+            ),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildMathCategoryCard(
+      Map<String, dynamic> category, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (category['screen'] != null) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (_) => category['screen']));
+        }
+      },
+      child: ClayContainer(
+        color: AppColors.primaryDark,
+        spread: 4.0,
+        borderRadius: 20,
+        curveType: CurveType.concave,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (category['image'] != null)
+                Image.asset(
+                  category['image'],
+                  width: 8.h,
+                  height: 8.h,
+                  fit: BoxFit.cover,
+                ),
+              Text(
+                category['title'],
+                textAlign: TextAlign.center,
+                style: myTextStyle21(
+                  fontWeight: FontWeight.w600,
+                  fontColor: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

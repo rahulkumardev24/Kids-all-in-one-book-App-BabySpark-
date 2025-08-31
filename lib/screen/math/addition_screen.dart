@@ -9,10 +9,31 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../controller/addition_controller.dart';
 import '../../helper/app_color.dart';
 
-class AdditionScreen extends StatelessWidget {
-  AdditionScreen({super.key});
+class AdditionScreen extends StatefulWidget {
+  const AdditionScreen({super.key});
 
+  @override
+  State<AdditionScreen> createState() => _AdditionScreenState();
+}
+
+class _AdditionScreenState extends State<AdditionScreen> {
   final AdditionController controller = Get.put(AdditionController());
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      /// ---- Set up completion callback ----- ///
+      controller.onCompletion = () {
+        DialogHelper.showMathCompletionDialog(
+          context: context,
+          onRestartGame: controller.restartGame,
+          onExit: () => Navigator.pop(context),
+        );
+      };
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +44,9 @@ class AdditionScreen extends StatelessWidget {
       return MediaQuery.of(context).size.shortestSide >= 600;
     }
 
-    // Set up completion callback
-    controller.onCompletion = () {
-      DialogHelper.showMathCompletionDialog(
-        context: context,
-        onRestartGame: controller.restartGame,
-        onExit: () => Navigator.pop(context),
-      );
-    };
-
     return SafeArea(
       child: Scaffold(
+        /// ------- App bar --------- ///
         appBar: AppBar(
           toolbarHeight: size.height * 0.18,
           automaticallyImplyLeading: false,
@@ -42,15 +55,15 @@ class AdditionScreen extends StatelessWidget {
               isTablet: isTablet(context), size: size, title: "Addition"),
         ),
         backgroundColor: Colors.white,
+
+        /// --------- Body --------- ///
         body: Obx(() {
           if (controller.additionProblems.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
-
           final currentProblem =
               controller.additionProblems[controller.currentProblemIndex.value];
           final correctAnswer = currentProblem['result'].toString();
-
           return Stack(
             children: [
               Padding(
@@ -61,10 +74,12 @@ class AdditionScreen extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          /// ----- Ball ----------- ///
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
+                              /// First Ball
                               Expanded(
                                 flex: 2,
                                 child: Column(
@@ -108,6 +123,8 @@ class AdditionScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
+
+                              /// Addition
                               Expanded(
                                 flex: 1,
                                 child: Center(
@@ -115,11 +132,12 @@ class AdditionScreen extends StatelessWidget {
                                     "+",
                                     style: myTextStyle40(
                                       fontWeight: FontWeight.bold,
-                                      fontColor: currentColor,
                                     ),
                                   ),
                                 ),
                               ),
+
+                              /// Second Ball
                               Expanded(
                                 flex: 2,
                                 child: Column(
@@ -166,6 +184,8 @@ class AdditionScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
+
+                              /// Equal
                               Expanded(
                                 flex: 1,
                                 child: Center(
@@ -173,11 +193,12 @@ class AdditionScreen extends StatelessWidget {
                                     "=",
                                     style: myTextStyle40(
                                       fontWeight: FontWeight.bold,
-                                      fontColor: currentColor,
                                     ),
                                   ),
                                 ),
                               ),
+
+                              /// Result Ball
                               Expanded(
                                 flex: 2,
                                 child: Column(
@@ -273,10 +294,12 @@ class AdditionScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: 1.h),
                         ],
                       ),
                     ),
+
+                    /// -------------  Liner Progress bar  ------------- ///
                     LinearProgressIndicator(
                       minHeight: 1.h,
                       value: (controller.currentProblemIndex.value + 1) /
@@ -287,6 +310,8 @@ class AdditionScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     SizedBox(height: 2.h),
+
+                    /// ------------ Options --------------------- ///
                     Wrap(
                       spacing: 2.h,
                       children: controller.currentOptions.map((number) {
@@ -389,11 +414,11 @@ class AdditionScreen extends StatelessWidget {
                                               width: 70,
                                               height: 70,
                                               decoration: BoxDecoration(
-                                                color: Colors.amber.shade200,
+                                                color: Colors.grey.shade200,
                                                 borderRadius:
                                                     BorderRadius.circular(15),
                                                 border: Border.all(
-                                                  color: Colors.orange.shade700,
+                                                  color: Colors.grey.shade700,
                                                   width: 3,
                                                 ),
                                               ),
@@ -436,6 +461,8 @@ class AdditionScreen extends StatelessWidget {
                       }).toList(),
                     ),
                     SizedBox(height: 3.h),
+
+                    /// ----- Control Button ----------- ///
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

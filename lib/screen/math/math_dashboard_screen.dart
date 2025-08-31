@@ -1,8 +1,11 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/screen/math/addition_screen.dart';
+import 'package:babyspark/screen/math/subtraction_screen.dart';
 import 'package:babyspark/screen/multiplication_table_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+
+import 'multiplication_screen.dart';
 
 class MathDashboardScreen extends StatefulWidget {
   const MathDashboardScreen({super.key});
@@ -154,8 +157,22 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
               onTap: (){
                 Navigator.push(context, MaterialPageRoute(builder: (_) => AdditionScreen()));
               },
-                child: const Text("Addition") )
+                child: const Text("Addition") ) ,
+            const SizedBox(height: 100,),
 
+            GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => SubtractionScreen()));
+                },
+                child: const Text("Subtraction") ) ,
+
+            const SizedBox(height: 100,),
+
+            GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) =>const MultiplicationScreen()));
+                },
+                child: const Text("Multiplication") ) ,
 
           ],
         ),

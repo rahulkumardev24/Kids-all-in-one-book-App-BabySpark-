@@ -7,7 +7,7 @@ import 'package:babyspark/service/tts_service.dart';
 import 'package:get/get.dart';
 
 class AdditionController extends GetxController {
-  // Reactive variables
+  /// Reactive variables
   final additionProblems = <Map<String, dynamic>>[].obs;
   final currentProblemIndex = 0.obs;
   final isAutoPlaying = false.obs;
@@ -17,12 +17,12 @@ class AdditionController extends GetxController {
   final vibrateAnswerBox = false.obs;
   final vibrateCorrectOption = false.obs;
   final currentOptions = <String>[].obs;
-  final selectedAnswer = ''.obs; // Add this for tap feedback
+  final selectedAnswer = ''.obs;
 
   /// Completion callback
   VoidCallback? onCompletion;
 
-  // Audio players
+  /// Audio players
   final AudioPlayer audioPlayer = AudioPlayer();
   final AudioPlayer effectsPlayer = AudioPlayer();
 

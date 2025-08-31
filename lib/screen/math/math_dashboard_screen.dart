@@ -5,6 +5,7 @@ import 'package:babyspark/screen/multiplication_table_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
+import 'division_screen.dart';
 import 'multiplication_screen.dart';
 
 class MathDashboardScreen extends StatefulWidget {
@@ -171,6 +172,13 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
             GestureDetector(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (_) =>const MultiplicationScreen()));
+                },
+                child: const Text("Multiplication") ) ,
+
+            const SizedBox(height: 100,),
+            GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) =>const DivisionScreen()));
                 },
                 child: const Text("Multiplication") ) ,
 

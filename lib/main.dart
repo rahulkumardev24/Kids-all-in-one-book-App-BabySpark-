@@ -9,8 +9,13 @@ import 'package:babyspark/widgets/home_carousel_slider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/bindings_interface.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import 'controller/loading_controller.dart';
 import 'firebase_options.dart';
 import 'helper/app_color.dart';
 
@@ -44,9 +49,12 @@ class MyApp extends StatelessWidget {
         ),
         child: ResponsiveSizer(
           builder: (context, orientation, screenType) {
-            return const MaterialApp(
+            return GetMaterialApp(
               debugShowCheckedModeBanner: false,
-              home: DashboardScreen(),
+              initialBinding: BindingsBuilder(() {
+                Get.put(LoadingController(), permanent: true);
+              }),
+              home: const DashboardScreen(),
             );
           },
         ));

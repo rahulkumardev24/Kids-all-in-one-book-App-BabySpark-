@@ -1,8 +1,10 @@
+import 'package:babyspark/helper/dialog_helper.dart';
 import 'package:babyspark/model/book_model.dart';
 import 'package:babyspark/screen/details_screen.dart';
 import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
 
+import '../../controller/loading_controller.dart';
 import '../../service/firebase_book_service.dart';
 import '../../widgets/items_card.dart';
 import 'alphabets/alphabets_details_screen.dart';
@@ -18,7 +20,17 @@ class BookGridScreen extends StatefulWidget {
 }
 
 class _BookGridScreenState extends State<BookGridScreen> {
+  final LoadingController _loadingController = LoadingController.instance;
   final FirebaseBookService _firebaseService = FirebaseBookService();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadingController.showLoading();
+    });
+  }
+
   bool isTablet(BuildContext context) {
     final shortestSide = MediaQuery.of(context).size.shortestSide;
     return shortestSide >= 600;
@@ -41,15 +53,17 @@ class _BookGridScreenState extends State<BookGridScreen> {
         body: StreamBuilder<List<BookModel>>(
           stream: _firebaseService.getBookData(widget.collectionName),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+            if (snapshot.connectionState != ConnectionState.waiting) {
+              _loadingController.hideLoading();
             }
             if (snapshot.hasError) {
               return const Center(child: Text("Error loading data"));
             }
+
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text("No alphabets found"));
+              return const Center(child: Text("No data found"));
             }
+
             final books = snapshot.data!;
             return GridView.builder(
               padding: const EdgeInsets.all(12),
@@ -64,7 +78,6 @@ class _BookGridScreenState extends State<BookGridScreen> {
               itemBuilder: (context, index) {
                 final book = books[index];
                 return GestureDetector(
-                  /// --- navigate to Details screen --- ///
                   onTap: () {
                     if (widget.collectionName == "alphabets_data") {
                       Navigator.push(
@@ -90,7 +103,6 @@ class _BookGridScreenState extends State<BookGridScreen> {
                       );
                     }
                   },
-
                   child: ItemsCard(
                     title: book.title,
                     imagePath: book.image,

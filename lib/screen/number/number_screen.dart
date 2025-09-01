@@ -1,3 +1,5 @@
+import 'package:babyspark/controller/loading_controller.dart';
+import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/my_text_button.dart';
@@ -12,12 +14,7 @@ class NumberScreen extends StatefulWidget {
 }
 
 class _NumberScreenState extends State<NumberScreen> {
-  final List<Color> _numberColors = [
-    Colors.redAccent,
-    Colors.indigo,
-    Colors.blue,
-    Colors.orange
-  ];
+  final LoadingController _loadingController = LoadingController.instance;
 
   final List<int> _displayedNumbers = List.generate(20, (index) => index + 1);
   bool _isLoadingMore = false;
@@ -62,10 +59,23 @@ class _NumberScreenState extends State<NumberScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadingController.showLoading();
+
+      Future.delayed(const Duration(seconds: 1), () {
+        _loadingController.hideLoading();
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        /// ---- App bar ----- ///
         appBar: AppBar(
           automaticallyImplyLeading: false,
           toolbarHeight: size.height * 0.2,
@@ -73,6 +83,8 @@ class _NumberScreenState extends State<NumberScreen> {
           backgroundColor: Colors.white,
         ),
         backgroundColor: Colors.white,
+
+        /// --- body --- ///
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -87,7 +99,8 @@ class _NumberScreenState extends State<NumberScreen> {
                 itemBuilder: (context, index) {
                   return NumberTile(
                     number: _displayedNumbers[index],
-                    color: _numberColors[index % _numberColors.length],
+                    color: AppConstant
+                        .numberColors[index % AppConstant.numberColors.length],
                     isTablet: isTablet(context),
                     onTap: () {
                       _navigateToNumberDetail(

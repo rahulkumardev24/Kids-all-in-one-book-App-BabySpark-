@@ -33,7 +33,6 @@ class LoadingController extends GetxController {
 
       // Set minimum show time
       _minimumShowTimer = Timer(const Duration(seconds: 1), () {
-        // Minimum show time completed
       });
     }
   }

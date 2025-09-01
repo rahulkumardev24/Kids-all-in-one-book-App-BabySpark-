@@ -8,10 +8,10 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
-import '../helper/app_color.dart';
-import '../service/tts_service.dart';
-import '../widgets/control_icon_button.dart';
-import '../widgets/navigation_button.dart';
+import '../../helper/app_color.dart';
+import '../../service/tts_service.dart';
+import '../../widgets/control_icon_button.dart';
+import '../../widgets/navigation_button.dart';
 
 class MultiplicationTableScreen extends StatefulWidget {
   const MultiplicationTableScreen({super.key});

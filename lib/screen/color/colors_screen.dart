@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:babyspark/controller/loading_controller.dart';
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/widgets/primary_app_bar.dart';
@@ -10,15 +11,16 @@ import '../../service/tts_service.dart';
 import '../../widgets/control_icon_button.dart';
 import '../../widgets/footer_animation.dart';
 
+@immutable
 class ColorsScreen extends StatefulWidget {
-  const ColorsScreen({super.key});
+  late int selectedIndex;
+  ColorsScreen({super.key, required this.selectedIndex});
 
   @override
   State<ColorsScreen> createState() => _ColorsScreenState();
 }
 
 class _ColorsScreenState extends State<ColorsScreen> {
-  int selectedIndex = 0;
   bool isSpeaking = false;
   bool isAutoPlaying = false;
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -31,7 +33,7 @@ class _ColorsScreenState extends State<ColorsScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: selectedIndex);
+    _pageController = PageController(initialPage: widget.selectedIndex);
     _scrollController = ScrollController();
 
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -49,12 +51,12 @@ class _ColorsScreenState extends State<ColorsScreen> {
   }
 
   void playColorSound() {
-    final colorName = myColorList[selectedIndex]["name"];
+    final colorName = myColorList[widget.selectedIndex]["name"];
     TTSService.speak(colorName);
   }
 
   void nextColor() {
-    if (selectedIndex < myColorList.length - 1) {
+    if (widget.selectedIndex < myColorList.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
@@ -66,7 +68,7 @@ class _ColorsScreenState extends State<ColorsScreen> {
   }
 
   void previousColor() {
-    if (selectedIndex > 0) {
+    if (widget.selectedIndex > 0) {
       _pageController.previousPage(
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
@@ -87,14 +89,14 @@ class _ColorsScreenState extends State<ColorsScreen> {
     } else {
       // Start autoplay
       _autoPlayTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
-        if (selectedIndex < myColorList.length - 1) {
-          selectedIndex++;
+        if (widget.selectedIndex < myColorList.length - 1) {
+          widget.selectedIndex++;
         } else {
-          selectedIndex = 0;
+          widget.selectedIndex = 0;
         }
 
         _pageController.animateToPage(
-          selectedIndex,
+          widget.selectedIndex,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
@@ -146,7 +148,7 @@ class _ColorsScreenState extends State<ColorsScreen> {
                     controller: _pageController,
                     onPageChanged: (index) {
                       setState(() {
-                        selectedIndex = index;
+                        widget.selectedIndex = index;
                       });
                       if (isAutoPlaying) playColorSound();
                     },

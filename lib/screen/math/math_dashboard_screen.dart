@@ -1,7 +1,7 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/screen/math/addition_screen.dart';
-import 'package:babyspark/screen/multiplication_table_screen.dart';
+import 'package:babyspark/screen/math/multiplication_table_screen.dart';
 import 'package:babyspark/widgets/navigation_button.dart';
 import 'package:clay_containers/constants.dart';
 import 'package:clay_containers/widgets/clay_container.dart';

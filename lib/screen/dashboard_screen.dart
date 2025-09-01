@@ -2,6 +2,7 @@ import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_color.dart';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/screen/categories_screen/book_grid_screen.dart';
+import 'package:babyspark/screen/color/color_grid_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/widgets/my_categories_card.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../widgets/home_carousel_slider.dart';
-import 'categories_screen/colors_screen.dart';
+import 'color/colors_screen.dart';
 import 'math/math_dashboard_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -123,7 +124,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => const ColorsScreen()));
+                                      builder: (_) => ColorGridScreen(appBarTitle: "Colours")));
                             }
 
                             /// --- Shapes --- ///

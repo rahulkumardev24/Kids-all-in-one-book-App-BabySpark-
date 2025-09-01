@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:babyspark/model/book_model.dart';
 import 'package:babyspark/service/tts_service.dart';
 import 'package:babyspark/widgets/primary_app_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -144,7 +145,6 @@ class _DetailsScreenState extends State<DetailsScreen>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final title = widget.collectionName.replaceAll('_data', '');
-
     return SafeArea(
       child: Scaffold(
         /// --- App bar --- ///
@@ -184,11 +184,31 @@ class _DetailsScreenState extends State<DetailsScreen>
                       children: [
                         ScaleTransition(
                           scale: _bounceAnimation,
-                          child: Image.network(
-                            item.image,
-                            width: size.width * 0.7,
+                          child: CachedNetworkImage(
+                            imageUrl: item.image,
                             height: size.width * 0.7,
+                            width: size.width * 0.7,
                             fit: BoxFit.contain,
+                            placeholder: (context, url) => Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                item.title[0],
+                                style: myTextStyleCus(
+                                    fontSize: isTablet(context) ? 200 : 150,
+                                    fontWeight: FontWeight.bold,
+                                    fontColor: AppColors.primaryDark),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                item.title[0],
+                                style: myTextStyleCus(
+                                    fontSize: isTablet(context) ? 150 : 100,
+                                    fontWeight: FontWeight.bold,
+                                    fontColor: AppColors.primaryDark),
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 20),

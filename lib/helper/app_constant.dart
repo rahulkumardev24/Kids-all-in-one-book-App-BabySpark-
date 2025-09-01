@@ -294,4 +294,12 @@ class AppConstant {
       'image': 'assets/images/division_icon.png',
     },
   ];
+
+
+ static final List<Color> numberColors = [
+    Colors.redAccent,
+    Colors.indigo,
+    Colors.blue,
+    Colors.orange
+  ];
 }

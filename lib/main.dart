@@ -1,7 +1,7 @@
+import 'package:babyspark/screen/box_matching_game.dart';
 import 'package:babyspark/screen/math/addition_screen.dart';
 import 'package:babyspark/screen/math/box_count_screen.dart';
 import 'package:babyspark/screen/math/math_dashboard_screen.dart';
-import 'package:babyspark/screen/multiplication_table_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/screen/dashboard_screen.dart';
 import 'package:babyspark/service/tts_service.dart';
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
               initialBinding: BindingsBuilder(() {
                 Get.put(LoadingController(), permanent: true);
               }),
-              home: const DashboardScreen(),
+              home: const BoxMatchingGame(),
             );
           },
         ));

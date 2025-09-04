@@ -1,13 +1,14 @@
+import 'package:babyspark/helper/app_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 import 'dart:async';
 import 'dart:math';
-
 import '../domain/custom_text_style.dart';
 import '../helper/app_color.dart';
 import '../widgets/navigation_button.dart';
+import '../widgets/simple_text_button.dart';
 
 class BoxMatchingGame extends StatefulWidget {
   const BoxMatchingGame({super.key});
@@ -18,20 +19,6 @@ class BoxMatchingGame extends StatefulWidget {
 
 class _BoxMatchingGameState extends State<BoxMatchingGame>
     with TickerProviderStateMixin {
-  // Game items with baby-friendly emojis
-  final List<String> symbols = [
-    '🐶',
-    '🐱',
-    '🐰',
-    '🏀',
-    '🐼',
-    '✈️',
-    '🦁',
-    '❤️',
-    '🌳',
-    '🏠'
-  ];
-
   // Game state
   List<CardItem> cards = [];
   int flippedCount = 0;
@@ -64,8 +51,8 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
   void initGame() {
     // Create pairs of cards
     List<String> gameSymbols = [];
-    gameSymbols.addAll(symbols);
-    gameSymbols.addAll(symbols);
+    gameSymbols.addAll(AppConstant.pairSymbols);
+    gameSymbols.addAll(AppConstant.pairSymbols);
     gameSymbols.shuffle();
 
     // Dispose existing controllers
@@ -97,7 +84,7 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
     });
 
     // Show all cards for 3 seconds before flipping them back
-    showAllTimer = Timer(Duration(seconds: 3), () {
+    showAllTimer = Timer(const Duration(seconds: 3), () {
       setState(() {
         showAll = false;
         for (var card in cards) {
@@ -149,23 +136,54 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
           matchesFound++;
 
           // Check if game is complete
-          if (matchesFound == symbols.length) {
+          if (matchesFound == AppConstant.pairSymbols.length) {
             // Game completed
-            Timer(Duration(seconds: 1), () {
+            Timer(const Duration(seconds: 1), () {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: Text("Yay! You won! 🎉"),
-                  content: Text("You found all matches in $moves moves!"),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        initGame();
-                      },
-                      child: Text("Play Again"),
+                  content: SizedBox(
+                    height: 40.h,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Lottie.asset("assets/lottie_animation_file/win.json"),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Image.asset(
+                              "assets/images/winner_cup.png",
+                              height: 20.h,
+                            ),
+
+                            /// ------- Buttons --------- ///
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SimpleTextButton(
+                                    onPress: () {
+                                      Navigator.pop(context);
+                                    },
+                                    btnBackgroundColor: Colors.grey.shade400,
+                                    btnText: "Exit"),
+                                SizedBox(
+                                  width: 2.h,
+                                ),
+                                Expanded(
+                                  child: SimpleTextButton(
+                                      btnText: "Play Again",
+                                      onPress: () {
+                                        initGame();
+                                        Navigator.pop(context);
+                                      }),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               );
             });
@@ -218,70 +236,28 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         NavigationButton(onTap: () => Navigator.pop(context)),
+
+                        SizedBox(
+                          height: 1.h,
+                        ),
                         Text(
-                          "Find Pari",
+                          "Find the matching Pairs",
                           style: myTextStyle21(),
                         ),
 
                         /// Progress bar and question counter - FIXED LAYOUT
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  width: 0.5, color: Colors.grey.shade500),
-                              borderRadius: BorderRadiusGeometry.circular(100)),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0, vertical: 2),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Padding(
-                                  padding:
-                                  const EdgeInsets.symmetric(vertical: 2.0),
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      SizedBox(
-                                        height: size.height * 0.04,
-                                        width: size.height * 0.04,
-                                        child: CircularProgressIndicator(
-                                          value: matchesFound / 10,
-                                          strokeWidth: 4,
-                                          backgroundColor:
-                                          Colors.grey.withAlpha(70),
-                                          color: AppColors.primaryDark,
-                                        ),
-                                      ),
-                                      Text(
-                                        "$matchesFound/$moves",
-                                        style: myTextStyle12(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                Text(
-                                  "Questions",
-                                  style: myTextStyle21(
-                                      fontWeight: FontWeight.w700),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                     Lottie.asset(
-                      "assets/lottie_animation_file/Boy looking .json",
+                      "assets/lottie_animation_file/teady_bear.json",
                       fit: BoxFit.cover,
                       height: size.height * 0.15,
                       width: size.height * 0.15,
@@ -294,93 +270,131 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
         ),
 
         /// ---------- Body ------------- ///
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            /// Game grid
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemCount: cards.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () => flipCard(index),
-                      child: AnimatedBuilder(
-                        animation: controllers[index],
-                        builder: (context, child) {
-                          // Calculate flip animation value
-                          double angle = controllers[index].value * pi;
-
-                          // If we're showing all cards at the beginning, show them flipped
-                          if (showAll) {
-                            angle = pi;
-                          }
-
-                          return Transform(
-                            transform: Matrix4.identity()
-                              ..setEntry(3, 2, 0.001) // Perspective
-                              ..rotateY(angle),
-                            alignment: Alignment.center,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: angle > pi / 2
-                                      ? Colors.white
-                                      : AppColors.primaryDark,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: angle > pi / 2
-                                      ? BoxBorder.all(
-                                          width: 1.5,
-                                          color: Colors.grey.shade300)
-                                      : null),
-                              child: Center(
-                                child: angle > pi / 2
-                                    ? Text(
-                                        cards[index].symbol,
-                                        style:  TextStyle(fontSize:7.h),
-                                      )
-                                    : const Text(
-                                        "?",
-                                        style: TextStyle(
-                                          fontSize:30 ,
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.textColor,
-                                        ),
-                                      ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              /// Game grid
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Divider(
+                            thickness: 3,
+                            color: AppColors.primaryDark,
+                            radius: BorderRadius.horizontal(
+                                left: Radius.circular(21)),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 1.5.h,
+                        ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              height: size.height * 0.08,
+                              width: size.height * 0.08,
+                              child: CircularProgressIndicator(
+                                value: matchesFound / 10,
+                                strokeWidth: 6,
+                                backgroundColor: Colors.grey.withAlpha(70),
+                                color: AppColors.primaryDark,
                               ),
                             ),
-                          );
-                        },
+                            Text(
+                              "$matchesFound/10",
+                              style: myTextStyle21(fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: 1.5.h,
+                        ),
+                        const Expanded(
+                          child: Divider(
+                            thickness: 3,
+                            color: AppColors.primaryDark,
+                            radius: BorderRadius.horizontal(
+                                right: Radius.circular(21)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 3.h,
+                    ),
+                    GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10,
                       ),
-                    );
-                  },
-                ),
-              ),
-            ),
+                      itemCount: cards.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () => flipCard(index),
+                          child: AnimatedBuilder(
+                            animation: controllers[index],
+                            builder: (context, child) {
+                              // Calculate flip animation value
+                              double angle = controllers[index].value * pi;
 
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                  color: Color(0xFFf8bbd0),
-                  borderRadius: BorderRadiusGeometry.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
-              child: const Text(
-                "Find the matching pairs!",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.deepPurple,
+                              // If we're showing all cards at the beginning, show them flipped
+                              if (showAll) {
+                                angle = pi;
+                              }
+
+                              return Transform(
+                                transform: Matrix4.identity()
+                                  ..setEntry(3, 2, 0.001) // Perspective
+                                  ..rotateY(angle),
+                                alignment: Alignment.center,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: angle > pi / 2
+                                          ? Colors.white
+                                          : AppColors.primaryDark,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: angle > pi / 2
+                                          ? BoxBorder.all(
+                                              width: 1.5,
+                                              color: Colors.grey.shade300)
+                                          : null),
+                                  child: Center(
+                                    child: angle > pi / 2
+                                        ? Text(
+                                            cards[index].symbol,
+                                            style: TextStyle(fontSize: 6.h),
+                                          )
+                                        : const Text(
+                                            "?",
+                                            style: TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold,
+                                              color: AppColors.textColor,
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

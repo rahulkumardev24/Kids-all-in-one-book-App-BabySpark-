@@ -264,11 +264,8 @@ class AppConstant {
     'One Hundred',
   ];
 
-
-
   /// List of math categories with icons and colors
- static final List<Map<String, dynamic>> mathCategories = [
-
+  static final List<Map<String, dynamic>> mathCategories = [
     {
       'title': 'Addition',
       'color': const Color(0xFF80DEEA),
@@ -295,11 +292,23 @@ class AppConstant {
     },
   ];
 
-
- static final List<Color> numberColors = [
+  static final List<Color> numberColors = [
     Colors.redAccent,
     Colors.indigo,
     Colors.blue,
     Colors.orange
+  ];
+
+  static final List<String> pairSymbols = [
+    '🐶',
+    '🐱',
+    '🐰',
+    '🏀',
+    '🐼',
+    '✈️',
+    '🦁',
+    '❤️',
+    '🌳',
+    '🏠'
   ];
 }

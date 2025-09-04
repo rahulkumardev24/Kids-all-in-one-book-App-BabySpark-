@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:velocity_x/velocity_x.dart';
 import 'dart:async';
 import 'dart:math';
 
+import '../domain/custom_text_style.dart';
 import '../helper/app_color.dart';
+import '../widgets/navigation_button.dart';
 
 class BoxMatchingGame extends StatefulWidget {
   const BoxMatchingGame({super.key});
@@ -14,7 +19,18 @@ class BoxMatchingGame extends StatefulWidget {
 class _BoxMatchingGameState extends State<BoxMatchingGame>
     with TickerProviderStateMixin {
   // Game items with baby-friendly emojis
-  final List<String> symbols = ['🐶', '🐱', '🐰', '🐻', '🐼', '🐯', '🦁', '🐮'];
+  final List<String> symbols = [
+    '🐶',
+    '🐱',
+    '🐰',
+    '🏀',
+    '🐼',
+    '✈️',
+    '🦁',
+    '❤️',
+    '🌳',
+    '🏠'
+  ];
 
   // Game state
   List<CardItem> cards = [];
@@ -183,46 +199,106 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-      
+
         /// ----------- App bar ----------- ///
         appBar: AppBar(
-          title: Text("Baby Memory Game"),
-          backgroundColor: Color(0xFFe91e63),
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: initGame,
-              tooltip: "New Game",
-            ),
-          ],
-        ),
-      
-        /// ---------- Body ------------- ///
-        body: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              color: Color(0xFFf8bbd0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    "Matches: $matchesFound/${symbols.length}",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "Moves: $moves",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                ],
+          automaticallyImplyLeading: false,
+          toolbarHeight: size.height * 0.2,
+          backgroundColor: Colors.white,
+          flexibleSpace: VxArc(
+            height: 2.5.h,
+            arcType: VxArcType.convey,
+            child: Container(
+              color: AppColors.primaryColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        NavigationButton(onTap: () => Navigator.pop(context)),
+                        Text(
+                          "Find Pari",
+                          style: myTextStyle21(),
+                        ),
+
+                        /// Progress bar and question counter - FIXED LAYOUT
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 0.5, color: Colors.grey.shade500),
+                              borderRadius: BorderRadiusGeometry.circular(100)),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 2),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding:
+                                  const EdgeInsets.symmetric(vertical: 2.0),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: size.height * 0.04,
+                                        width: size.height * 0.04,
+                                        child: CircularProgressIndicator(
+                                          value: matchesFound / 10,
+                                          strokeWidth: 4,
+                                          backgroundColor:
+                                          Colors.grey.withAlpha(70),
+                                          color: AppColors.primaryDark,
+                                        ),
+                                      ),
+                                      Text(
+                                        "$matchesFound/$moves",
+                                        style: myTextStyle12(),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  "Questions",
+                                  style: myTextStyle21(
+                                      fontWeight: FontWeight.w700),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Lottie.asset(
+                      "assets/lottie_animation_file/Boy looking .json",
+                      fit: BoxFit.cover,
+                      height: size.height * 0.15,
+                      width: size.height * 0.15,
+                    )
+                  ],
+                ),
               ),
             ),
-      
-            // Game grid
+          ),
+        ),
+
+        /// ---------- Body ------------- ///
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            /// Game grid
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -241,12 +317,12 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
                         builder: (context, child) {
                           // Calculate flip animation value
                           double angle = controllers[index].value * pi;
-      
+
                           // If we're showing all cards at the beginning, show them flipped
                           if (showAll) {
                             angle = pi;
                           }
-      
+
                           return Transform(
                             transform: Matrix4.identity()
                               ..setEntry(3, 2, 0.001) // Perspective
@@ -260,20 +336,21 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
                                   borderRadius: BorderRadius.circular(10),
                                   border: angle > pi / 2
                                       ? BoxBorder.all(
-                                          width: 1.5, color: Colors.grey.shade300)
+                                          width: 1.5,
+                                          color: Colors.grey.shade300)
                                       : null),
                               child: Center(
                                 child: angle > pi / 2
                                     ? Text(
                                         cards[index].symbol,
-                                        style: const TextStyle(fontSize: 30),
+                                        style:  TextStyle(fontSize:7.h),
                                       )
                                     : const Text(
                                         "?",
                                         style: TextStyle(
-                                          fontSize: 24,
+                                          fontSize:30 ,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                          color: AppColors.textColor,
                                         ),
                                       ),
                               ),
@@ -286,11 +363,14 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
                 ),
               ),
             ),
-      
-            // Instructions
+
             Container(
-              padding: EdgeInsets.all(16),
-              color: Color(0xFFf8bbd0),
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                  color: Color(0xFFf8bbd0),
+                  borderRadius: BorderRadiusGeometry.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))),
               child: const Text(
                 "Find the matching pairs!",
                 style: TextStyle(

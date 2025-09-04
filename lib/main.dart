@@ -1,20 +1,10 @@
 import 'package:babyspark/screen/box_matching_game.dart';
-import 'package:babyspark/screen/math/addition_screen.dart';
-import 'package:babyspark/screen/math/box_count_screen.dart';
-import 'package:babyspark/screen/math/math_dashboard_screen.dart';
-import 'package:babyspark/screen/number/number_screen.dart';
-import 'package:babyspark/screen/dashboard_screen.dart';
 import 'package:babyspark/service/tts_service.dart';
-import 'package:babyspark/widgets/home_carousel_slider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_instance/src/bindings_interface.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
 import 'controller/loading_controller.dart';
 import 'firebase_options.dart';
 import 'helper/app_color.dart';

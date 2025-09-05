@@ -5,10 +5,12 @@ import 'package:babyspark/screen/categories_screen/book_grid_screen.dart';
 import 'package:babyspark/screen/color/color_grid_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
 import 'package:babyspark/widgets/my_categories_card.dart';
+import 'package:babyspark/widgets/simple_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../months/week_screen.dart';
 import '../widgets/home_carousel_slider.dart';
 import 'color/colors_screen.dart';
 import 'math/math_dashboard_screen.dart';
@@ -31,64 +33,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        /// ---- App bar ---- ///
-        appBar: AppBar(
-          toolbarHeight: size.height * 0.12,
-          backgroundColor: AppColors.primaryColor,
-          flexibleSpace: SizedBox(
-            width: size.width,
-            child: Stack(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Hello Little Explorer!",
-                        style: myTextStyleCus(
-                          fontFamily: "secondary",
-                          fontSize: isTablet(context) ? 30 : 21,
+
+          /// ---- App bar ---- ///
+          appBar: AppBar(
+            toolbarHeight: size.height * 0.12,
+            backgroundColor: AppColors.primaryColor,
+            flexibleSpace: SizedBox(
+              width: size.width,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0, vertical: 8),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Hello Little Explorer!",
+                          style: myTextStyleCus(
+                            fontFamily: "secondary",
+                            fontSize: isTablet(context) ? 30 : 21,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "What shall we learn today?",
-                        style: myTextStyleCus(
-                            fontSize: isTablet(context) ? 27 : 18,
-                            fontFamily: "primary",
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ],
+                        Text(
+                          "What shall we learn today?",
+                          style: myTextStyleCus(
+                              fontSize: isTablet(context) ? 27 : 18,
+                              fontFamily: "primary",
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Positioned(
-                  right: 0,
-                  bottom: -1.5.h,
-                  child: Lottie.asset(
-                    "assets/lottie_animation_file/animal animation.json",
-                    height: size.height * 0.18,
-                    width: size.height * 0.18,
-                    fit: BoxFit.cover,
+                  Positioned(
+                    right: 0,
+                    bottom: -1.5.h,
+                    child: Lottie.asset(
+                      "assets/lottie_animation_file/animal animation.json",
+                      height: size.height * 0.18,
+                      width: size.height * 0.18,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
+          backgroundColor: AppColors.primaryColor,
 
-        /// ---- Body ------ ///
-        body: Container(
-          decoration: const BoxDecoration(color: AppColors.primaryColor),
-          child: SingleChildScrollView(
+          /// ---- Body ------ ///
+          body: SingleChildScrollView(
             child: Column(
               children: [
                 /// ------ Carousel Slider ------- ///
                 const HomeCarouselSlider(
                   viewportFraction: 0.9,
                 ),
-
                 SizedBox(
                   height: 1.h,
                 ),
@@ -108,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: GridView.builder(
                       itemCount: AppConstant.categories.length,
                       physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true, // Important for scrollable content
+                      shrinkWrap: true,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -271,11 +272,61 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                 ),
+
+                Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          width: size.width,
+                          decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadiusGeometry.circular(21),
+                              border: BoxBorder.all(
+                                  width: 1.5, color: AppColors.primaryDark)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Image.asset(
+                                  "assets/images/weeks.png",
+                                ),
+                                SizedBox(
+                                  height: 1.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround
+                                  ,
+                                  children: [
+                                    Text(
+                                      "Week",
+                                      style: myTextStyle21(
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    SimpleTextButton(
+                                        onPress: () {
+                                          Navigator.push(context, MaterialPageRoute(builder: (_)=> WeekScreen()));
+                                        },
+                                        btnBorderRadius: 100,
+                                        btnText: "Learn")
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
-          ),
-        ),
-      ),
+          )),
     );
   }
 }

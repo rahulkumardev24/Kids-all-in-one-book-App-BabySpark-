@@ -73,6 +73,11 @@ class AppConstant {
       "path": "assets/images/car.png",
       "color": const Color(0xFFD3F8B1),
     },
+    {
+      "title": "Emoji",
+      "path": "assets/images/emoji.webp",
+      "color": const Color(0xFFF8ECB1),
+    },
   ];
 
   /// colors list

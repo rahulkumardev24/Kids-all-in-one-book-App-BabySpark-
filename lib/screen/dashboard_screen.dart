@@ -85,7 +85,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             child: Column(
               children: [
                 /// ------ Carousel Slider ------- ///
-                const HomeCarouselSlider(),
+                const HomeCarouselSlider(
+                  viewportFraction: 0.9,
+                ),
 
                 SizedBox(
                   height: 1.h,
@@ -124,7 +126,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => ColorGridScreen(appBarTitle: "Colours")));
+                                      builder: (_) => const ColorGridScreen(
+                                          appBarTitle: "Colours")));
                             }
 
                             /// --- Shapes --- ///
@@ -249,6 +252,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       builder: (_) => const BookGridScreen(
                                             collectionName: "alphabets_data",
                                             appBarTitle: "Alphabets",
+                                          )));
+                            }
+
+                            /// ------- Emoji --------- ///
+                            else if (categories["title"] == "Emoji") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BookGridScreen(
+                                            collectionName: "emoji_data",
+                                            appBarTitle: "Emoji",
                                           )));
                             }
                           },

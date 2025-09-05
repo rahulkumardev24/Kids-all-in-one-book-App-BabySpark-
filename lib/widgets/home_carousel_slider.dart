@@ -1,3 +1,4 @@
+import 'package:babyspark/screen/box_matching_game.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -34,6 +35,25 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
             borderRadius: BorderRadius.circular(16.0),
             image: const DecorationImage(
               image: AssetImage("assets/poster/ball_count.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const BoxMatchingGame()),
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16.0),
+            image: const DecorationImage(
+              image: AssetImage("assets/poster/find matching number.png"),
               fit: BoxFit.cover,
             ),
           ),

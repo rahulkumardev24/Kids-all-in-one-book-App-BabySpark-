@@ -5,6 +5,7 @@ import '../screen/math/addition_screen.dart';
 import '../screen/math/division_screen.dart';
 import '../screen/math/multiplication_screen.dart';
 import '../screen/math/subtraction_screen.dart';
+import 'app_color.dart';
 
 class AppConstant {
   static final List<Map<String, dynamic>> categories = [
@@ -315,5 +316,43 @@ class AppConstant {
     '❤️',
     '🌳',
     '🏠'
+  ];
+
+ static final weekDaysData = [
+    {
+      "day": "Monday",
+      "color": AppColors.primaryDark.withValues(alpha: 0.15),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "Tuesday",
+      "color": AppColors.primaryDark.withValues(alpha: 0.35),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "Wednesday",
+      "color":AppColors.primaryDark.withValues(alpha: 0.55),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "Thursday",
+      "color": AppColors.primaryDark.withValues(alpha: 0.75),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "Friday",
+      "color": AppColors.primaryDark.withValues(alpha: 0.95),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "Saturday",
+      "color": AppColors.primaryDark.withValues(alpha: 1),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "Sunday",
+      "color": AppColors.primaryDark,
+      "image": "assets/images/emoji.webp"
+    },
   ];
 }

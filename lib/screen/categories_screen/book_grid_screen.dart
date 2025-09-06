@@ -66,8 +66,8 @@ class _BookGridScreenState extends State<BookGridScreen> {
             return GridView.builder(
               padding: const EdgeInsets.all(12),
               physics: const ClampingScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: size.width > 600 ? 4 : 2,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
                 mainAxisSpacing: 8,
                 crossAxisSpacing: 8,
                 childAspectRatio: 0.85,

@@ -9,10 +9,8 @@ import 'package:babyspark/widgets/simple_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-
 import '../months/week_screen.dart';
 import '../widgets/home_carousel_slider.dart';
-import 'color/colors_screen.dart';
 import 'math/math_dashboard_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -279,6 +277,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
                           width: size.width,
@@ -300,19 +299,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround
-                                  ,
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
                                       "Week",
-                                      style: myTextStyle21(
-                                          fontWeight: FontWeight.w600),
+                                      style: myTextStyleCus(
+                                        fontSize: isTablet(context) ? 32 : 21,
+                                        fontFamily: "primary",
+                                      ),
                                     ),
                                     SimpleTextButton(
                                         onPress: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: (_)=> WeekScreen()));
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      const WeekScreen()));
                                         },
                                         btnBorderRadius: 100,
+                                        elevation: 0,
                                         btnText: "Learn")
                                   ],
                                 ),

@@ -9,19 +9,23 @@ class SimpleTextButton extends StatelessWidget {
   final Color btnBackgroundColor;
   final double btnBorderRadius;
   final Color fontColor;
+  final double elevation ;
   const SimpleTextButton(
       {super.key,
       required this.onPress,
       required this.btnText,
       this.btnBackgroundColor = AppColors.primaryDark,
       this.btnBorderRadius = 10,
-      this.fontColor = Colors.black});
+      this.fontColor = Colors.black ,
+      this.elevation = 1
+      });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPress,
       style: ElevatedButton.styleFrom(
+        elevation: elevation,
         backgroundColor: btnBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadiusGeometry.circular(btnBorderRadius)),

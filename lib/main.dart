@@ -1,4 +1,4 @@
-import 'package:babyspark/screen/box_matching_game.dart';
+import 'package:babyspark/months/months_screen.dart';
 import 'package:babyspark/screen/dashboard_screen.dart';
 import 'package:babyspark/service/tts_service.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
               initialBinding: BindingsBuilder(() {
                 Get.put(LoadingController(), permanent: true);
               }),
-              home: const DashboardScreen(),
+              home: const MonthsScreen(),
             );
           },
         ));

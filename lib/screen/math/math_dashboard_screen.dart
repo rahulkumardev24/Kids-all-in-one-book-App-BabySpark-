@@ -1,13 +1,14 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
-import 'package:babyspark/screen/math/addition_screen.dart';
 import 'package:babyspark/screen/math/multiplication_table_screen.dart';
+import 'package:babyspark/screen/math/start_daily_challenge_screen.dart';
 import 'package:babyspark/widgets/navigation_button.dart';
 import 'package:clay_containers/constants.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../helper/app_color.dart';
@@ -21,6 +22,104 @@ class MathDashboardScreen extends StatefulWidget {
 }
 
 class _MathDashboardScreenState extends State<MathDashboardScreen> {
+  int _completedChallenges = 0;
+  final int _totalDailyQuestions = 10;
+  bool _isChallengeCompletedToday = false;
+  DateTime? _lastChallengeDate;
+  int _todayProgress = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadChallengeProgress();
+  }
+
+  void _loadChallengeProgress() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _completedChallenges = prefs.getInt('completedChallenges') ?? 0;
+      _lastChallengeDate =
+          DateTime.tryParse(prefs.getString('lastChallengeDate') ?? '');
+      _todayProgress = prefs.getInt('todayProgress') ?? 0;
+
+      // Check if it's a new day
+      final now = DateTime.now();
+      if (_lastChallengeDate != null &&
+          (now.day != _lastChallengeDate!.day ||
+              now.month != _lastChallengeDate!.month ||
+              now.year != _lastChallengeDate!.year)) {
+        _todayProgress = 0;
+        _isChallengeCompletedToday = false;
+        prefs.setInt('todayProgress', 0);
+      } else if (_todayProgress >= _totalDailyQuestions) {
+        _isChallengeCompletedToday = true;
+      }
+    });
+  }
+
+  void _updateProgress(int progress) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _todayProgress = progress;
+      if (progress >= _totalDailyQuestions) {
+        _isChallengeCompletedToday = true;
+        _completedChallenges++;
+        prefs.setInt('completedChallenges', _completedChallenges);
+      }
+    });
+
+    prefs.setInt('todayProgress', progress);
+    prefs.setString('lastChallengeDate', DateTime.now().toIso8601String());
+  }
+
+  void _startDailyChallenge() {
+    try {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DailyChallengeScreen(
+            onProgressUpdate: _updateProgress,
+            initialProgress: _todayProgress,
+          ),
+        ),
+      ).then((_) {
+        // Refresh progress when returning from challenge
+        _loadChallengeProgress();
+      });
+    } catch (e) {
+      // Show error message if navigation fails
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error starting challenge: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+// Add this to your initState or somewhere to reset daily progress
+  void _checkAndResetDailyProgress() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String todayKey = _getTodayKey();
+    final String? lastResetDate = prefs.getString('last_reset_date');
+
+    if (lastResetDate != todayKey) {
+      // New day, reset progress
+      await prefs.setInt('today_progress', 0);
+      await prefs.setInt('current_question_index', 0);
+      await prefs.setString('last_reset_date', todayKey);
+      setState(() {
+        _todayProgress = 0;
+        _isChallengeCompletedToday = false;
+      });
+    }
+  }
+
+  String _getTodayKey() {
+    final now = DateTime.now();
+    return '${now.year}-${now.month}-${now.day}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -182,9 +281,8 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                       width: double.infinity,
                       height: size.height * 0.3,
                       padding: const EdgeInsets.all(16),
-                      decoration:  BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppColors.babyOrange,
-
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,14 +304,16 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            "Solve 5 addition problems to earn a star!",
+                            _isChallengeCompletedToday
+                                ? "Today's challenge completed! 🎉"
+                                : "Solve $_totalDailyQuestions problems to earn stars!",
                             style: myTextStyle18(
                               fontColor: Colors.grey[700]!,
                             ),
                           ),
                           const SizedBox(height: 12),
                           LinearProgressIndicator(
-                            value: 0.4,
+                            value: _todayProgress / _totalDailyQuestions,
                             backgroundColor: Colors.grey[200],
                             valueColor: const AlwaysStoppedAnimation<Color>(
                                 Color(0xFFFFA726)),
@@ -222,10 +322,16 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                           ),
                           const SizedBox(height: 8),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "2/5 completed",
+                                "Total completed: $_completedChallenges",
+                                style: myTextStyle14(
+                                  fontColor: Colors.grey[600]!,
+                                ),
+                              ),
+                              Text(
+                                "$_todayProgress/$_totalDailyQuestions today",
                                 style: myTextStyle14(
                                   fontColor: Colors.grey[600]!,
                                 ),
@@ -236,21 +342,23 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (_) => const AdditionScreen()));
-                              },
+                              onPressed: _isChallengeCompletedToday
+                                  ? null
+                                  : _startDailyChallenge,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFFFFA726),
+                                backgroundColor: _isChallengeCompletedToday
+                                    ? Colors.grey
+                                    : const Color(0xFFFFA726),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
                               ),
                               child: Text(
-                                "Start Challenge",
+                                _isChallengeCompletedToday
+                                    ? "Completed Today"
+                                    : "Start Challenge",
                                 style: myTextStyle18(
                                   fontWeight: FontWeight.bold,
                                   fontColor: Colors.white,

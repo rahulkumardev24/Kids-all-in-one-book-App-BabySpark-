@@ -25,6 +25,11 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        multiDexEnabled true
+    }
+    // ADD THIS SECTION
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 
     buildTypes {

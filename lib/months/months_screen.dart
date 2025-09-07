@@ -150,8 +150,8 @@ class _MonthsScreenState extends State<MonthsScreen> {
                                 padding: EdgeInsets.only(
                                     left: 2.h, top: 0.5.h, bottom: 0.5.h),
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 2.h, horizontal: 2.h),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 2.h),
                                   margin: const EdgeInsets.only(left: 12),
                                   decoration: BoxDecoration(
                                     color: isCurrentSpeaking
@@ -191,10 +191,14 @@ class _MonthsScreenState extends State<MonthsScreen> {
                                           SizedBox(
                                             width: 1.h,
                                           ),
-                                          Image.asset(
-                                            item["image"] as String,
-                                            height: 5.h,
-                                            width: 5.h,
+                                          Padding(
+                                            padding: const EdgeInsets.all(2.0),
+                                            child: Image.asset(
+                                              "assets/images/trady_bear.png",
+                                              height: 8.h,
+                                              width: 8.h,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ],
                                       )

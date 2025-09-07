@@ -5,6 +5,7 @@ import 'package:babyspark/months/months_screen.dart';
 import 'package:babyspark/screen/categories_screen/book_grid_screen.dart';
 import 'package:babyspark/screen/color/color_grid_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
+import 'package:babyspark/widgets/control_icon_button.dart';
 import 'package:babyspark/widgets/my_categories_card.dart';
 import 'package:babyspark/widgets/simple_text_button.dart';
 import 'package:flutter/material.dart';
@@ -331,6 +332,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ) ,
 
+                /// -------- Months ------ ///
                 Container(
                   color: Colors.white,
                   width: double.infinity,
@@ -391,7 +393,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ) ,
               ],
             ),
-          )),
+          ) ,
+
+
+      ),
+      
+      
     );
   }
 }

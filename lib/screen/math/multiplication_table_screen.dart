@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:babyspark/domain/custom_text_style.dart';
+import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/widgets/primary_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -31,30 +32,6 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
   int _currentSpeakingIndex = -1;
   int _speechSessionId = 0;
   final AudioPlayer bgPlayer = AudioPlayer();
-
-  ///------ Colors for different tables --------- ///
-  final List<Color> _tableColors = [
-    Colors.pink,
-    Colors.blue,
-    Colors.green,
-    Colors.orange,
-    Colors.red,
-    Colors.teal,
-    Colors.indigo,
-    Colors.amber.shade700,
-    Colors.deepPurple,
-    Colors.lightBlue,
-    Colors.deepOrangeAccent,
-    Colors.brown,
-    Colors.blueGrey,
-    Colors.yellow.shade700,
-    Colors.red,
-    Colors.pinkAccent,
-    Colors.greenAccent.shade700,
-    Colors.cyanAccent.shade700,
-    Colors.deepOrange,
-    Colors.indigo.shade800
-  ];
 
   @override
   void initState() {
@@ -243,8 +220,8 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentColor =
-        _tableColors[(_selectedNumber - 1) % _tableColors.length];
+    final currentColor = AppConstant
+        .tableColors[(_selectedNumber - 1) % AppConstant.tableColors.length];
     final size = MediaQuery.of(context).size;
 
     IconData getIcon() {
@@ -331,8 +308,8 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
               itemCount: _numbers.length,
               itemBuilder: (context, index) {
                 final number = _numbers[index];
-                final numberColor =
-                    _tableColors[(number - 1) % _tableColors.length];
+                final numberColor = AppConstant
+                    .tableColors[(number - 1) % AppConstant.tableColors.length];
                 return GestureDetector(
                   onTap: () {
                     setState(() {

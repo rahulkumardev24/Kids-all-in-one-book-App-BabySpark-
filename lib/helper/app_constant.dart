@@ -318,7 +318,7 @@ class AppConstant {
     '🏠'
   ];
 
- static final weekDaysData = [
+  static final weekDaysData = [
     {
       "day": "Monday",
       "color": AppColors.primaryDark.withValues(alpha: 0.15),
@@ -331,7 +331,7 @@ class AppConstant {
     },
     {
       "day": "Wednesday",
-      "color":AppColors.primaryDark.withValues(alpha: 0.55),
+      "color": AppColors.primaryDark.withValues(alpha: 0.55),
       "image": "assets/images/emoji.webp"
     },
     {
@@ -354,5 +354,92 @@ class AppConstant {
       "color": AppColors.primaryDark,
       "image": "assets/images/emoji.webp"
     },
+  ];
+
+  static final monthsData = [
+    {
+      "day": "January",
+      "color": const Color(0xffE0F0FA),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "February",
+      "color": const Color(0xffF8D7DA),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "March",
+      "color": const Color(0xffD4F1D5),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "April",
+      "color": const Color(0xfFE9D4FA),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "May",
+      "color": const Color(0xffFFEAA7),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "June",
+      "color": const Color(0xffFFC8C8),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "July",
+      "color": const Color(0xffF2D6D6),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "August",
+      "color": const Color(0xffFFD8A8),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "September",
+      "color": const Color(0xb5f0ff8d),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "October",
+      "color": const Color(0xffE6C8A5),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "November",
+      "color": const Color(0xffb3ffd2),
+      "image": "assets/images/emoji.webp"
+    },
+    {
+      "day": "December",
+      "color": const Color(0xffD4E2E6),
+      "image": "assets/images/emoji.webp"
+    },
+  ];
+
+  ///------ Colors for different tables --------- ///
+  static final List<Color> tableColors = [
+    Colors.pink,
+    Colors.blue,
+    Colors.green,
+    Colors.orange,
+    Colors.red,
+    Colors.teal,
+    Colors.indigo,
+    Colors.amber.shade700,
+    Colors.deepPurple,
+    Colors.lightBlue,
+    Colors.deepOrangeAccent,
+    Colors.brown,
+    Colors.blueGrey,
+    Colors.yellow.shade700,
+    Colors.red,
+    Colors.pinkAccent,
+    Colors.greenAccent.shade700,
+    Colors.cyanAccent.shade700,
+    Colors.deepOrange,
+    Colors.indigo.shade800
   ];
 }

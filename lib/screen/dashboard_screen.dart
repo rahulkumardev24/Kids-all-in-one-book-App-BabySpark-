@@ -1,6 +1,7 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_color.dart';
 import 'package:babyspark/helper/app_constant.dart';
+import 'package:babyspark/months/months_screen.dart';
 import 'package:babyspark/screen/categories_screen/book_grid_screen.dart';
 import 'package:babyspark/screen/color/color_grid_screen.dart';
 import 'package:babyspark/screen/number/number_screen.dart';
@@ -328,7 +329,66 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ],
                     ),
                   ),
-                )
+                ) ,
+
+                Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: size.width,
+                          decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadiusGeometry.circular(21),
+                              border: BoxBorder.all(
+                                  width: 1.5, color: AppColors.primaryDark)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Image.asset(
+                                  "assets/images/months.png",
+                                ),
+                                SizedBox(
+                                  height: 1.h,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      "Months",
+                                      style: myTextStyleCus(
+                                        fontSize: isTablet(context) ? 32 : 21,
+                                        fontFamily: "primary",
+                                      ),
+                                    ),
+                                    SimpleTextButton(
+                                        onPress: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) =>
+                                                  const MonthsScreen()));
+                                        },
+                                        btnBorderRadius: 100,
+                                        elevation: 0,
+                                        btnText: "Learn")
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ) ,
               ],
             ),
           )),

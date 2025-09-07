@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
               initialBinding: BindingsBuilder(() {
                 Get.put(LoadingController(), permanent: true);
               }),
-              home: const MonthsScreen(),
+              home: const DashboardScreen(),
             );
           },
         ));

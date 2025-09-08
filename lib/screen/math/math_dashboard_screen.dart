@@ -1,16 +1,14 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/screen/math/multiplication_table_screen.dart';
-import 'package:babyspark/screen/math/start_daily_challenge_screen.dart';
 import 'package:babyspark/widgets/navigation_button.dart';
+import 'package:babyspark/widgets/simple_text_button.dart';
 import 'package:clay_containers/constants.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:velocity_x/velocity_x.dart';
-
 import '../../helper/app_color.dart';
 import '../../widgets/home_carousel_slider.dart';
 
@@ -22,104 +20,6 @@ class MathDashboardScreen extends StatefulWidget {
 }
 
 class _MathDashboardScreenState extends State<MathDashboardScreen> {
-  int _completedChallenges = 0;
-  final int _totalDailyQuestions = 10;
-  bool _isChallengeCompletedToday = false;
-  DateTime? _lastChallengeDate;
-  int _todayProgress = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadChallengeProgress();
-  }
-
-  void _loadChallengeProgress() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _completedChallenges = prefs.getInt('completedChallenges') ?? 0;
-      _lastChallengeDate =
-          DateTime.tryParse(prefs.getString('lastChallengeDate') ?? '');
-      _todayProgress = prefs.getInt('todayProgress') ?? 0;
-
-      // Check if it's a new day
-      final now = DateTime.now();
-      if (_lastChallengeDate != null &&
-          (now.day != _lastChallengeDate!.day ||
-              now.month != _lastChallengeDate!.month ||
-              now.year != _lastChallengeDate!.year)) {
-        _todayProgress = 0;
-        _isChallengeCompletedToday = false;
-        prefs.setInt('todayProgress', 0);
-      } else if (_todayProgress >= _totalDailyQuestions) {
-        _isChallengeCompletedToday = true;
-      }
-    });
-  }
-
-  void _updateProgress(int progress) async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _todayProgress = progress;
-      if (progress >= _totalDailyQuestions) {
-        _isChallengeCompletedToday = true;
-        _completedChallenges++;
-        prefs.setInt('completedChallenges', _completedChallenges);
-      }
-    });
-
-    prefs.setInt('todayProgress', progress);
-    prefs.setString('lastChallengeDate', DateTime.now().toIso8601String());
-  }
-
-  void _startDailyChallenge() {
-    try {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => DailyChallengeScreen(
-            onProgressUpdate: _updateProgress,
-            initialProgress: _todayProgress,
-          ),
-        ),
-      ).then((_) {
-        // Refresh progress when returning from challenge
-        _loadChallengeProgress();
-      });
-    } catch (e) {
-      // Show error message if navigation fails
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error starting challenge: $e'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
-
-// Add this to your initState or somewhere to reset daily progress
-  void _checkAndResetDailyProgress() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String todayKey = _getTodayKey();
-    final String? lastResetDate = prefs.getString('last_reset_date');
-
-    if (lastResetDate != todayKey) {
-      // New day, reset progress
-      await prefs.setInt('today_progress', 0);
-      await prefs.setInt('current_question_index', 0);
-      await prefs.setString('last_reset_date', todayKey);
-      setState(() {
-        _todayProgress = 0;
-        _isChallengeCompletedToday = false;
-      });
-    }
-  }
-
-  String _getTodayKey() {
-    final now = DateTime.now();
-    return '${now.year}-${now.month}-${now.day}';
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -267,9 +167,83 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                         const HomeCarouselSlider(
                           viewportFraction: 1,
                         ),
+
                         SizedBox(height: 3.h),
                       ],
                     ),
+                  ),
+
+                  /// ---- Comparison card ---- ////
+
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Number Comparison" , style: myTextStyle21(),),
+                          SizedBox(height: 1.h,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: _comparisonItemCard(
+                                    size: size,
+                                    text: "5",
+                                    cardColor: AppColors.primaryDark,
+                                    isBorder: true),
+                              ),
+                              SizedBox(width: 2.h,),
+                              Expanded(
+                                child: _comparisonItemCard(
+                                    size: size,
+                                    text: "?",
+                                    cardColor: Colors.grey.shade500,
+                                    isBorder: true,
+                                    textColor: Colors.grey.shade700),
+                              ),
+                              SizedBox(width: 2.h,),
+                              Expanded(
+                                child: _comparisonItemCard(
+                                    size: size,
+                                    text: "3",
+                                    cardColor: AppColors.primaryDark,
+                                    isBorder: true),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 2.h),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _comparisonItemCard(
+                                  size: size,
+                                  text: ">",
+                                  cardColor: Vx.gray300,
+                                  textColor: AppColors.primaryDark,
+                                  isBorder: false),
+                              _comparisonItemCard(
+                                  size: size,
+                                  text: "=",
+                                  cardColor: Vx.gray300,
+                                  textColor: AppColors.primaryDark,
+                                  isBorder: false),
+                              _comparisonItemCard(
+                                  size: size,
+                                  text: "<",
+                                  cardColor: Vx.gray300,
+                                  textColor: AppColors.primaryDark,
+                                  isBorder: false),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 3.h,
                   ),
 
                   /// ----- Daily challenge section ------ ///
@@ -279,7 +253,7 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                     edge: VxEdge.top,
                     child: Container(
                       width: double.infinity,
-                      height: size.height * 0.3,
+                      height: size.height * 0.25,
                       padding: const EdgeInsets.all(16),
                       decoration: const BoxDecoration(
                         color: AppColors.babyOrange,
@@ -302,70 +276,22 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
-                          Text(
-                            _isChallengeCompletedToday
-                                ? "Today's challenge completed! 🎉"
-                                : "Solve $_totalDailyQuestions problems to earn stars!",
-                            style: myTextStyle18(
-                              fontColor: Colors.grey[700]!,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
+                          SizedBox(height: 2.h),
                           LinearProgressIndicator(
-                            value: _todayProgress / _totalDailyQuestions,
+                            value: 0,
                             backgroundColor: Colors.grey[200],
                             valueColor: const AlwaysStoppedAnimation<Color>(
                                 Color(0xFFFFA726)),
                             borderRadius: BorderRadius.circular(10),
                             minHeight: 12,
                           ),
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Total completed: $_completedChallenges",
-                                style: myTextStyle14(
-                                  fontColor: Colors.grey[600]!,
-                                ),
-                              ),
-                              Text(
-                                "$_todayProgress/$_totalDailyQuestions today",
-                                style: myTextStyle14(
-                                  fontColor: Colors.grey[600]!,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 2.h),
                           SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: _isChallengeCompletedToday
-                                  ? null
-                                  : _startDailyChallenge,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: _isChallengeCompletedToday
-                                    ? Colors.grey
-                                    : const Color(0xFFFFA726),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                              ),
-                              child: Text(
-                                _isChallengeCompletedToday
-                                    ? "Completed Today"
-                                    : "Start Challenge",
-                                style: myTextStyle18(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: Colors.white,
-                                ),
-                              ),
-                            ),
+                            height: 2.h,
                           ),
+                          SizedBox(
+                              width: size.width,
+                              child: SimpleTextButton(
+                                  onPress: () {}, btnText: "Start Challenge"))
                         ],
                       ),
                     ),
@@ -419,5 +345,25 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
         ),
       ),
     );
+  }
+
+  Widget _comparisonItemCard(
+      {required Size size,
+      required String text,
+      required bool isBorder,
+      required Color cardColor,
+      Color textColor = Colors.black}) {
+    return Container(
+        height: size.width * 0.2,
+        width: size.width * 0.2,
+        decoration: BoxDecoration(
+            color: cardColor.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(11),
+            border: BoxBorder.all(width: isBorder ? 2 : 0, color: cardColor)),
+        child: Center(
+            child: Text(
+          text,
+          style: myTextStyle32(fontFamily: "secondary", fontColor: textColor),
+        )));
   }
 }

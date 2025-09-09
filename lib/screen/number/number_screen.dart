@@ -79,7 +79,12 @@ class _NumberScreenState extends State<NumberScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           toolbarHeight: size.height * 0.2,
-          flexibleSpace: const SecondaryAppBar(title: "Number"),
+          flexibleSpace: SecondaryAppBar(
+            title: "Number",
+            onPress: () {
+              Navigator.pop(context);
+            },
+          ),
           backgroundColor: Colors.white,
         ),
         backgroundColor: Colors.white,

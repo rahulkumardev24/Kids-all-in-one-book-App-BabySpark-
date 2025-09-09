@@ -1,6 +1,7 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/screen/math/multiplication_table_screen.dart';
+import 'package:babyspark/screen/math/number_comparison_screen.dart';
 import 'package:babyspark/widgets/navigation_button.dart';
 import 'package:babyspark/widgets/simple_text_button.dart';
 import 'package:clay_containers/constants.dart';
@@ -176,7 +177,7 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                   /// ---- Comparison card ---- ////
 
                   Card(
-                    margin: EdgeInsets.all(8),
+                    margin: const EdgeInsets.all(8),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -250,7 +251,13 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                           SizedBox(
                               width: size.width,
                               child: SimpleTextButton(
-                                onPress: () {},
+                                onPress: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) =>
+                                              const NumberComparisonScreen()));
+                                },
                                 btnText: "START",
                                 fontSize: 21,
                               ))
@@ -321,6 +328,8 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
       ),
     );
   }
+
+  /// -------- Widgets --------- ///
 
   Widget _buildMathCategoryCard(
       Map<String, dynamic> category, BuildContext context) {

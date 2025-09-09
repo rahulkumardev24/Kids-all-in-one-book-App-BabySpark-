@@ -293,4 +293,13 @@ class AdditionController extends GetxController {
     options.shuffle();
     return options;
   }
+
+  void stopAll() {
+    audioPlayer.stop();
+    effectsPlayer.stop();
+    isSpeaking.value = false;
+    isAutoPlaying.value = false;
+    TTSService.stop();
+    Get.delete<AdditionController>();
+  }
 }

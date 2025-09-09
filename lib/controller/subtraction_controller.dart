@@ -307,4 +307,13 @@ class SubtractionController extends GetxController {
     isSpeaking.value = false;
     isAutoPlaying.value = false;
   }
+
+  void stopAll() {
+    audioPlayer.stop();
+    effectsPlayer.stop();
+    isSpeaking.value = false;
+    isAutoPlaying.value = false;
+    TTSService.stop();
+    Get.delete<SubtractionController>();
+  }
 }

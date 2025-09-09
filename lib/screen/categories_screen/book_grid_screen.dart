@@ -44,7 +44,7 @@ class _BookGridScreenState extends State<BookGridScreen> {
           automaticallyImplyLeading: false,
           toolbarHeight: size.height * 0.2,
           backgroundColor: Colors.transparent,
-          flexibleSpace: SecondaryAppBar(title: widget.appBarTitle),
+          flexibleSpace: SecondaryAppBar(title: widget.appBarTitle , onPress: (){Navigator.pop(context);},),
         ),
 
         /// --- body --- ///

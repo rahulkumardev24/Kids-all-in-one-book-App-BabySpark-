@@ -81,4 +81,9 @@ class WeekController extends GetxController {
     _currentSpeakingIndex.value = index;
     _scrollToCurrentWeek(index);
   }
+
+  void stopAll(){
+    _isAutoPlaying.value = false ;
+    Get.delete<WeekController>();
+  }
 }

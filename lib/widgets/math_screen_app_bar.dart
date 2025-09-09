@@ -9,12 +9,15 @@ class MathScreenAppBar extends StatelessWidget {
   final Size size;
   final bool isTablet;
   final String title;
+  final VoidCallback onPress ;
 
   const MathScreenAppBar(
       {super.key,
       required this.isTablet,
       required this.size,
-      required this.title});
+      required this.title ,
+      required this.onPress
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +78,7 @@ class MathScreenAppBar extends StatelessWidget {
           Positioned(
               top: 8,
               left: 8,
-              child: NavigationButton(onTap: () => Navigator.pop(context))),
+              child: NavigationButton(onTap: onPress)),
         ],
       ),
     );

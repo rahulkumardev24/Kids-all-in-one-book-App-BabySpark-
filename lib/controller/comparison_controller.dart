@@ -291,4 +291,13 @@ class ComparisonController extends GetxController {
       });
     }
   }
+
+  /// ---- Stops ------ ///
+ void stopAll(){
+    isAutoPlaying.value = false ;
+    isSpeaking.value = false ;
+    effectsPlayer.dispose();
+    audioPlayer.dispose();
+    Get.delete<ComparisonController>();
+ }
 }

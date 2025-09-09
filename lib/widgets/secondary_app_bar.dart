@@ -9,7 +9,9 @@ import 'navigation_button.dart';
 
 class SecondaryAppBar extends StatefulWidget {
   final String title;
-  const SecondaryAppBar({super.key, required this.title});
+  final VoidCallback onPress;
+  const SecondaryAppBar(
+      {super.key, required this.title, required this.onPress});
 
   @override
   State<SecondaryAppBar> createState() => _SecondaryAppBarState();
@@ -83,7 +85,7 @@ class _SecondaryAppBarState extends State<SecondaryAppBar> {
             Positioned(
                 top: 8,
                 left: 8,
-                child: NavigationButton(onTap: () => Navigator.pop(context))),
+                child: NavigationButton(onTap: widget.onPress)),
           ],
         ),
       ),

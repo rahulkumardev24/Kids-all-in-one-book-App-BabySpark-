@@ -1,5 +1,4 @@
 import 'package:babyspark/screen/dashboard_screen.dart';
-import 'package:babyspark/screen/math/number_comparison_screen.dart';
 import 'package:babyspark/service/tts_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +12,23 @@ import 'helper/app_color.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  /// firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    /// Firebase initialization
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
-  /// screen Orientation -> Portrait
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+    /// Screen Orientation -> Portrait only
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
 
-  await TTSService.initTTS();
+    /// Initialize TTS service
+    await TTSService.initTTS();
+  } catch (e) {
+    print("Initialization error: $e");
+  }
 
   runApp(const MyApp());
 }
@@ -33,21 +39,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
-          statusBarColor: AppColors.primaryDark,
-          statusBarIconBrightness: Brightness.light,
-          statusBarBrightness: Brightness.dark,
-        ),
-        child: ResponsiveSizer(
-          builder: (context, orientation, screenType) {
-            return GetMaterialApp(
-              debugShowCheckedModeBanner: false,
-              initialBinding: BindingsBuilder(() {
-                Get.put(LoadingController(), permanent: true);
-              }),
-              home: const DashboardScreen(),
-            );
-          },
-        ));
+      value: const SystemUiOverlayStyle(
+        statusBarColor: AppColors.primaryDark,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.black, // Added for better navigation bar
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+      child: ResponsiveSizer(
+        builder: (context, orientation, screenType) {
+          return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            initialBinding: BindingsBuilder(() {
+              Get.put(LoadingController(), permanent: true);
+            }),
+            theme: ThemeData(
+              primaryColor: AppColors.primaryDark,
+              fontFamily: 'main',
+            ),
+            home: const DashboardScreen(),
+
+            // Optional: Add error handling for better UX
+            builder: (context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                child: child ?? const SizedBox(),
+              );
+            },
+          );
+        },
+      ),
+    );
   }
 }

@@ -84,4 +84,9 @@ class MonthsController extends GetxController {
     _currentSpeakingIndex.value = index;
     _scrollToCurrentMonth(index);
   }
+  void stopAllSpeech() {
+    _isAutoPlaying.value = false;
+    _currentSpeakingIndex.value = -1;
+    TTSService.stop();
+  }
 }

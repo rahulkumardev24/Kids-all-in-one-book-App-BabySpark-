@@ -310,4 +310,11 @@ class DivisionController extends GetxController {
     isSpeaking.value = false;
     isAutoPlaying.value = false;
   }
+  void stopAll(){
+    isAutoPlaying.value = false ;
+    isSpeaking.value = false ;
+    effectsPlayer.dispose();
+    audioPlayer.dispose();
+    Get.delete<DivisionController>();
+  }
 }

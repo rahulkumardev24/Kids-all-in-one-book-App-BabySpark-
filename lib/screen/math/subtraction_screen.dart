@@ -54,19 +54,31 @@ class _SubtractionScreenState extends State<SubtractionScreen> {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.yellow,
             flexibleSpace: MathScreenAppBar(
-                isTablet: isTablet(context), size: size, title: "Subtraction"),
+                isTablet: isTablet(context), size: size, title: "Subtraction" , onPress: (){
+                  Navigator.pop(context);
+                  subtractionController.stopAll();
+                  },),
           ),
           backgroundColor: Colors.white,
 
           /// ----------- Body ------------ ///
-          body: Obx(() {
+          body: PopScope(
+              canPop: true,
+              onPopInvokedWithResult: (didPop, result) {
+                if(didPop){
+                  subtractionController.stopAll();
+                }
+
+              },
+              child:
+          Obx(() {
             if (subtractionController.subtractionProblems.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
 
             /// ------- get current problem --------- ///
             final currentProblem = subtractionController.subtractionProblems[
-                subtractionController.currentProblemIndex.value];
+            subtractionController.currentProblemIndex.value];
 
             /// -------- get correct answer --------- ///
             final correctAnswer = currentProblem['result'].toString();
@@ -79,229 +91,229 @@ class _SubtractionScreenState extends State<SubtractionScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
 
-                    children: [
-                      /// ------------ Subtraction Ball ---------  ///
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          /// First Ball
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              children: [
-                                GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate:
+                          /// ------------ Subtraction Ball ---------  ///
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              /// First Ball
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    GridView.builder(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                  ),
-                                  itemCount: currentProblem['num1'],
-                                  itemBuilder: (context, index) {
-                                    return Image.asset(
-                                      "assets/images/yellow_ball.webp",
-                                      width: 6.h,
-                                      height: 6.h,
-                                      fit: BoxFit.cover,
-                                    );
-                                  },
-                                ),
-                                SizedBox(height: 1.h),
-                                Container(
-                                  height: 8.h,
-                                  width: 8.h,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryDark,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "${currentProblem['num1']}",
-                                      style: myTextStyle30(
-                                        fontWeight: FontWeight.bold,
-                                        fontColor: Colors.white,
+                                        crossAxisCount: 2,
                                       ),
+                                      itemCount: currentProblem['num1'],
+                                      itemBuilder: (context, index) {
+                                        return Image.asset(
+                                          "assets/images/yellow_ball.webp",
+                                          width: 6.h,
+                                          height: 6.h,
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          /// subtraction
-                          Expanded(
-                            flex: 1,
-                            child: Center(
-                              child: Text(
-                                "-",
-                                style: myTextStyle40(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          /// Second Ball
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              children: [
-                                GridView.builder(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                  ),
-                                  itemCount: currentProblem['num2'],
-                                  itemBuilder: (context, index) {
-                                    return Image.asset(
-                                      "assets/images/yellow_ball.webp",
-                                      width: 6.h,
-                                      height: 6.h,
-                                      fit: BoxFit.cover,
-                                    );
-                                  },
-                                ),
-                                SizedBox(height: 1.h),
-                                Container(
-                                  height: 8.h,
-                                  width: 8.h,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primaryDark,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "${currentProblem['num2']}",
-                                        style: myTextStyle30(
-                                          fontWeight: FontWeight.bold,
-                                          fontColor: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
-                          /// Equal
-                          Expanded(
-                            flex: 1,
-                            child: Center(
-                              child: Text(
-                                "=",
-                                style: myTextStyle40(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          /// Result Ball
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              children: [
-                                GridView.builder(
-                                  shrinkWrap: true,
-                                  physics:
-                                  const NeverScrollableScrollPhysics(),
-                                  gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    mainAxisSpacing: 8,
-                                    crossAxisSpacing: 8,
-                                  ),
-                                  itemCount: currentProblem['result'],
-                                  itemBuilder: (context, index) {
-                                    return Image.asset(
-                                      "assets/images/yellow_ball.webp",
-                                      width: 6.h,
-                                      height: 6.h,
-                                      fit: BoxFit.cover,
-                                    );
-                                  },
-                                ),
-                                SizedBox(height: 1.h),
-                                DragTarget<String>(
-                                  builder: (context, accepted, rejected) {
-                                    return Container(
+                                    SizedBox(height: 1.h),
+                                    Container(
                                       height: 8.h,
                                       width: 8.h,
                                       decoration: BoxDecoration(
-                                        color: subtractionController.isCorrect.value ||
-                                            accepted.isNotEmpty
-                                            ? Colors.green
-                                            : Colors.white,
-                                        borderRadius:
-                                        BorderRadius.circular(8),
-                                        border: Border.all(
-                                          color:
-                                          subtractionController.isCorrect.value ||
-                                              accepted.isNotEmpty
-                                              ? Colors.green
-                                              : AppColors.primaryDark,
-                                          width: 3,
-                                        ),
+                                        color: AppColors.primaryDark,
+                                        borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Center(
-                                        child: subtractionController.isCorrect.value ||
-                                            accepted.isNotEmpty
-                                            ? Text(
-                                          correctAnswer,
+                                        child: Text(
+                                          "${currentProblem['num1']}",
                                           style: myTextStyle30(
-                                            fontWeight:
-                                            FontWeight.bold,
+                                            fontWeight: FontWeight.bold,
                                             fontColor: Colors.white,
                                           ),
-                                        )
-                                            : Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            const Icon(
-                                              Icons
-                                                  .question_mark_rounded,
-                                              color: AppColors.primaryDark,
-                                              size: 25,
-                                            ),
-                                            if (subtractionController
-                                                .currentProblemIndex
-                                                .value ==
-                                                0 &&
-                                                !subtractionController
-                                                    .isCorrect.value)
-                                              Text(
-                                                "Drag here",
-                                                style: myTextStyle12(
-                                                  fontColor:
-                                                  AppColors.primaryDark,
-                                                ),
-                                              ),
-                                          ],
                                         ),
                                       ),
-                                    );
-                                  },
-                                  onAcceptWithDetails: (details) {
-                                    subtractionController.checkAnswer(details.data);
-                                  },
+                                    ),
+                                  ],
                                 ),
+                              ),
 
-                              ],
-                            ),
-                          ),
+                              /// subtraction
+                              Expanded(
+                                flex: 1,
+                                child: Center(
+                                  child: Text(
+                                    "-",
+                                    style: myTextStyle40(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              /// Second Ball
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    GridView.builder(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                      ),
+                                      itemCount: currentProblem['num2'],
+                                      itemBuilder: (context, index) {
+                                        return Image.asset(
+                                          "assets/images/yellow_ball.webp",
+                                          width: 6.h,
+                                          height: 6.h,
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    Container(
+                                      height: 8.h,
+                                      width: 8.h,
+                                      decoration: BoxDecoration(
+                                        color: AppColors.primaryDark,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "${currentProblem['num2']}",
+                                            style: myTextStyle30(
+                                              fontWeight: FontWeight.bold,
+                                              fontColor: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              /// Equal
+                              Expanded(
+                                flex: 1,
+                                child: Center(
+                                  child: Text(
+                                    "=",
+                                    style: myTextStyle40(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              /// Result Ball
+                              Expanded(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    GridView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                      const NeverScrollableScrollPhysics(),
+                                      gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        mainAxisSpacing: 8,
+                                        crossAxisSpacing: 8,
+                                      ),
+                                      itemCount: currentProblem['result'],
+                                      itemBuilder: (context, index) {
+                                        return Image.asset(
+                                          "assets/images/yellow_ball.webp",
+                                          width: 6.h,
+                                          height: 6.h,
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(height: 1.h),
+                                    DragTarget<String>(
+                                      builder: (context, accepted, rejected) {
+                                        return Container(
+                                          height: 8.h,
+                                          width: 8.h,
+                                          decoration: BoxDecoration(
+                                            color: subtractionController.isCorrect.value ||
+                                                accepted.isNotEmpty
+                                                ? Colors.green
+                                                : Colors.white,
+                                            borderRadius:
+                                            BorderRadius.circular(8),
+                                            border: Border.all(
+                                              color:
+                                              subtractionController.isCorrect.value ||
+                                                  accepted.isNotEmpty
+                                                  ? Colors.green
+                                                  : AppColors.primaryDark,
+                                              width: 3,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: subtractionController.isCorrect.value ||
+                                                accepted.isNotEmpty
+                                                ? Text(
+                                              correctAnswer,
+                                              style: myTextStyle30(
+                                                fontWeight:
+                                                FontWeight.bold,
+                                                fontColor: Colors.white,
+                                              ),
+                                            )
+                                                : Column(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .center,
+                                              children: [
+                                                const Icon(
+                                                  Icons
+                                                      .question_mark_rounded,
+                                                  color: AppColors.primaryDark,
+                                                  size: 25,
+                                                ),
+                                                if (subtractionController
+                                                    .currentProblemIndex
+                                                    .value ==
+                                                    0 &&
+                                                    !subtractionController
+                                                        .isCorrect.value)
+                                                  Text(
+                                                    "Drag here",
+                                                    style: myTextStyle12(
+                                                      fontColor:
+                                                      AppColors.primaryDark,
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      onAcceptWithDetails: (details) {
+                                        subtractionController.checkAnswer(details.data);
+                                      },
+                                    ),
+
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  )),
+                      )),
 
                   SizedBox(height: 2.h,),
 
@@ -515,7 +527,7 @@ class _SubtractionScreenState extends State<SubtractionScreen> {
                 ],
               ),
             );
-          })),
+          }))),
     );
   }
 }

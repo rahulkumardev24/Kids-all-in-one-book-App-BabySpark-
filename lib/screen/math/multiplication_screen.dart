@@ -18,9 +18,8 @@ class MultiplicationScreen extends StatefulWidget {
 }
 
 class _SubtractionScreenState extends State<MultiplicationScreen> {
-  final MultiplicationController subtractionController =
+  final MultiplicationController multiplicationController =
       Get.put(MultiplicationController());
-
 
   @override
   void initState() {
@@ -28,10 +27,10 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       /// ---- Set up completion callback ----- ///
-      subtractionController.onCompletion = () {
+      multiplicationController.onCompletion = () {
         DialogHelper.showMathCompletionDialog(
           context: context,
-          onRestartGame: subtractionController.restartGame,
+          onRestartGame: multiplicationController.restartGame,
           onExit: () => Navigator.pop(context),
         );
       };
@@ -55,19 +54,31 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
             automaticallyImplyLeading: false,
             backgroundColor: Colors.yellow,
             flexibleSpace: MathScreenAppBar(
-                isTablet: isTablet(context), size: size, title: "Multiplication"),
+              isTablet: isTablet(context),
+              size: size,
+              title: "Multiplication",
+              onPress: () {
+                Navigator.pop(context);
+                multiplicationController.stopAll();
+              },
+            ),
           ),
           backgroundColor: Colors.white,
 
           /// ----------- Body ------------ ///
-          body: Obx(() {
-            if (subtractionController.multiplicationProblem.isEmpty) {
+          body: PopScope(onPopInvokedWithResult: (didPop, result) {
+            if (didPop) {
+              multiplicationController.stopAll();
+            }
+          }, child: Obx(() {
+            if (multiplicationController.multiplicationProblem.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
 
             /// ------- get current problem --------- ///
-            final currentProblem = subtractionController.multiplicationProblem[
-                subtractionController.currentProblemIndex.value];
+            final currentProblem =
+                multiplicationController.multiplicationProblem[
+                    multiplicationController.currentProblemIndex.value];
 
             /// -------- get correct answer --------- ///
             final correctAnswer = currentProblem['result'].toString();
@@ -78,8 +89,7 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
                 children: [
                   Expanded(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       /// ------------ Subtraction Ball ---------  ///
 
@@ -211,10 +221,9 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
                               children: [
                                 GridView.builder(
                                   shrinkWrap: true,
-                                  physics:
-                                  const NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
                                     mainAxisSpacing: 8,
                                     crossAxisSpacing: 8,
@@ -236,66 +245,65 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
                                       height: 8.h,
                                       width: 8.h,
                                       decoration: BoxDecoration(
-                                        color: subtractionController.isCorrect.value ||
-                                            accepted.isNotEmpty
+                                        color: multiplicationController
+                                                    .isCorrect.value ||
+                                                accepted.isNotEmpty
                                             ? Colors.green
                                             : Colors.white,
-                                        borderRadius:
-                                        BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                          color:
-                                          subtractionController.isCorrect.value ||
-                                              accepted.isNotEmpty
+                                          color: multiplicationController
+                                                      .isCorrect.value ||
+                                                  accepted.isNotEmpty
                                               ? Colors.green
                                               : AppColors.primaryDark,
                                           width: 3,
                                         ),
                                       ),
                                       child: Center(
-                                        child: subtractionController.isCorrect.value ||
-                                            accepted.isNotEmpty
+                                        child: multiplicationController
+                                                    .isCorrect.value ||
+                                                accepted.isNotEmpty
                                             ? Text(
-                                          correctAnswer,
-                                          style: myTextStyle30(
-                                            fontWeight:
-                                            FontWeight.bold,
-                                            fontColor: Colors.white,
-                                          ),
-                                        )
-                                            : Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            const Icon(
-                                              Icons
-                                                  .question_mark_rounded,
-                                              color: AppColors.primaryDark,
-                                              size: 25,
-                                            ),
-                                            if (subtractionController
-                                                .currentProblemIndex
-                                                .value ==
-                                                0 &&
-                                                !subtractionController
-                                                    .isCorrect.value)
-                                              Text(
-                                                "Drag here",
-                                                style: myTextStyle12(
-                                                  fontColor:
-                                                  AppColors.primaryDark,
+                                                correctAnswer,
+                                                style: myTextStyle30(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontColor: Colors.white,
                                                 ),
+                                              )
+                                            : Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.question_mark_rounded,
+                                                    color:
+                                                        AppColors.primaryDark,
+                                                    size: 25,
+                                                  ),
+                                                  if (multiplicationController
+                                                              .currentProblemIndex
+                                                              .value ==
+                                                          0 &&
+                                                      !multiplicationController
+                                                          .isCorrect.value)
+                                                    Text(
+                                                      "Drag here",
+                                                      style: myTextStyle12(
+                                                        fontColor: AppColors
+                                                            .primaryDark,
+                                                      ),
+                                                    ),
+                                                ],
                                               ),
-                                          ],
-                                        ),
                                       ),
                                     );
                                   },
                                   onAcceptWithDetails: (details) {
-                                    subtractionController.checkAnswer(details.data);
+                                    multiplicationController
+                                        .checkAnswer(details.data);
                                   },
                                 ),
-
                               ],
                             ),
                           ),
@@ -304,29 +312,32 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
                     ],
                   )),
 
-                  SizedBox(height: 2.h,),
-
-
+                  SizedBox(
+                    height: 2.h,
+                  ),
 
                   /// -------------  Liner Progress bar  ------------- ///
                   LinearProgressIndicator(
                     minHeight: 1.h,
-                    value: (subtractionController.currentProblemIndex.value + 1) /
-                        subtractionController.multiplicationProblem.length,
+                    value: (multiplicationController.currentProblemIndex.value +
+                            1) /
+                        multiplicationController.multiplicationProblem.length,
                     backgroundColor: Colors.grey.shade400,
-                    valueColor:
-                    const AlwaysStoppedAnimation<Color>(AppColors.primaryDark),
+                    valueColor: const AlwaysStoppedAnimation<Color>(
+                        AppColors.primaryDark),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   SizedBox(height: 2.h),
 
-
                   /// ------------ Options --------------------- ///
                   Wrap(
                     spacing: 2.h,
-                    children: subtractionController.currentOptions.map((number) {
+                    children:
+                        multiplicationController.currentOptions.map((number) {
                       final isCorrectOption = number == correctAnswer;
-                      final isSelected = subtractionController.selectedAnswer.value == number;
+                      final isSelected =
+                          multiplicationController.selectedAnswer.value ==
+                              number;
 
                       return Draggable<String>(
                         data: number,
@@ -335,8 +346,8 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
                             width: 70,
                             height: 70,
                             decoration: BoxDecoration(
-                              color:
-                              subtractionController.showHint.value && isCorrectOption
+                              color: multiplicationController.showHint.value &&
+                                      isCorrectOption
                                   ? Colors.amber.shade100
                                   : AppColors.primaryDark,
                               borderRadius: BorderRadius.circular(15),
@@ -371,106 +382,107 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
                         ),
                         child: GestureDetector(
                           onTap: () {
-                            subtractionController.checkAnswer(number);
+                            multiplicationController.checkAnswer(number);
                           },
                           child:
-                          // If selected and correct - GREEN
-                          (isSelected && subtractionController.isCorrect.value)
-                              ? Container(
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius:
-                              BorderRadius.circular(15),
-                              border: Border.all(
-                                color: Colors.green.shade800,
-                                width: 3,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                number,
-                                style: myTextStyle30(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: Colors.white,
-                                ),
-                              ),
-                            ),
-                          )
+                              // If selected and correct - GREEN
+                              (isSelected &&
+                                      multiplicationController.isCorrect.value)
+                                  ? Container(
+                                      width: 70,
+                                      height: 70,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.circular(15),
+                                        border: Border.all(
+                                          color: Colors.green.shade800,
+                                          width: 3,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          number,
+                                          style: myTextStyle30(
+                                            fontWeight: FontWeight.bold,
+                                            fontColor: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    )
 
-                          // If hint is shown and this is correct option - YELLOW with vibration
-                              : subtractionController.showHint.value &&
-                              isCorrectOption
-                              ? AnimatedContainer(
-                            duration: const Duration(
-                                milliseconds: 100),
-                            transform: subtractionController
-                                .vibrateCorrectOption.value
-                                ? Matrix4.translationValues(
-                              subtractionController.random
-                                  .nextDouble() *
-                                  16 -
-                                  8,
-                              subtractionController.random
-                                  .nextDouble() *
-                                  16 -
-                                  8,
-                              0,
-                            )
-                                : Matrix4.identity(),
-                            child: Container(
-                              width: 70,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius:
-                                BorderRadius.circular(15),
-                                border: Border.all(
-                                  color: Colors.grey.shade700,
-                                  width: 3,
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  number,
-                                  style: myTextStyle30(
-                                    fontWeight: FontWeight.bold,
-                                    fontColor: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )
+                                  // If hint is shown and this is correct option - YELLOW with vibration
+                                  : multiplicationController.showHint.value &&
+                                          isCorrectOption
+                                      ? AnimatedContainer(
+                                          duration:
+                                              const Duration(milliseconds: 100),
+                                          transform: multiplicationController
+                                                  .vibrateCorrectOption.value
+                                              ? Matrix4.translationValues(
+                                                  multiplicationController
+                                                              .random
+                                                              .nextDouble() *
+                                                          16 -
+                                                      8,
+                                                  multiplicationController
+                                                              .random
+                                                              .nextDouble() *
+                                                          16 -
+                                                      8,
+                                                  0,
+                                                )
+                                              : Matrix4.identity(),
+                                          child: Container(
+                                            width: 70,
+                                            height: 70,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade200,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              border: Border.all(
+                                                color: Colors.grey.shade700,
+                                                width: 3,
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                number,
+                                                style: myTextStyle30(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontColor: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
 
-                          // Default state - NORMAL
-                              : Container(
-                            width: 70,
-                            height: 70,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius:
-                              BorderRadius.circular(15),
-                              border: Border.all(
-                                color: Colors.grey.shade700,
-                                width: 3,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                number,
-                                style: myTextStyle30(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
+                                      // Default state - NORMAL
+                                      : Container(
+                                          width: 70,
+                                          height: 70,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade200,
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                            border: Border.all(
+                                              color: Colors.grey.shade700,
+                                              width: 3,
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              number,
+                                              style: myTextStyle30(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                         ),
                       );
                     }).toList(),
                   ),
                   SizedBox(height: 3.h),
-
 
                   /// ----- Control Button ----------- ///
                   Row(
@@ -480,25 +492,25 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
                         icon: Icons.arrow_back_rounded,
                         iconSize: 24,
                         color: AppColors.primaryDark,
-                        onPressed: subtractionController.goToPreviousProblem,
+                        onPressed: multiplicationController.goToPreviousProblem,
                         borderColor: Colors.grey.shade700,
                         isRounded: false,
                       ),
                       AvatarGlow(
-                        glowColor: subtractionController.isSpeaking.value
+                        glowColor: multiplicationController.isSpeaking.value
                             ? Colors.amber
                             : AppColors.primaryColor,
                         glowRadiusFactor: 0.4,
-                        animate: subtractionController.isSpeaking.value,
+                        animate: multiplicationController.isSpeaking.value,
                         child: ControlIconButton(
-                          icon: subtractionController.isSpeaking.value
+                          icon: multiplicationController.isSpeaking.value
                               ? Icons.pause_rounded
                               : Icons.volume_up_rounded,
                           iconSize: 24,
-                          color: subtractionController.isSpeaking.value
+                          color: multiplicationController.isSpeaking.value
                               ? Colors.amber
                               : AppColors.primaryDark,
-                          onPressed: subtractionController.toggleAutoPlay,
+                          onPressed: multiplicationController.toggleAutoPlay,
                           borderColor: Colors.grey.shade700,
                         ),
                       ),
@@ -506,7 +518,7 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
                         icon: Icons.arrow_forward_rounded,
                         iconSize: 24,
                         color: AppColors.primaryDark,
-                        onPressed: subtractionController.goToNextProblem,
+                        onPressed: multiplicationController.goToNextProblem,
                         isRounded: false,
                         borderColor: Colors.grey.shade700,
                       ),
@@ -516,7 +528,7 @@ class _SubtractionScreenState extends State<MultiplicationScreen> {
                 ],
               ),
             );
-          })),
+          }))),
     );
   }
 }

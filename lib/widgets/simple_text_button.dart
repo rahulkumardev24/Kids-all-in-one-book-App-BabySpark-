@@ -10,6 +10,7 @@ class SimpleTextButton extends StatelessWidget {
   final double btnBorderRadius;
   final Color fontColor;
   final double elevation ;
+  final double fontSize ;
   const SimpleTextButton(
       {super.key,
       required this.onPress,
@@ -17,7 +18,8 @@ class SimpleTextButton extends StatelessWidget {
       this.btnBackgroundColor = AppColors.primaryDark,
       this.btnBorderRadius = 10,
       this.fontColor = Colors.black ,
-      this.elevation = 1
+      this.elevation = 1 ,
+        this.fontSize = 18
       });
 
   @override
@@ -32,7 +34,7 @@ class SimpleTextButton extends StatelessWidget {
       ),
       child: Text(
         btnText,
-        style: myTextStyle18(fontColor: fontColor),
+        style: myTextStyleCus(fontColor: fontColor , fontSize: fontSize),
       ),
     );
   }

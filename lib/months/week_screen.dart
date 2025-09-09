@@ -24,6 +24,7 @@ class _WeekScreenState extends State<WeekScreen> {
   void initState() {
     super.initState();
     TTSService.initTTS();
+    toggleAutoPlay();
   }
 
   @override
@@ -169,69 +170,71 @@ class _WeekScreenState extends State<WeekScreen> {
                           ),
 
                           Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                if (_isAutoPlaying) {
-                                  toggleAutoPlay();
-                                }
-                                playSound(item["day"] as String);
-                                setState(() {
-                                  _currentSpeakingIndex = index;
-                                });
-                                _scrollToCurrentMonth(index);
-                              },
-                              borderRadius: const BorderRadius.horizontal(
-                                      left: Radius.circular(100))
-                                  .copyWith(
-                                      topRight: const Radius.circular(11),
-                                      bottomRight: const Radius.circular(11)),
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(vertical: 8),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
-                                decoration: BoxDecoration(
-                                  color: isCurrentSpeaking
-                                      ? AppColors.primaryDark
-                                      : item["color"] as Color,
-                                  borderRadius: BorderRadius.circular(12)
-                                      .copyWith(
-                                          topLeft: const Radius.circular(100),
-                                          bottomLeft:
-                                              const Radius.circular(100)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      item["day"] as String,
-                                      style: myTextStyle30(
-                                          fontFamily: "secondary",
-                                          fontColor: isCurrentSpeaking
-                                              ? Colors.white
-                                              : Colors.black),
-                                    ),
-
-                                    /// ------ Image ------ ///
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Row(
-                                        children: [
-                                          if (isCurrentSpeaking)
-                                            Icon(
-                                              Icons.volume_up,
-                                              color: Colors.white54,
-                                              size: 3.h,
-                                            ),
-                                          Image.asset(
-                                            "assets/images/white_bear.png",
-                                            height: size.height * 0.08,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ],
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                              child: InkWell(
+                                onTap: () {
+                                  if (_isAutoPlaying) {
+                                    toggleAutoPlay();
+                                  }
+                                  playSound(item["day"] as String);
+                                  setState(() {
+                                    _currentSpeakingIndex = index;
+                                  });
+                                  _scrollToCurrentMonth(index);
+                                },
+                                borderRadius: const BorderRadius.horizontal(
+                                        left: Radius.circular(100))
+                                    .copyWith(
+                                        topRight: const Radius.circular(11),
+                                        bottomRight: const Radius.circular(11)),
+                                child: Ink(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 15),
+                                  decoration: BoxDecoration(
+                                    color: isCurrentSpeaking
+                                        ? AppColors.primaryDark
+                                        : item["color"] as Color,
+                                    borderRadius: BorderRadius.circular(12)
+                                        .copyWith(
+                                            topLeft: const Radius.circular(100),
+                                            bottomLeft:
+                                                const Radius.circular(100)),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        item["day"] as String,
+                                        style: myTextStyle30(
+                                            fontFamily: "secondary",
+                                            fontColor: isCurrentSpeaking
+                                                ? Colors.white
+                                                : Colors.black),
                                       ),
-                                    )
-                                  ],
+
+                                      /// ------ Image ------ ///
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Row(
+                                          children: [
+                                            if (isCurrentSpeaking)
+                                              Icon(
+                                                Icons.volume_up,
+                                                color: Colors.white54,
+                                                size: 3.h,
+                                              ),
+                                            Image.asset(
+                                              "assets/images/white_bear.png",
+                                              height: size.height * 0.08,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

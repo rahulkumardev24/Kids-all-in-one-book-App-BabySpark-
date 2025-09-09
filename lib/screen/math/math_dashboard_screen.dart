@@ -168,7 +168,7 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                           viewportFraction: 1,
                         ),
 
-                        SizedBox(height: 3.h),
+                        SizedBox(height: 2.h),
                       ],
                     ),
                   ),
@@ -176,13 +176,19 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                   /// ---- Comparison card ---- ////
 
                   Card(
+                    margin: EdgeInsets.all(8),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Number Comparison" , style: myTextStyle21(),),
-                          SizedBox(height: 1.h,),
+                          Text(
+                            "Number Comparison",
+                            style: myTextStyle21(),
+                          ),
+                          SizedBox(
+                            height: 1.h,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -193,7 +199,9 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                                     cardColor: AppColors.primaryDark,
                                     isBorder: true),
                               ),
-                              SizedBox(width: 2.h,),
+                              SizedBox(
+                                width: 2.h,
+                              ),
                               Expanded(
                                 child: _comparisonItemCard(
                                     size: size,
@@ -202,7 +210,9 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                                     isBorder: true,
                                     textColor: Colors.grey.shade700),
                               ),
-                              SizedBox(width: 2.h,),
+                              SizedBox(
+                                width: 2.h,
+                              ),
                               Expanded(
                                 child: _comparisonItemCard(
                                     size: size,
@@ -213,7 +223,6 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                             ],
                           ),
                           SizedBox(height: 2.h),
-
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -237,6 +246,14 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                                   isBorder: false),
                             ],
                           ),
+                          SizedBox(height: 2.h),
+                          SizedBox(
+                              width: size.width,
+                              child: SimpleTextButton(
+                                onPress: () {},
+                                btnText: "START",
+                                fontSize: 21,
+                              ))
                         ],
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:babyspark/model/book_model.dart';
 import 'package:babyspark/service/tts_service.dart';
 import 'package:babyspark/widgets/primary_app_bar.dart';
@@ -7,6 +8,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../domain/custom_text_style.dart';
 import '../helper/app_color.dart';
@@ -179,48 +181,54 @@ class _DetailsScreenState extends State<DetailsScreen>
                 itemBuilder: (context, index) {
                   final item = widget.items[index];
                   return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ScaleTransition(
-                          scale: _bounceAnimation,
-                          child: CachedNetworkImage(
-                            imageUrl: item.image,
-                            height: size.width * 0.7,
-                            width: size.width * 0.7,
-                            fit: BoxFit.contain,
-                            placeholder: (context, url) => Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                item.title[0],
-                                style: myTextStyleCus(
-                                    fontSize: isTablet(context) ? 200 : 150,
-                                    fontWeight: FontWeight.bold,
-                                    fontColor: AppColors.primaryDark),
+                    child: GestureDetector(
+                      onTap: () {
+                        _playBounce();
+                        playSound(item.title);
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ScaleTransition(
+                            scale: _bounceAnimation,
+                            child: CachedNetworkImage(
+                              imageUrl: item.image,
+                              height: size.width * 0.7,
+                              width: size.width * 0.7,
+                              fit: BoxFit.contain,
+                              placeholder: (context, url) => Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  item.title[0],
+                                  style: myTextStyleCus(
+                                      fontSize: isTablet(context) ? 200 : 150,
+                                      fontWeight: FontWeight.bold,
+                                      fontColor: AppColors.primaryDark),
+                                ),
                               ),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              alignment: Alignment.center,
-                              child: Text(
-                                item.title[0],
-                                style: myTextStyleCus(
-                                    fontSize: isTablet(context) ? 150 : 100,
-                                    fontWeight: FontWeight.bold,
-                                    fontColor: AppColors.primaryDark),
+                              errorWidget: (context, url, error) => Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  item.title[0],
+                                  style: myTextStyleCus(
+                                      fontSize: isTablet(context) ? 150 : 100,
+                                      fontWeight: FontWeight.bold,
+                                      fontColor: AppColors.primaryDark),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          item.title,
-                          style: myTextStyleCus(
-                            fontSize: isTablet(context) ? 60 : 36,
-                            fontFamily: "primary",
-                            fontWeight: FontWeight.w600,
+                          SizedBox(height: 1.h),
+                          Text(
+                            item.title,
+                            style: myTextStyleCus(
+                              fontSize: isTablet(context) ? 60 : 36,
+                              fontFamily: "primary",
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -244,17 +252,24 @@ class _DetailsScreenState extends State<DetailsScreen>
                             onPressed: _previousItem,
                             isRounded: false,
                           ),
-                          const SizedBox(width: 20),
-                          ControlIconButton(
-                            color: _isAutoPlaying ? Colors.green : Colors.black,
-                            icon: _isAutoPlaying
-                                ? CupertinoIcons.pause_solid
-                                : CupertinoIcons.play_arrow_solid,
-                            iconSize: isTablet(context) ? 36 : 28,
-                            iconColor: Colors.white,
-                            onPressed: _toggleAutoPlay,
+                          SizedBox(width: 5.h),
+                          AvatarGlow(
+                            glowColor: AppColors.primaryDark,
+                            glowRadiusFactor: 0.4,
+                            animate: _isAutoPlaying,
+                            child: ControlIconButton(
+                              color: _isAutoPlaying
+                                  ? Colors.amber
+                                  : AppColors.primaryDark,
+                              icon: _isAutoPlaying
+                                  ? CupertinoIcons.pause_solid
+                                  : Icons.volume_up_rounded,
+                              iconSize: isTablet(context) ? 36 : 28,
+                              iconColor: Colors.white,
+                              onPressed: _toggleAutoPlay,
+                            ),
                           ),
-                          const SizedBox(width: 20),
+                          SizedBox(width: 5.h),
                           ControlIconButton(
                             icon: Icons.arrow_forward_rounded,
                             iconSize: isTablet(context) ? 32 : 24,

@@ -49,20 +49,15 @@ class NumberTile extends StatelessWidget {
               ),
             ),
 
-            // Number display
+            ///------ Number display ------- ///
             Center(
               child: Text(
                 '$number',
                 style: isTablet
-                    ? myTextStyle32(
-                        fontWeight: FontWeight.bold,
-                  fontColor: Colors.white
-
-                      )
-                    : myTextStyle28(
-                        fontWeight: FontWeight.w700,
-                  fontColor: Colors.white
-                      ),
+                    ? myTextStyle40(
+                        fontWeight: FontWeight.bold, fontColor: Colors.white)
+                    : myTextStyle35(
+                        fontWeight: FontWeight.w700, fontColor: Colors.white),
               ),
             ),
           ],

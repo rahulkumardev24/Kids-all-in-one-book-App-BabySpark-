@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:avatar_glow/avatar_glow.dart';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../domain/custom_text_style.dart';
 import '../../helper/app_color.dart';
 import '../../service/tts_service.dart';
@@ -20,14 +23,23 @@ class NumberDetailScreen extends StatefulWidget {
   });
 
   @override
-  _NumberDetailScreenState createState() => _NumberDetailScreenState();
+  State<NumberDetailScreen> createState() => _NumberDetailScreenState();
 }
 
-class _NumberDetailScreenState extends State<NumberDetailScreen> {
+class _NumberDetailScreenState extends State<NumberDetailScreen>
+    with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late int currentPage;
   Timer? _timer;
   bool _isPlaying = false;
+
+  late AnimationController _bounceController;
+  late Animation<double> _scaleAnimation;
+
+  bool isTablet(BuildContext context) {
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    return shortestSide >= 600;
+  }
 
   @override
   void initState() {
@@ -35,14 +47,19 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
     currentPage = widget.initialNumber;
     _pageController = PageController(initialPage: widget.initialNumber);
 
-    Future.delayed(const Duration(milliseconds: 500), () {
-      playSound(currentPage + 1);
-    });
-  }
+    _bounceController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
 
-  bool isTablet(BuildContext context) {
-    final shortestSide = MediaQuery.of(context).size.shortestSide;
-    return shortestSide >= 600;
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.2)
+        .chain(CurveTween(curve: Curves.bounceOut))
+        .animate(_bounceController);
+
+    Future.delayed(const Duration(milliseconds: 400), () {
+      playSound(currentPage + 1);
+      _playBounce();
+    });
   }
 
   void _startAutoPlay() {
@@ -66,12 +83,23 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
   }
 
   void playSound(int number) {
+    TTSService.stop();
     TTSService.speak("$number");
+  }
+
+  void _playBounce() {
+    _bounceController
+      ..stop()
+      ..reset()
+      ..forward();
   }
 
   @override
   void dispose() {
+    _stopAutoPlay();
     _pageController.dispose();
+    _bounceController.dispose();
+    TTSService.stop();
     super.dispose();
   }
 
@@ -80,6 +108,7 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
+        /// ----------- Appbar ----------- ///
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
@@ -87,26 +116,34 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
           flexibleSpace: const PrimaryAppBar(title: "Number"),
         ),
         backgroundColor: Colors.white,
+
+        /// ---------- Body ----------- ///
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
                 onPageChanged: (int page) {
-                  setState(() {
-                    currentPage = page;
-                  });
+                  setState(() => currentPage = page);
                   playSound(page + 1);
-                },
-                itemBuilder: (context, index) {
-                  return Center(
-                    child: _numberPage(index + 1),
-                  );
+                  _playBounce();
                 },
                 itemCount: widget.maxNumber,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      playSound(index + 1);
+                      _playBounce();
+                    },
+                    child: Center(
+                      child: _numberPage(index + 1),
+                    ),
+                  );
+                },
               ),
             ),
+
+            /// --------- Footer Controls -------- ///
             SizedBox(
               height: size.height * 0.25,
               child: Stack(
@@ -136,28 +173,35 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
                                   }
                                 : null,
                           ),
-                          SizedBox(width: size.width * 0.05),
+                          SizedBox(width: 4.h),
 
                           /// Play / Pause AutoPlay
-                          ControlIconButton(
-                            color: _isPlaying ? Colors.green : Colors.black,
-                            icon: _isPlaying
-                                ? CupertinoIcons.pause_solid
-                                : CupertinoIcons.play_arrow_solid,
-                            iconSize: isTablet(context) ? 36 : 27,
-                            iconColor: Colors.white,
-                            onPressed: () {
-                              setState(() {
-                                _isPlaying = !_isPlaying;
-                                if (_isPlaying) {
-                                  _startAutoPlay();
-                                } else {
-                                  _stopAutoPlay();
-                                }
-                              });
-                            },
+                          AvatarGlow(
+                            glowColor: AppColors.primaryDark,
+                            glowRadiusFactor: 0.4,
+                            animate: _isPlaying,
+                            child: ControlIconButton(
+                              color: _isPlaying
+                                  ? Colors.amber
+                                  : AppColors.primaryDark,
+                              icon: _isPlaying
+                                  ? CupertinoIcons.pause_solid
+                                  : Icons.volume_up_rounded,
+                              iconSize: isTablet(context) ? 36 : 27,
+                              iconColor: Colors.white,
+                              onPressed: () {
+                                setState(() {
+                                  _isPlaying = !_isPlaying;
+                                  if (_isPlaying) {
+                                    _startAutoPlay();
+                                  } else {
+                                    _stopAutoPlay();
+                                  }
+                                });
+                              },
+                            ),
                           ),
-                          SizedBox(width: size.width * 0.05),
+                          SizedBox(width: 4.h),
 
                           /// Next Button
                           ControlIconButton(
@@ -192,14 +236,16 @@ class _NumberDetailScreenState extends State<NumberDetailScreen> {
     String numberWord = AppConstant.numberWords[number];
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            '$number',
-            style: myTextStyleCus(
-              fontSize: 200,
-              fontFamily: "primary",
-              fontWeight: FontWeight.w500,
+          ScaleTransition(
+            scale: _scaleAnimation,
+            child: Text(
+              '$number',
+              style: myTextStyleCus(
+                fontSize: Get.width * 0.6,
+                fontFamily: "primary",
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           Text(

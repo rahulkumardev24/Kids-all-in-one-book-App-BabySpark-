@@ -188,8 +188,41 @@ class _DetailsScreenState extends State<AlphabetsDetailsScreen>
                         playSound(item.title);
                       },
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          /// ------ Alphabet ------ ///
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  item.title[0],
+                                  style: const TextStyle(
+                                      fontSize: 60,
+                                      color: AppColors.primaryDark,
+                                      shadows: [
+                                        Shadow(
+                                            color: Colors.black,
+                                            blurRadius: 3,
+                                            offset: Offset(1.0, 1.0))
+                                      ]),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(item.title[0].toLowerCase(),
+                                    style: const TextStyle(
+                                        fontSize: 40,
+                                        color: AppColors.primaryLight,
+                                        shadows: [
+                                          Shadow(
+                                              color: Colors.black,
+                                              blurRadius: 3,
+                                              offset: Offset(1.0, 1.0))
+                                        ])),
+                              ],
+                            ),
+                          ),
+
                           ScaleTransition(
                             scale: _bounceAnimation,
                             child: CachedNetworkImage(
@@ -219,7 +252,6 @@ class _DetailsScreenState extends State<AlphabetsDetailsScreen>
                               ),
                             ),
                           ),
-                          SizedBox(height: 1.h),
                           Text(
                             item.title,
                             style: myTextStyleCus(
@@ -235,6 +267,12 @@ class _DetailsScreenState extends State<AlphabetsDetailsScreen>
                 },
               ),
             ),
+
+            SizedBox(
+              height: 1.h,
+            ),
+
+            ///  ----------- Control ------------- ///
             SizedBox(
               height: size.height * 0.25,
               child: Stack(

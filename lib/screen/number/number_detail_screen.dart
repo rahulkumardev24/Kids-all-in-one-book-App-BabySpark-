@@ -241,9 +241,17 @@ class _NumberDetailScreenState extends State<NumberDetailScreen>
             scale: _scaleAnimation,
             child: Text(
               '$number',
-              style: myTextStyleCus(
+              style: TextStyle(
                 fontSize: Get.width * 0.6,
                 fontFamily: "primary",
+                color: AppColors.primaryDark,
+                shadows: const [
+                  BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 1,
+                      spreadRadius: 1,
+                      offset: Offset(1.5, 1.5))
+                ],
                 fontWeight: FontWeight.w500,
               ),
             ),

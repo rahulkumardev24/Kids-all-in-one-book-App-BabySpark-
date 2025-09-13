@@ -1,4 +1,5 @@
 import 'package:babyspark/screen/dashboard_screen.dart';
+import 'package:babyspark/screen/math/number_find_screen.dart';
 import 'package:babyspark/service/tts_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -43,8 +44,8 @@ class MyApp extends StatelessWidget {
         statusBarColor: AppColors.primaryDark,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.black, // Added for better navigation bar
-        systemNavigationBarIconBrightness: Brightness.light,
+        systemNavigationBarColor: AppColors.primaryColor,
+        systemNavigationBarIconBrightness: Brightness.dark,
       ),
       child: ResponsiveSizer(
         builder: (context, orientation, screenType) {
@@ -57,12 +58,11 @@ class MyApp extends StatelessWidget {
               primaryColor: AppColors.primaryDark,
               fontFamily: 'main',
             ),
-            home: const DashboardScreen(),
-
-            // Optional: Add error handling for better UX
+            home: const NumberFindScreen(),
             builder: (context, child) {
               return MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: const TextScaler.linear(1.0)),
                 child: child ?? const SizedBox(),
               );
             },

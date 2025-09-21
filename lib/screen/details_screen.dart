@@ -193,8 +193,8 @@ class _DetailsScreenState extends State<DetailsScreen>
                             scale: _bounceAnimation,
                             child: CachedNetworkImage(
                               imageUrl: item.image,
-                              height: size.width * 0.7,
-                              width: size.width * 0.7,
+                              height: size.width * 0.6,
+                              width: size.width * 0.6,
                               fit: BoxFit.contain,
                               placeholder: (context, url) => Container(
                                 alignment: Alignment.center,

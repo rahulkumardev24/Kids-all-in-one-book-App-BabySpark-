@@ -227,15 +227,15 @@ class _DetailsScreenState extends State<AlphabetsDetailsScreen>
                             scale: _bounceAnimation,
                             child: CachedNetworkImage(
                               imageUrl: item.image,
-                              height: size.width * 0.7,
-                              width: size.width * 0.7,
+                              height: size.width * 0.6,
+                              width: size.width * 0.6,
                               fit: BoxFit.contain,
                               placeholder: (context, url) => Container(
                                 alignment: Alignment.center,
                                 child: Text(
                                   item.title[0],
                                   style: myTextStyleCus(
-                                      fontSize: isTablet(context) ? 200 : 150,
+                                      fontSize: isTablet(context) ? 160 : 150,
                                       fontWeight: FontWeight.bold,
                                       fontColor: AppColors.primaryDark),
                                 ),
@@ -255,7 +255,7 @@ class _DetailsScreenState extends State<AlphabetsDetailsScreen>
                           Text(
                             item.title,
                             style: myTextStyleCus(
-                              fontSize: isTablet(context) ? 60 : 36,
+                              fontSize: isTablet(context) ? 40 : 36,
                               fontFamily: "primary",
                               fontWeight: FontWeight.w600,
                             ),
@@ -268,9 +268,7 @@ class _DetailsScreenState extends State<AlphabetsDetailsScreen>
               ),
             ),
 
-            SizedBox(
-              height: 1.h,
-            ),
+
 
             ///  ----------- Control ------------- ///
             SizedBox(

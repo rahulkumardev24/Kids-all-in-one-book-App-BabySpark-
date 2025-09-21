@@ -1,4 +1,5 @@
 import 'package:babyspark/screen/box_matching_game.dart';
+import 'package:babyspark/screen/math/number_find_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -59,6 +60,26 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
           ),
         ),
       ),
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const NumberFindScreen()),
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16.0),
+            image: const DecorationImage(
+              image: AssetImage("assets/poster/same_number_poster.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+      ),
+
     ];
 
     return Column(

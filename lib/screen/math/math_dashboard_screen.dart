@@ -1,5 +1,6 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
+import 'package:babyspark/screen/math/daily_challenge_screen.dart';
 import 'package:babyspark/screen/math/multiplication_table_screen.dart';
 import 'package:babyspark/screen/math/number_comparison_screen.dart';
 import 'package:babyspark/widgets/navigation_button.dart';
@@ -315,7 +316,14 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                           SizedBox(
                               width: size.width,
                               child: SimpleTextButton(
-                                  onPress: () {}, btnText: "Start Challenge"))
+                                  onPress: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                const DailyChallengeScreen()));
+                                  },
+                                  btnText: "Start Challenge"))
                         ],
                       ),
                     ),

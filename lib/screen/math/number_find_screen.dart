@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:clay_containers/clay_containers.dart';
+import 'package:babyspark/service/tts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -19,7 +19,7 @@ class NumberFindScreen extends StatefulWidget {
 
 class _NumberFindScreenState extends State<NumberFindScreen> {
   final Random _randomNumber = Random();
-  final AudioPlayer audioPlayer = AudioPlayer() ;
+  final AudioPlayer audioPlayer = AudioPlayer();
   late int randomQuestion;
   int currentQuestion = 1;
   int totalQuestions = 10;
@@ -39,6 +39,10 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
   /// ---- Generate random number ---- ///
   generateRandomNumber() {
     randomQuestion = _randomNumber.nextInt(100);
+    String speakNumber = "Find Number $randomQuestion ";
+    Future.delayed(const Duration(milliseconds: 800), () {
+      TTSService.speak(speakNumber);
+    });
   }
 
   /// ---- Generate Random Options ---- ///
@@ -67,7 +71,7 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
           selectedAnswer = null;
         });
 
-        /// Correct 
+        /// Correct
         if (selected == randomQuestion.toString()) {
           audioPlayer.play(AssetSource("audio/correct.mp3"));
           score++;
@@ -100,6 +104,8 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
               ),
             );
           }
+        } else {
+          audioPlayer.play(AssetSource("audio/wrong.mp3"));
         }
       }
     });
@@ -107,6 +113,10 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isTablet(BuildContext context) {
+      return MediaQuery.of(context).size.shortestSide >= 600;
+    }
+
     return SafeArea(
       child: Scaffold(
         /// ----------- Appbar ---------- ///
@@ -198,42 +208,73 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
         backgroundColor: Colors.white,
 
         /// ---------- Body ------------ ///
-        body: Column(
-          children: [
-            SizedBox(height: 2.h),
-
-            /// ----------- Number --------------- ///
-            ClayContainer(
-              width: Get.width * 0.9,
-              borderRadius: 21.0,
-              surfaceColor: Colors.white,
-              curveType: CurveType.concave,
-              spread: 2,
-              child: Center(
-                child: Text(
-                  "$randomQuestion",
-                  style: const TextStyle(
-                      letterSpacing: 2,
-                      color: AppColors.primaryDark,
-                      fontFamily: "Secondary",
-                      shadows: [
-                        Shadow(color: Colors.black, offset: Offset(1.0, -2.5))
-                      ],
-                      fontSize: 100),
-                ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              /// ----------- Number --------------- ///
+              Row(
+                children: [
+                  Expanded(
+                      child: Divider(
+                    thickness: 0.5.h,
+                  )),
+                  Container(
+                    height: 20,
+                    width: 20,
+                    decoration: const BoxDecoration(
+                        color: AppColors.primaryDark,
+                        borderRadius:
+                            BorderRadius.horizontal(left: Radius.circular(21))),
+                  ),
+                  Container(
+                    width: Get.width * 0.6,
+                    decoration: const BoxDecoration(
+                      borderRadius:
+                          BorderRadiusGeometry.all(Radius.circular(21)),
+                      gradient: LinearGradient(
+                          colors: [Colors.black87, Colors.black]),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "$randomQuestion",
+                        style: TextStyle(
+                          letterSpacing: 2,
+                          color: AppColors.primaryDark,
+                          fontFamily: "Secondary",
+                          fontSize: isTablet(context) ? 13.h : 11.h,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 20,
+                    width: 20,
+                    decoration: const BoxDecoration(
+                        color: AppColors.primaryDark,
+                        borderRadius: BorderRadius.horizontal(
+                            right: Radius.circular(21))),
+                  ),
+                  Expanded(
+                      child: Divider(
+                    thickness: 0.5.h,
+                  )),
+                ],
               ),
-            ),
 
-            SizedBox(height: 2.h),
+              SizedBox(height: 2.h),
 
-            /// --------- Grid ---------- Options ---------- ///
-            Expanded(
-              child: GridView.builder(
+              /// --------- Grid ---------- Options ---------- ///
+              GridView.builder(
                 padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 5,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 6,
+                  mainAxisSpacing: 6,
+                  childAspectRatio: 0.12.h,
                 ),
                 itemCount: optionsList.length,
                 itemBuilder: (context, index) {
@@ -271,9 +312,9 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
                     ),
                   );
                 },
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

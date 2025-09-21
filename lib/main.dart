@@ -1,5 +1,6 @@
 import 'package:babyspark/screen/dashboard_screen.dart';
 import 'package:babyspark/screen/math/number_find_screen.dart';
+import 'package:babyspark/screen/splash/splash_screen.dart';
 import 'package:babyspark/service/tts_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class MyApp extends StatelessWidget {
               primaryColor: AppColors.primaryDark,
               fontFamily: 'main',
             ),
-            home: const NumberFindScreen(),
+            home: const SplashScreen(),
             builder: (context, child) {
               return MediaQuery(
                 data: MediaQuery.of(context)

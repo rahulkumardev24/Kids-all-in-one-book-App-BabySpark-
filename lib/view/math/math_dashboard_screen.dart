@@ -25,6 +25,9 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    bool isTablet(BuildContext context) {
+      return MediaQuery.of(context).size.shortestSide >= 600;
+    }
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.primaryLight,
@@ -53,7 +56,10 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                       }),
                       Text(
                         "Mathematics",
-                        style: myTextStyle21(fontFamily: "primary"),
+                        style: myTextStyleCus(
+                            fontSize: 3.h,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: "primary"),
                       )
                     ],
                   ),
@@ -128,7 +134,8 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                                       child: Text(
                                     "Multiplication\nTable",
                                     textAlign: TextAlign.center,
-                                    style: myTextStyle30(
+                                    style: myTextStyleCus(
+                                      fontSize: 4.h,
                                       fontFamily: "secondary",
                                     ),
                                   )),
@@ -153,8 +160,8 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
+                               SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: isTablet(context) ? 4 : 2,
                             crossAxisSpacing: 18,
                             mainAxisSpacing: 18,
                           ),
@@ -166,8 +173,8 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                         ),
 
                         SizedBox(height: 3.h),
-                        const HomeCarouselSlider(
-                          viewportFraction: 1,
+                        HomeCarouselSlider(
+                          viewportFraction: isTablet(context) ?  0.8 : 1,
                         ),
 
                         SizedBox(height: 2.h),
@@ -186,7 +193,7 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                         children: [
                           Text(
                             "Number Comparison",
-                            style: myTextStyle21(),
+                            style: myTextStyleCus(fontSize: 2.5.h , fontWeight: FontWeight.w500),
                           ),
                           SizedBox(
                             height: 1.h,
@@ -260,7 +267,7 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                                               const NumberComparisonScreen()));
                                 },
                                 btnText: "START",
-                                fontSize: 21,
+                                fontSize: 2.5.h,
                               ))
                         ],
                       ),
@@ -323,6 +330,7 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                                             builder: (_) =>
                                                 const DailyChallengeScreen()));
                                   },
+                                  fontSize: 2.5.h,
                                   btnText: "Start Challenge"))
                         ],
                       ),
@@ -388,16 +396,19 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
       required Color cardColor,
       Color textColor = Colors.black}) {
     return Container(
-        height: size.width * 0.2,
-        width: size.width * 0.2,
         decoration: BoxDecoration(
             color: cardColor.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(11),
             border: BoxBorder.all(width: isBorder ? 2 : 0, color: cardColor)),
         child: Center(
-            child: Text(
-          text,
-          style: myTextStyle32(fontFamily: "secondary", fontColor: textColor),
-        )));
+            child: Padding(
+              padding: EdgeInsets.symmetric( horizontal:  3.h),
+              child: Text(
+                        text,
+                        style: myTextStyleCus(
+                fontSize: 5.h,
+                fontFamily: "secondary", fontColor: textColor),
+                      ),
+            )));
   }
 }

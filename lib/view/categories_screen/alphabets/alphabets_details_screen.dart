@@ -182,86 +182,94 @@ class _DetailsScreenState extends State<AlphabetsDetailsScreen>
                 itemBuilder: (context, index) {
                   final item = widget.items[index];
                   return Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        _playBounce();
-                        playSound(item.title);
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          /// ------ Alphabet ------ ///
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  item.title[0],
-                                  style: const TextStyle(
-                                      fontSize: 60,
-                                      color: AppColors.primaryDark,
-                                      shadows: [
+                    child: Stack(
+
+                      children: [
+                        /// ------ Alphabet ------ ///
+                        Positioned(
+                          top: 1.h,
+                          left: 1.h,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                item.title[0],
+                                style:  TextStyle(
+                                    fontSize: isTablet(context) ? 10.h : 8.h,
+                                    color: AppColors.primaryDark,
+                                    shadows: const [
+                                      Shadow(
+                                          color: Colors.black,
+                                          blurRadius: 3,
+                                          offset: Offset(1.0, 1.0))
+                                    ]),
+                              ),
+                               SizedBox(width: 1.h),
+                              Text(item.title[0].toLowerCase(),
+                                  style:  TextStyle(
+                                      fontSize: isTablet(context) ? 6.h : 4.h,
+                                      color: AppColors.primaryLight,
+                                      shadows: const [
                                         Shadow(
                                             color: Colors.black,
                                             blurRadius: 3,
                                             offset: Offset(1.0, 1.0))
-                                      ]),
+                                      ])),
+                            ],
+                          ),
+                        ),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              _playBounce();
+                              playSound(item.title);
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ScaleTransition(
+                                  scale: _bounceAnimation,
+                                  child: CachedNetworkImage(
+                                    imageUrl: item.image,
+                                    height: size.width * 0.6,
+                                    width: size.width * 0.6,
+                                    fit: BoxFit.contain,
+                                    placeholder: (context, url) => Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        item.title[0],
+                                        style: myTextStyleCus(
+                                            fontSize: isTablet(context) ? 18.h : 15.h,
+                                            fontWeight: FontWeight.bold,
+                                            fontColor: AppColors.primaryDark),
+                                      ),
+                                    ),
+                                    errorWidget: (context, url, error) => Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        item.title[0],
+                                        style: myTextStyleCus(
+                                            fontSize: isTablet(context) ? 150 : 100,
+                                            fontWeight: FontWeight.bold,
+                                            fontColor: AppColors.primaryDark),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                const SizedBox(width: 6),
-                                Text(item.title[0].toLowerCase(),
-                                    style: const TextStyle(
-                                        fontSize: 40,
-                                        color: AppColors.primaryLight,
-                                        shadows: [
-                                          Shadow(
-                                              color: Colors.black,
-                                              blurRadius: 3,
-                                              offset: Offset(1.0, 1.0))
-                                        ])),
+                                /// ---- Title ---- ///
+                                Text(
+                                  item.title,
+                                  style: myTextStyleCus(
+                                    fontSize: 6.h,
+                                    fontFamily: "primary",
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
-
-                          ScaleTransition(
-                            scale: _bounceAnimation,
-                            child: CachedNetworkImage(
-                              imageUrl: item.image,
-                              height: size.width * 0.6,
-                              width: size.width * 0.6,
-                              fit: BoxFit.contain,
-                              placeholder: (context, url) => Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  item.title[0],
-                                  style: myTextStyleCus(
-                                      fontSize: isTablet(context) ? 160 : 150,
-                                      fontWeight: FontWeight.bold,
-                                      fontColor: AppColors.primaryDark),
-                                ),
-                              ),
-                              errorWidget: (context, url, error) => Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  item.title[0],
-                                  style: myTextStyleCus(
-                                      fontSize: isTablet(context) ? 150 : 100,
-                                      fontWeight: FontWeight.bold,
-                                      fontColor: AppColors.primaryDark),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            item.title,
-                            style: myTextStyleCus(
-                              fontSize: isTablet(context) ? 40 : 36,
-                              fontFamily: "primary",
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   );
                 },

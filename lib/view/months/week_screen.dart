@@ -2,14 +2,13 @@ import 'package:avatar_glow/avatar_glow.dart';
 import 'package:babyspark/controller/week_controller.dart';
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
-import 'package:babyspark/service/tts_service.dart';
 import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../helper/app_color.dart';
-import '../widgets/control_icon_button.dart';
+import '../../helper/app_color.dart';
+import '../../widgets/control_icon_button.dart';
+
 
 class WeekScreen extends StatefulWidget {
   const WeekScreen({super.key});
@@ -203,7 +202,7 @@ class _WeekScreenState extends State<WeekScreen> {
                         },
                       ),
                       SizedBox(
-                        height: 10.h,
+                        height: 20.h,
                       )
                     ],
                   ),

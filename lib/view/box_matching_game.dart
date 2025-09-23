@@ -160,12 +160,15 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SimpleTextButton(
-                                    onPress: () {
-                                      Navigator.pop(context);
-                                    },
-                                    btnBackgroundColor: Colors.grey.shade400,
-                                    btnText: "Exit"),
+                                Expanded(
+                                  child: SimpleTextButton(
+                                      onPress: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                      btnBackgroundColor: Colors.grey.shade400,
+                                      btnText: "Exit"),
+                                ),
                                 SizedBox(
                                   width: 2.h,
                                 ),
@@ -195,7 +198,7 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
         });
       } else {
         // No match - flip cards back after a delay
-        Timer(Duration(milliseconds: 800), () {
+        Timer(const Duration(milliseconds: 800), () {
           // Find the indices of the first and second cards
           int firstIndex = cards.indexWhere((card) => card == firstCard);
           int secondIndex = cards.indexWhere((card) => card == secondCard);
@@ -218,6 +221,11 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    bool isTablet(BuildContext context) {
+      final shortestSide = MediaQuery.of(context).size.shortestSide;
+      return shortestSide >= 600;
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -331,9 +339,8 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
                     GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: isTablet(context) ? 5 : 4,
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
@@ -354,7 +361,7 @@ class _BoxMatchingGameState extends State<BoxMatchingGame>
 
                               return Transform(
                                 transform: Matrix4.identity()
-                                  ..setEntry(3, 2, 0.001) // Perspective
+                                  ..setEntry(3, 2, 0.001)
                                   ..rotateY(angle),
                                 alignment: Alignment.center,
                                 child: Container(

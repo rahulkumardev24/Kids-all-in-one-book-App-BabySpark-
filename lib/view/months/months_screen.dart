@@ -6,8 +6,8 @@ import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../domain/custom_text_style.dart';
-import '../helper/app_color.dart';
+import '../../domain/custom_text_style.dart';
+import '../../helper/app_color.dart';
 
 class MonthsScreen extends StatefulWidget {
   const MonthsScreen({super.key});
@@ -63,7 +63,7 @@ class _MonthsScreenState extends State<MonthsScreen> {
                         final isCurrentSpeaking =
                             monthsController.currentSpeakingIndex == index;
                         return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          margin:  EdgeInsets.symmetric(vertical: 6),
                           child: Stack(
                             alignment: Alignment.centerLeft,
                             children: [
@@ -147,10 +147,10 @@ class _MonthsScreenState extends State<MonthsScreen> {
 
                               ///--------- Month number badge ------- ///
                               Positioned(
-                                left: -2.h,
+                                left: -1.h,
                                 child: Container(
-                                  height: size.width * 0.25,
-                                  width: size.width * 0.25,
+                                  height: size.width * 0.2 ,
+                                  width: size.width * 0.2,
                                   alignment: Alignment.center,
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(

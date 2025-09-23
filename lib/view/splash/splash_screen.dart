@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:babyspark/domain/custom_text_style.dart';
-import 'package:babyspark/screen/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+
+import '../dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

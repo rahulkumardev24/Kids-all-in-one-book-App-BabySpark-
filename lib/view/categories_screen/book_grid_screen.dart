@@ -1,10 +1,10 @@
 import 'package:babyspark/model/book_model.dart';
-import 'package:babyspark/screen/details_screen.dart';
 import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
 import '../../controller/loading_controller.dart';
 import '../../service/firebase_book_service.dart';
 import '../../widgets/items_card.dart';
+import '../details_screen.dart';
 import 'alphabets/alphabets_details_screen.dart';
 
 class BookGridScreen extends StatefulWidget {

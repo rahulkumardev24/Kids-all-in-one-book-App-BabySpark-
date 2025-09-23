@@ -8,6 +8,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../domain/custom_text_style.dart';
 import '../../helper/app_color.dart';
+import '../../helper/dialog_helper.dart';
 import '../../widgets/navigation_button.dart';
 
 class NumberFindScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
   final AudioPlayer audioPlayer = AudioPlayer();
   late int randomQuestion;
   int currentQuestion = 1;
-  int totalQuestions = 10;
+  int totalQuestions = 2;
   int score = 0;
 
   late List<String> optionsList;
@@ -82,27 +83,20 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
               optionsList = generateOptions(randomQuestion);
             });
           } else {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text("Game Completed!"),
-                content: Text("Your score: $score/$totalQuestions"),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      setState(() {
-                        currentQuestion = 1;
-                        score = 0;
-                        generateRandomNumber();
-                        optionsList = generateOptions(randomQuestion);
-                      });
-                    },
-                    child: const Text("Play Again"),
-                  ),
-                ],
-              ),
-            );
+            DialogHelper.showMathCompletionDialog(
+                context: context,
+                message: "Well Done kids you find the all numbers",
+                onRestartGame: () {
+                  setState(() {
+                    currentQuestion = 1;
+                    score = 0;
+                    generateRandomNumber();
+                    optionsList = generateOptions(randomQuestion);
+                  });
+                },
+                onExit: () {
+                  Navigator.pop(context);
+                });
           }
         } else {
           audioPlayer.play(AssetSource("audio/wrong.mp3"));

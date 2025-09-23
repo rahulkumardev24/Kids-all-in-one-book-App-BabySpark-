@@ -1,10 +1,10 @@
-import 'package:babyspark/screen/box_matching_game.dart';
-import 'package:babyspark/screen/math/number_find_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../helper/app_color.dart';
-import '../screen/math/box_count_screen.dart';
+import '../view/box_matching_game.dart';
+import '../view/math/box_count_screen.dart';
+import '../view/math/number_find_screen.dart';
 
 class HomeCarouselSlider extends StatefulWidget {
   final double viewportFraction ;

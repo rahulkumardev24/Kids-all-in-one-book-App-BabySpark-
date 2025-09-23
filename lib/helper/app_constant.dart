@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../screen/math/addition_screen.dart';
-import '../screen/math/division_screen.dart';
-import '../screen/math/multiplication_screen.dart';
-import '../screen/math/subtraction_screen.dart';
+import '../view/math/addition_screen.dart';
+import '../view/math/division_screen.dart';
+import '../view/math/multiplication_screen.dart';
+import '../view/math/subtraction_screen.dart';
 import 'app_color.dart';
 
 class AppConstant {

@@ -1,11 +1,11 @@
 import 'package:babyspark/helper/app_constant.dart';
-import 'package:babyspark/screen/color/colors_screen.dart';
 import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../controller/loading_controller.dart';
 import '../../domain/custom_text_style.dart';
 import '../../helper/app_color.dart';
+import 'colors_screen.dart';
 
 class ColorGridScreen extends StatefulWidget {
   final String appBarTitle;

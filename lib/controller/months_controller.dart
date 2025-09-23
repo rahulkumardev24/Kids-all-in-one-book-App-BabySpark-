@@ -87,6 +87,7 @@ class MonthsController extends GetxController {
   void stopAllSpeech() {
     _isAutoPlaying.value = false;
     _currentSpeakingIndex.value = -1;
+    Get.delete<MonthsController>() ;
     TTSService.stop();
   }
 }

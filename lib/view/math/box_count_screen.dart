@@ -252,7 +252,7 @@ class _BoxCountScreenState extends State<BoxCountScreen> {
             ),
             SizedBox(height: size.height * 0.01),
             Expanded(
-              flex: 4,
+              flex: 5,
               child: Animate(
                 effects: const [
                   BlurEffect(
@@ -285,9 +285,9 @@ class _BoxCountScreenState extends State<BoxCountScreen> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
-                mainAxisSpacing: 21,
-                crossAxisSpacing: 21,
-                childAspectRatio: 1.1,
+                mainAxisSpacing: 2.h,
+
+                childAspectRatio: 1.4,
                 children: options.map((e) {
                   return FittedBox(
                     child: Animate(
@@ -321,7 +321,8 @@ class _BoxCountScreenState extends State<BoxCountScreen> {
                               : null,
                           child: Text(
                             e.toString(),
-                            style: myTextStyle40(
+                            style: myTextStyleCus(
+                              fontSize: 7.h,
                                 fontFamily: "secondary",
                                 fontColor: Colors.black87),
                           ),

@@ -1,8 +1,5 @@
 import 'package:babyspark/domain/custom_text_style.dart';
 import 'package:babyspark/helper/app_constant.dart';
-import 'package:babyspark/screen/math/daily_challenge_screen.dart';
-import 'package:babyspark/screen/math/multiplication_table_screen.dart';
-import 'package:babyspark/screen/math/number_comparison_screen.dart';
 import 'package:babyspark/widgets/navigation_button.dart';
 import 'package:babyspark/widgets/simple_text_button.dart';
 import 'package:clay_containers/constants.dart';
@@ -13,6 +10,9 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../helper/app_color.dart';
 import '../../widgets/home_carousel_slider.dart';
+import 'daily_challenge_screen.dart';
+import 'multiplication_table_screen.dart';
+import 'number_comparison_screen.dart';
 
 class MathDashboardScreen extends StatefulWidget {
   const MathDashboardScreen({super.key});

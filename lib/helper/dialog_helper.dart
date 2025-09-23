@@ -5,7 +5,7 @@ import '../domain/custom_text_style.dart';
 import 'app_color.dart';
 
 class DialogHelper {
-  /// ------- Show Game Completion Dialog
+  /// ------- Show Game Completion Dialog ---- ///
   static void showMathCompletionDialog({
     required BuildContext context,
     required VoidCallback onRestartGame,

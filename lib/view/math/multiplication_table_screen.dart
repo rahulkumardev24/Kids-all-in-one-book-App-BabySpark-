@@ -263,7 +263,10 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
                             ),
                             Text(
                               "Multiplication Table",
-                              style: myTextStyle21(fontFamily: "primary"),
+                              style: myTextStyleCus(
+                                  fontSize: isTablet(context) ? 28 : 21,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: "primary"),
                             )
                           ],
                         ),
@@ -277,8 +280,8 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
                   child: Lottie.asset(
                     "assets/lottie_animation_file/bear_hi.json",
                     fit: BoxFit.cover,
-                    height: size.width * 0.35,
-                    width: size.width * 0.35,
+                    height: size.width * 0.3,
+                    width: size.width * 0.3,
                   ),
                 )
               ],
@@ -336,7 +339,8 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
                       child: Center(
                         child: Text(
                           '$number',
-                          style: myTextStyle18(
+                          style: myTextStyleCus(
+                            fontSize: isTablet(context) ? 2.4.h : 2.h,
                             fontWeight: FontWeight.bold,
                             fontColor: _selectedNumber == number
                                 ? Colors.white
@@ -359,14 +363,15 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
                   Expanded(child: Divider(thickness: 2, color: currentColor)),
                   SizedBox(width: 2.h),
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: EdgeInsets.all(2.h),
                     decoration: BoxDecoration(
                       color: currentColor,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '$_selectedNumber',
-                      style: myTextStyle25(
+                      style: myTextStyleCus(
+                          fontSize: 5.h,
                           fontWeight: FontWeight.bold,
                           fontColor: Colors.white,
                           fontFamily: "secondary"),
@@ -451,65 +456,48 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
               ),
             ),
 
-            SizedBox(
-              height: size.height * 0.15,
-              child: Stack(
+            ///  --- Control buttons at the bottom --- ///
+            Container(
+              padding:
+              EdgeInsets.symmetric(horizontal: 2.h).copyWith(top: 2.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  /// Car animation at the bottom
-                  Positioned(
-                    top: -1.1.h,
-                    child: SizedBox(
-                      child: Lottie.asset(
-                        "assets/lottie_animation_file/Car insurance offers loading page.json",
-                        width: size.width,
-                        fit: BoxFit.cover,
-                      ),
+                  ControlIconButton(
+                    icon: Icons.arrow_back_rounded,
+                    iconSize: isTablet(context) ? 32 : 24,
+                    color: AppColors.primaryDark,
+                    onPressed: _goToPreviousTable,
+                    isRounded: false,
+                    borderColor: Colors.grey.shade700,
+                  ),
+                  AvatarGlow(
+                    glowColor: _isSpeaking
+                        ? Colors.amber
+                        : AppColors.primaryDark,
+                    glowRadiusFactor: 0.4,
+                    animate: _isSpeaking,
+                    child: ControlIconButton(
+                      icon: getIcon(),
+                      iconSize: isTablet(context) ? 32 : 24,
+                      color: getIconColor(),
+                      onPressed: _toggleAutoPlay,
+                      borderColor: Colors.grey.shade700,
                     ),
                   ),
-
-                  ///  --- Control buttons at the bottom --- ///
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 2.h, vertical: 2.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ControlIconButton(
-                          icon: Icons.arrow_back_rounded,
-                          iconSize: isTablet(context) ? 32 : 24,
-                          color: AppColors.primaryDark,
-                          onPressed: _goToPreviousTable,
-                          isRounded: false,
-                          borderColor: Colors.grey.shade700,
-                        ),
-                        AvatarGlow(
-                          glowColor: _isSpeaking
-                              ? Colors.amber
-                              : AppColors.primaryDark,
-                          glowRadiusFactor: 0.4,
-                          animate: _isSpeaking,
-                          child: ControlIconButton(
-                            icon: getIcon(),
-                            iconSize: isTablet(context) ? 32 : 24,
-                            color: getIconColor(),
-                            onPressed: _toggleAutoPlay,
-                            borderColor: Colors.grey.shade700,
-                          ),
-                        ),
-                        ControlIconButton(
-                          icon: Icons.arrow_forward_rounded,
-                          iconSize: isTablet(context) ? 32 : 24,
-                          color: AppColors.primaryDark,
-                          onPressed: _goToNextTable,
-                          borderColor: Colors.grey.shade700,
-                          isRounded: false,
-                        ),
-                      ],
-                    ),
+                  ControlIconButton(
+                    icon: Icons.arrow_forward_rounded,
+                    iconSize: isTablet(context) ? 32 : 24,
+                    color: AppColors.primaryDark,
+                    onPressed: _goToNextTable,
+                    borderColor: Colors.grey.shade700,
+                    isRounded: false,
                   ),
                 ],
               ),
-            )
+            ),
+
+            SizedBox(height: 2.h,)
           ],
         ),
       ),

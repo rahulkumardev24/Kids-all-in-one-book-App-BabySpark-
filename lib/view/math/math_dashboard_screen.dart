@@ -28,6 +28,7 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
     bool isTablet(BuildContext context) {
       return MediaQuery.of(context).size.shortestSide >= 600;
     }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.primaryLight,
@@ -160,7 +161,7 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
-                               SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: isTablet(context) ? 4 : 2,
                             crossAxisSpacing: 18,
                             mainAxisSpacing: 18,
@@ -174,7 +175,7 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
 
                         SizedBox(height: 3.h),
                         HomeCarouselSlider(
-                          viewportFraction: isTablet(context) ?  0.8 : 1,
+                          viewportFraction: isTablet(context) ? 0.8 : 1,
                         ),
 
                         SizedBox(height: 2.h),
@@ -193,7 +194,8 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
                         children: [
                           Text(
                             "Number Comparison",
-                            style: myTextStyleCus(fontSize: 2.5.h , fontWeight: FontWeight.w500),
+                            style: myTextStyleCus(
+                                fontSize: 2.5.h, fontWeight: FontWeight.w500),
                           ),
                           SizedBox(
                             height: 1.h,
@@ -402,13 +404,12 @@ class _MathDashboardScreenState extends State<MathDashboardScreen> {
             border: BoxBorder.all(width: isBorder ? 2 : 0, color: cardColor)),
         child: Center(
             child: Padding(
-              padding: EdgeInsets.symmetric( horizontal:  3.h),
-              child: Text(
-                        text,
-                        style: myTextStyleCus(
-                fontSize: 5.h,
-                fontFamily: "secondary", fontColor: textColor),
-                      ),
-            )));
+          padding: EdgeInsets.symmetric(horizontal: 3.h),
+          child: Text(
+            text,
+            style: myTextStyleCus(
+                fontSize: 5.h, fontFamily: "secondary", fontColor: textColor),
+          ),
+        )));
   }
 }

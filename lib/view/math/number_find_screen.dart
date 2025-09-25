@@ -23,7 +23,7 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
   final AudioPlayer audioPlayer = AudioPlayer();
   late int randomQuestion;
   int currentQuestion = 1;
-  int totalQuestions = 2;
+  int totalQuestions = 10;
   int score = 0;
 
   late List<String> optionsList;
@@ -300,6 +300,7 @@ class _NumberFindScreenState extends State<NumberFindScreen> {
                               fontColor: selectedAnswer == option
                                   ? Colors.white
                                   : Vx.gray700,
+                              fontWeight: FontWeight.w700,
                               fontSize: 30),
                         ),
                       ),

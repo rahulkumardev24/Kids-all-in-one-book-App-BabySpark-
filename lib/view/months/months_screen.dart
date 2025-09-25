@@ -4,7 +4,7 @@ import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/widgets/control_icon_button.dart';
 import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide ScreenType;
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../domain/custom_text_style.dart';
 import '../../helper/app_color.dart';
@@ -18,6 +18,7 @@ class MonthsScreen extends StatefulWidget {
 
 class _MonthsScreenState extends State<MonthsScreen> {
   final MonthsController monthsController = Get.put(MonthsController());
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -63,7 +64,7 @@ class _MonthsScreenState extends State<MonthsScreen> {
                         final isCurrentSpeaking =
                             monthsController.currentSpeakingIndex == index;
                         return Container(
-                          margin:  EdgeInsets.symmetric(vertical: 6),
+                          margin: const EdgeInsets.symmetric(vertical: 6),
                           child: Stack(
                             alignment: Alignment.centerLeft,
                             children: [
@@ -104,10 +105,16 @@ class _MonthsScreenState extends State<MonthsScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Padding(
-                                            padding: EdgeInsets.only(left: 5.h),
+                                            padding: EdgeInsets.only(
+                                              left: Device.screenType ==
+                                                      ScreenType.tablet
+                                                  ? 8.h
+                                                  : 5.h,
+                                            ),
                                             child: Text(
                                               item["day"] as String,
-                                              style: myTextStyle30(
+                                              style: myTextStyleCus(
+                                                fontSize: 3.h,
                                                 fontFamily: "secondary",
                                                 fontColor: isCurrentSpeaking
                                                     ? Colors.white
@@ -149,7 +156,7 @@ class _MonthsScreenState extends State<MonthsScreen> {
                               Positioned(
                                 left: -1.h,
                                 child: Container(
-                                  height: size.width * 0.2 ,
+                                  height: size.width * 0.2,
                                   width: size.width * 0.2,
                                   alignment: Alignment.center,
                                   decoration: const BoxDecoration(

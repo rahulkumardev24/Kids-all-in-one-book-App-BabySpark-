@@ -354,112 +354,161 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
               },
             ),
 
-            /// ------- Table Number --------- ///
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(child: Divider(thickness: 2, color: currentColor)),
-                  SizedBox(width: 2.h),
-                  Container(
-                    padding: EdgeInsets.all(2.h),
-                    decoration: BoxDecoration(
-                      color: currentColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '$_selectedNumber',
-                      style: myTextStyleCus(
-                          fontSize: 5.h,
-                          fontWeight: FontWeight.bold,
-                          fontColor: Colors.white,
-                          fontFamily: "secondary"),
-                    ),
-                  ),
-                  SizedBox(width: 2.h),
-                  Expanded(child: Divider(thickness: 2, color: currentColor)),
-                ],
-              ),
+            SizedBox(
+              height: 1.h,
             ),
 
             /// --- Multiplication Table --- ///
             Expanded(
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 2.h),
+                margin: EdgeInsets.symmetric(horizontal: 3.h),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    final multiplier = index + 1;
-                    final result = _selectedNumber * multiplier;
-                    final itemColor = currentColor;
-                    final isCurrentlySpeaking = _currentSpeakingIndex == index;
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      margin: EdgeInsets.symmetric(vertical: 0.1.h),
-                      padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: isCurrentlySpeaking
-                            ? Colors.amber
-                            : itemColor.withValues(alpha: 0.9),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15.h),
+                        topLeft: Radius.circular(15.h),
+                        bottomRight: Radius.circular(1.h),
+                        bottomLeft: Radius.circular(1.h)),
+                    border: BoxBorder.all(width: 2)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    /// ------- Table header  ----- ///
+                    SizedBox(
+                      width: Device.screenType == ScreenType.tablet
+                          ? size.width * 0.4
+                          : size.width * 0.6,
+                      height: Device.screenType == ScreenType.tablet
+                          ? size.width * 0.2
+                          : size.width * 0.3,
+                      child: Stack(
                         children: [
-                          Text('$_selectedNumber',
-                              style: myTextStyle21(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: isCurrentlySpeaking
-                                      ? Colors.black
-                                      : Colors.white,
-                                  fontFamily: "primary")),
-                          Text(' × ',
-                              style: myTextStyle21(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: isCurrentlySpeaking
-                                      ? Colors.black
-                                      : Colors.white,
-                                  fontFamily: "primary")),
-                          Text('$multiplier',
-                              style: myTextStyle21(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: isCurrentlySpeaking
-                                      ? Colors.black
-                                      : Colors.white,
-                                  fontFamily: "primary")),
-                          Text(' = ',
-                              style: myTextStyle21(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: isCurrentlySpeaking
-                                      ? Colors.black
-                                      : Colors.white,
-                                  fontFamily: "primary")),
-                          Text('$result',
-                              style: myTextStyle25(
-                                  fontWeight: FontWeight.bold,
-                                  fontColor: isCurrentlySpeaking
-                                      ? Colors.black
-                                      : Colors.white,
-                                  fontFamily: "primary")),
+
+                          /// Panda Image
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Image.asset(
+                              "assets/images/panda.webp",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            left: 5.5.h,
+                            child: Container(
+                              width: size.width * 0.3,
+                              height: Device.screenType == ScreenType.tablet
+                                  ? size.width * 0.1
+                                  : size.width * 0.15,
+                              decoration: BoxDecoration(
+                                  color: currentColor.withValues(alpha: 0.9),
+                                  borderRadius:
+                                      BorderRadiusGeometry.circular(1.h),
+                                  border: BoxBorder.all(
+                                      width: 3, color: Colors.black)),
+                              child: Center(
+                                child: Text(
+                                  '$_selectedNumber',
+                                  style: TextStyle(
+                                      fontSize: 4.h,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      shadows: const [
+                                        Shadow(
+                                            color: Colors.black,
+                                            blurRadius: 2.0,
+                                            offset: Offset(2.0, 2.0))
+                                      ],
+                                      fontFamily: "secondary"),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
-                    );
-                  },
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 1.h, right: 1.h, bottom: 1.h, top: 1.h),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+
+                        itemCount: 10,
+                        itemBuilder: (context, index) {
+                          final multiplier = index + 1;
+                          final result = _selectedNumber * multiplier;
+                          final itemColor = currentColor;
+                          final isCurrentlySpeaking =
+                              _currentSpeakingIndex == index;
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 300),
+                            margin: EdgeInsets.symmetric(vertical: 0.1.h),
+                            decoration: BoxDecoration(
+                              color: isCurrentlySpeaking
+                                  ? Colors.amber
+                                  : itemColor.withValues(alpha: 0.9),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text('$_selectedNumber',
+                                    style: myTextStyleCus(
+                                        fontSize: 3.h,
+                                        fontWeight: FontWeight.bold,
+                                        fontColor: isCurrentlySpeaking
+                                            ? Colors.black
+                                            : Colors.white,
+                                        fontFamily: "primary")),
+                                Text(' × ',
+                                    style: myTextStyleCus(
+                                        fontSize: 3.h,
+                                        fontWeight: FontWeight.bold,
+                                        fontColor: isCurrentlySpeaking
+                                            ? Colors.black
+                                            : Colors.white,
+                                        fontFamily: "primary")),
+                                Text('$multiplier',
+                                    style: myTextStyleCus(
+                                        fontSize: 3.h,
+                                        fontWeight: FontWeight.bold,
+                                        fontColor: isCurrentlySpeaking
+                                            ? Colors.black
+                                            : Colors.white,
+                                        fontFamily: "primary")),
+                                Text(' = ',
+                                    style: myTextStyleCus(
+                                        fontSize: 3.h,
+                                        fontWeight: FontWeight.bold,
+                                        fontColor: isCurrentlySpeaking
+                                            ? Colors.black
+                                            : Colors.white,
+                                        fontFamily: "primary")),
+                                Text('$result',
+                                    style: myTextStyleCus(
+                                        fontSize: 3.h,
+                                        fontWeight: FontWeight.bold,
+                                        fontColor: isCurrentlySpeaking
+                                            ? Colors.black
+                                            : Colors.white,
+                                        fontFamily: "primary")),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
 
+            SizedBox(
+              height: 2.h,
+            ),
+
             ///  --- Control buttons at the bottom --- ///
             Container(
-              padding:
-              EdgeInsets.symmetric(horizontal: 2.h).copyWith(top: 2.h),
+              padding: EdgeInsets.symmetric(horizontal: 2.h),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -472,9 +521,8 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
                     borderColor: Colors.grey.shade700,
                   ),
                   AvatarGlow(
-                    glowColor: _isSpeaking
-                        ? Colors.amber
-                        : AppColors.primaryDark,
+                    glowColor:
+                        _isSpeaking ? Colors.amber : AppColors.primaryDark,
                     glowRadiusFactor: 0.4,
                     animate: _isSpeaking,
                     child: ControlIconButton(
@@ -497,7 +545,9 @@ class _MultiplicationTableScreenState extends State<MultiplicationTableScreen> {
               ),
             ),
 
-            SizedBox(height: 2.h,)
+            SizedBox(
+              height: 2.h,
+            )
           ],
         ),
       ),

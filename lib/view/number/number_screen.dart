@@ -1,7 +1,10 @@
 import 'package:babyspark/controller/loading_controller.dart';
+import 'package:babyspark/domain/custom_text_style.dart';
+import 'package:babyspark/helper/app_color.dart';
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../widgets/my_text_button.dart';
 import '../../widgets/number_tile.dart';
 import 'number_detail_screen.dart';
@@ -94,37 +97,71 @@ class _NumberScreenState extends State<NumberScreen> {
           child: Column(
             children: [
               /// Grid item
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 4,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: isTablet(context) ? 5 : 4,
+                  ),
+                  itemCount: _displayedNumbers.length,
+                  itemBuilder: (context, index) {
+                    return NumberTile(
+                      number: _displayedNumbers[index],
+                      color: AppConstant.numberColors[
+                          index % AppConstant.numberColors.length],
+                      isTablet: isTablet(context),
+                      onTap: () {
+                        _navigateToNumberDetail(
+                            context, _displayedNumbers[index]);
+                      },
+                    );
+                  },
                 ),
-                itemCount: _displayedNumbers.length,
-                itemBuilder: (context, index) {
-                  return NumberTile(
-                    number: _displayedNumbers[index],
-                    color: AppConstant
-                        .numberColors[index % AppConstant.numberColors.length],
-                    isTablet: isTablet(context),
-                    onTap: () {
-                      _navigateToNumberDetail(
-                          context, _displayedNumbers[index]);
-                    },
-                  );
-                },
+              ),
+              SizedBox(
+                height: 2.h,
               ),
 
               /// --- Learn More Button ---
               _displayedNumbers.last < 100
                   ? Align(
-                      alignment: Alignment.center,
+                      alignment: Alignment.centerRight,
                       child: Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: MyTextButton(
-                          btnText: "Learn More Number",
-                          onPress: _loadMoreNumbers,
-                        ),
+                        padding:  EdgeInsets.only(bottom: 2.h , right: 2.h),
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryDark,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadiusGeometry.only(
+                                        bottomLeft: Radius.circular(1.h),
+                                        topLeft: Radius.circular(1.h),
+                                        bottomRight: Radius.circular(5.h),
+                                        topRight: Radius.circular(5.h)))),
+                            onPressed: () {
+                              _loadMoreNumbers();
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "More Number",
+                                  style: myTextStyleCus(
+                                      fontSize: isTablet(context) ? 2.h : 3.h,
+                                      fontFamily: "secondary",
+                                      fontColor: Colors.white),
+                                ),
+                                SizedBox(
+                                  width: 1.h,
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: 2.h,
+                                )
+                              ],
+                            )),
                       ),
                     )
                   : const SizedBox.shrink(),

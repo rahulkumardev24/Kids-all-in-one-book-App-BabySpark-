@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../domain/custom_text_style.dart';
 import '../helper/app_color.dart';
@@ -44,27 +45,30 @@ class ItemsCard extends StatelessWidget {
 
           /// --- Title --- ///
           Positioned(
-            bottom: size.height* 0.03,
-            child: Text(
-              title,
-              style: myTextStyleCus(
-                  fontSize: isTablet ? 60 : 18, fontWeight: FontWeight.normal),
+            bottom: size.height * 0.03,
+            child: FittedBox(
+              child: Text(
+                title,
+                style: myTextStyleCus(
+                    fontSize: isTablet ? 3.h : 3.h,
+                    fontWeight: FontWeight.w700),
+              ),
             ),
           ),
           Positioned(
-            top: - size.width * 0.00,
+            top: -size.width * 0.00,
             right: 0,
             child: CachedNetworkImage(
               imageUrl: imagePath,
-              height: size.width * 0.4,
-              width: size.width * 0.4,
+              height: isTablet ? size.width * 0.2 : size.width * 0.35,
+              width: isTablet ? size.width * 0.2 : size.width * 0.35,
               fit: BoxFit.contain,
               placeholder: (context, url) => Container(
                 alignment: Alignment.center,
                 child: Text(
                   firstLetter,
                   style: myTextStyleCus(
-                    fontSize: isTablet ? 150 : 100,
+                    fontSize: isTablet ? 130 : 100,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

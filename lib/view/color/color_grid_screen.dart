@@ -1,6 +1,7 @@
 import 'package:babyspark/helper/app_constant.dart';
 import 'package:babyspark/widgets/secondary_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../controller/loading_controller.dart';
 import '../../domain/custom_text_style.dart';
@@ -46,7 +47,12 @@ class _BookGridScreenState extends State<ColorGridScreen> {
             automaticallyImplyLeading: false,
             toolbarHeight: size.height * 0.2,
             backgroundColor: Colors.transparent,
-            flexibleSpace: SecondaryAppBar(title: widget.appBarTitle , onPress: (){Navigator.pop(context);},),
+            flexibleSpace: SecondaryAppBar(
+              title: widget.appBarTitle,
+              onPress: () {
+                Navigator.pop(context);
+              },
+            ),
           ),
 
           /// --- body --- ///
@@ -54,7 +60,7 @@ class _BookGridScreenState extends State<ColorGridScreen> {
             padding: const EdgeInsets.all(12),
             physics: const ClampingScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: size.width > 600 ? 4 : 2,
+              crossAxisCount: isTablet(context) ? 3 : 2,
               mainAxisSpacing: 8,
               crossAxisSpacing: 8,
               childAspectRatio: 0.85,
@@ -126,15 +132,15 @@ class ItemsColorCard extends StatelessWidget {
             child: Text(
               title,
               style: myTextStyleCus(
-                  fontSize: isTablet ? 60 : 18, fontWeight: FontWeight.normal),
+                  fontSize: 3.h, fontWeight: FontWeight.w700),
             ),
           ),
           Positioned(
             top: -size.width * 0.00,
-            right: 0,
+            right: 1.h,
             child: Container(
-              width: size.width * 0.4,
-              height: size.width * 0.4,
+              width: isTablet ? size.width * 0.22 : size.width * 0.35,
+              height: isTablet ? size.width * 0.22 : size.width * 0.35,
               decoration: BoxDecoration(
                 color: color,
                 shape: BoxShape.circle,

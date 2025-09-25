@@ -106,6 +106,10 @@ class _NumberDetailScreenState extends State<NumberDetailScreen>
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    bool isTablet(BuildContext context) {
+      return MediaQuery.of(context).size.shortestSide >= 600;
+    }
+
     return SafeArea(
       child: Scaffold(
         /// ----------- Appbar ----------- ///
@@ -136,11 +140,15 @@ class _NumberDetailScreenState extends State<NumberDetailScreen>
                       _playBounce();
                     },
                     child: Center(
-                      child: _numberPage(index + 1),
+                      child: _numberPage(
+                          number: index + 1, isTablet: isTablet(context)),
                     ),
                   );
                 },
               ),
+            ),
+            SizedBox(
+              height: 1.h,
             ),
 
             /// --------- Footer Controls -------- ///
@@ -150,7 +158,7 @@ class _NumberDetailScreenState extends State<NumberDetailScreen>
                 children: [
                   const FooterAnimation(),
                   Positioned(
-                    top: 0,
+                    top: 1.h,
                     left: 0,
                     right: 0,
                     child: Center(
@@ -232,7 +240,7 @@ class _NumberDetailScreenState extends State<NumberDetailScreen>
     );
   }
 
-  Widget _numberPage(int number) {
+  Widget _numberPage({required int number, required bool isTablet}) {
     String numberWord = AppConstant.numberWords[number];
     return Center(
       child: Column(
@@ -242,7 +250,7 @@ class _NumberDetailScreenState extends State<NumberDetailScreen>
             child: Text(
               '$number',
               style: TextStyle(
-                fontSize: Get.width * 0.6,
+                fontSize: isTablet ? Get.width * 0.4 : Get.width * 0.5,
                 fontFamily: "primary",
                 color: AppColors.primaryDark,
                 shadows: const [
@@ -258,7 +266,7 @@ class _NumberDetailScreenState extends State<NumberDetailScreen>
           ),
           Text(
             numberWord,
-            style: myTextStyle40(fontWeight: FontWeight.bold),
+            style: myTextStyleCus(fontSize:  isTablet ? 8.h : 5.h , fontWeight: FontWeight.w500),
           ),
         ],
       ),

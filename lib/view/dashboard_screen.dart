@@ -47,20 +47,42 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "Hello Little Explorer!",
-                        style: myTextStyleCus(
-                          fontFamily: "secondary",
-                          fontSize: isTablet(context) ? 30 : 21,
-                        ),
+
+                      Row(
+                        children: [
+                          Text(
+                            "H",
+                            style: myTextStyleCus(
+                              fontFamily: "secondary",
+                              fontSize: isTablet(context) ? 30 : 5.h,
+                            ),
+                          ),
+                          Text(
+                            "Ello",
+                            style: myTextStyleCus(
+                              fontFamily: "secondary",
+                              fontSize: isTablet(context) ? 30 : 3.h,
+                            ),
+                          ),
+                          SizedBox(width: 1.h,),
+                          Text(
+                            "K",
+                            style: myTextStyleCus(
+                              fontFamily: "secondary",
+                              fontSize: isTablet(context) ? 30 : 5.h,
+                            ),
+                          ),
+                          Text(
+                            "ids",
+                            style: myTextStyleCus(
+                              fontFamily: "secondary",
+                              fontSize: isTablet(context) ? 30 : 3.h,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "What shall we learn today?",
-                        style: myTextStyleCus(
-                            fontSize: isTablet(context) ? 27 : 18,
-                            fontFamily: "primary",
-                            fontWeight: FontWeight.w500),
-                      ),
+
+
                     ],
                   ),
                 ),

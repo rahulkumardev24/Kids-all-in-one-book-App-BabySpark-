@@ -45,7 +45,7 @@ class _HomeCarouselSliderState extends State<HomeCarouselSlider> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const BoxMatchingGame()),
+            MaterialPageRoute(builder: (_) =>  BoxMatchingGame()),
           );
         },
         child: Container(

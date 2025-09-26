@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:babyspark/domain/custom_text_style.dart';
+import 'package:babyspark/service/tts_service.dart';
 import 'package:babyspark/utils/app_utils.dart';
 import 'package:babyspark/widgets/navigation_button.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,9 @@ class _BoxCountScreenState extends State<BoxCountScreen> {
   void initState() {
     super.initState();
     generateQuestion();
+
+    TTSService.speak(
+        "How many balls do you see? Count and select the correct number.");
   }
 
   void generateQuestion() {
@@ -286,7 +290,6 @@ class _BoxCountScreenState extends State<BoxCountScreen> {
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
                 mainAxisSpacing: 2.h,
-
                 childAspectRatio: 1.4,
                 children: options.map((e) {
                   return FittedBox(
@@ -322,7 +325,7 @@ class _BoxCountScreenState extends State<BoxCountScreen> {
                           child: Text(
                             e.toString(),
                             style: myTextStyleCus(
-                              fontSize: 7.h,
+                                fontSize: 7.h,
                                 fontFamily: "secondary",
                                 fontColor: Colors.black87),
                           ),

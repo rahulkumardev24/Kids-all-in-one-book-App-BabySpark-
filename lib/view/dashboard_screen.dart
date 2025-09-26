@@ -47,42 +47,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-
                       Row(
                         children: [
                           Text(
                             "H",
                             style: myTextStyleCus(
                               fontFamily: "secondary",
-                              fontSize: isTablet(context) ? 30 : 5.h,
+                              fontColor: Colors.red,
+                              fontSize: isTablet(context) ? 5.h : 5.h,
                             ),
                           ),
                           Text(
-                            "Ello",
+                            "ello",
                             style: myTextStyleCus(
                               fontFamily: "secondary",
-                              fontSize: isTablet(context) ? 30 : 3.h,
+                              fontColor: Colors.blue,
+                              fontSize: isTablet(context) ? 3.h : 3.h,
                             ),
                           ),
-                          SizedBox(width: 1.h,),
+                          SizedBox(
+                            width: 1.h,
+                          ),
                           Text(
                             "K",
                             style: myTextStyleCus(
                               fontFamily: "secondary",
-                              fontSize: isTablet(context) ? 30 : 5.h,
+                              fontColor: Colors.blue,
+                              fontSize: isTablet(context) ? 5.h : 5.h,
                             ),
                           ),
                           Text(
                             "ids",
                             style: myTextStyleCus(
                               fontFamily: "secondary",
-                              fontSize: isTablet(context) ? 30 : 3.h,
+                              fontColor: Colors.red ,
+                              fontSize: isTablet(context) ? 3.h : 3.h,
                             ),
                           ),
                         ],
                       ),
-
-
                     ],
                   ),
                 ),
